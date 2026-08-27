@@ -1,0 +1,69 @@
+---
+/**
+ * Chama — a marca visual do guia, evocando o padrão FHIR.
+ *
+ * É um desenho original, NÃO o logotipo oficial do HL7. A escolha é
+ * deliberada: este site afirma em toda página que não tem vínculo com o HL7,
+ * e estampar a marca registrada deles contradiria isso, além de sugerir um
+ * endosso que não existe. A atribuição de marca fica no rodapé.
+ */
+interface Props {
+  /** Tamanho em pixels. */
+  tamanho?: number;
+  /** Texto acessível. Sem ele, o ícone é tratado como decorativo. */
+  rotulo?: string;
+  class?: string;
+}
+
+const { tamanho = 24, rotulo, class: classe } = Astro.props;
+
+// Ids de gradiente precisam ser únicos por instância no documento.
+const uid = Math.random().toString(36).slice(2, 9);
+---
+
+<svg
+  class={classe}
+  width={tamanho}
+  height={tamanho}
+  viewBox="0 0 24 30"
+  fill="none"
+  role={rotulo ? 'img' : undefined}
+  aria-label={rotulo}
+  aria-hidden={rotulo ? undefined : 'true'}
+>
+  <defs>
+    <linearGradient id={`chama-fora-${uid}`} x1="12" y1="0" x2="12" y2="30" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="var(--chama-topo)"></stop>
+      <stop offset="100%" stop-color="var(--chama-base)"></stop>
+    </linearGradient>
+    <linearGradient id={`chama-dentro-${uid}`} x1="12" y1="12" x2="12" y2="29" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="var(--chama-nucleo-topo)"></stop>
+      <stop offset="100%" stop-color="var(--chama-nucleo-base)"></stop>
+    </linearGradient>
+  </defs>
+
+  <path
+    d="M12.6 0.4c0.4 5.2 3.9 7.2 6.5 10.4 2.1 2.6 2.9 5.3 2.9 8.1 0 6.1-4.5 10.7-10 10.7S2 25 2 18.9c0-3.5 1.4-5.9 3.4-8.1C7.8 8.2 9.3 6.6 9.6 3.4c1.6 1.5 2.3 3.2 2.4 5.3 0.6-2.9 0.7-5.6 0.6-8.3z"
+    fill={`url(#chama-fora-${uid})`}></path>
+
+  <path
+    d="M12.3 12.1c0.2 2.7 2 3.8 3.3 5.4 1.1 1.4 1.5 2.8 1.5 4.3 0 3.2-2.3 5.6-5.1 5.6s-5.1-2.4-5.1-5.6c0-1.8 0.7-3.1 1.7-4.2 1.2-1.4 2-2.2 2.2-3.9 0.8 0.8 1.2 1.7 1.2 2.8 0.3-1.5 0.4-2.9 0.3-4.4z"
+    fill={`url(#chama-dentro-${uid})`}></path>
+</svg>
+
+<style>
+  svg {
+    --chama-topo: #f59e0b;
+    --chama-base: #b45309;
+    --chama-nucleo-topo: #fde68a;
+    --chama-nucleo-base: #f59e0b;
+    flex-shrink: 0;
+  }
+
+  :global(:root[data-theme='dark']) svg {
+    --chama-topo: #fbbf24;
+    --chama-base: #d97706;
+    --chama-nucleo-topo: #fef3c7;
+    --chama-nucleo-base: #fbbf24;
+  }
+</style>

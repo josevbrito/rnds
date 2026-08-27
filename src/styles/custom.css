@@ -1,0 +1,145 @@
+/* ---------------------------------------------------------------------------
+   Paleta
+   O Starlight é dark-first no CSS: `:root` carrega os tokens escuros e
+   `:root[data-theme='light']` os claros. O ThemeProvider sobrescrito faz o
+   site ABRIR no escuro, mas a estrutura de tokens abaixo segue a do Starlight.
+
+   Duas famílias, com papéis distintos:
+     âmbar  -> identidade (chama, botão do hero, marcações do guia)
+     azul   -> interação (links, item ativo da navegação, foco)
+--------------------------------------------------------------------------- */
+
+/* Tema escuro - o padrão do site */
+:root {
+  --sl-color-accent-low: #451a03;
+  --sl-color-accent: #d97706;
+  --sl-color-accent-high: #fbbf24;
+
+  /* Links e navegação ativa - azul, não âmbar. */
+  --sl-color-text-accent: #60a5fa;
+
+  --rnds-vigente: #34d399;
+  --rnds-revogada: #f87171;
+  --rnds-historico: #a1a1aa;
+  --rnds-alerta: #fbbf24;
+  --rnds-link: #60a5fa;
+
+  /* Botão secundário do hero - âmbar preenchido, contraste conferido. */
+  --rnds-botao-bg: #fbbf24;
+  --rnds-botao-fg: #431407;
+}
+
+/* Tema claro */
+:root[data-theme='light'] {
+  --sl-color-accent-low: #fef3c7;
+  --sl-color-accent: #b45309;
+  --sl-color-accent-high: #78350f;
+
+  --sl-color-text-accent: #1d4ed8;
+
+  --rnds-vigente: #047857;
+  --rnds-revogada: #b91c1c;
+  --rnds-historico: #52525b;
+  --rnds-alerta: #b45309;
+  --rnds-link: #1d4ed8;
+
+  --rnds-botao-bg: #b45309;
+  --rnds-botao-fg: #ffffff;
+}
+
+/* ---------------------------------------------------------------------------
+   Tabelas de dados - o formato principal deste site.
+   Precisam rolar dentro do próprio container em vez de empurrar a página.
+--------------------------------------------------------------------------- */
+.sl-markdown-content table,
+.tabela-dados {
+  display: block;
+  overflow-x: auto;
+  max-width: 100%;
+  border-collapse: collapse;
+  font-size: var(--sl-text-sm);
+}
+
+.tabela-dados th {
+  text-align: start;
+  font-weight: 600;
+  white-space: nowrap;
+  border-block-end: 1px solid var(--sl-color-gray-5);
+  padding: 0.6rem 0.75rem;
+}
+
+.tabela-dados td {
+  padding: 0.6rem 0.75rem;
+  border-block-end: 1px solid var(--sl-color-gray-6);
+  vertical-align: top;
+}
+
+/* ---------------------------------------------------------------------------
+   Etiquetas de status
+--------------------------------------------------------------------------- */
+.etiqueta {
+  display: inline-block;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.1rem 0.45rem;
+  border-radius: 0.2rem;
+  border: 1px solid currentcolor;
+  white-space: nowrap;
+}
+
+.etiqueta[data-status='vigente'],
+.etiqueta[data-status='producao'] {
+  color: var(--rnds-vigente);
+}
+.etiqueta[data-status='revogada'] {
+  color: var(--rnds-revogada);
+}
+.etiqueta[data-status='historico'],
+.etiqueta[data-status='indeterminado'] {
+  color: var(--rnds-historico);
+}
+.etiqueta[data-status='homologacao'],
+.etiqueta[data-status='planejado'] {
+  color: var(--rnds-alerta);
+}
+
+/* As normas que faltam na lista oficial do gov.br são o diferencial editorial
+   do site - usam a cor da marca de propósito. */
+.marca-ausente {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--rnds-alerta);
+}
+
+.verificado {
+  font-size: var(--sl-text-xs);
+  color: var(--sl-color-gray-3);
+  font-variant-numeric: tabular-nums;
+}
+
+code {
+  font-variant-ligatures: none;
+}
+
+/* ---------------------------------------------------------------------------
+   Botão âmbar do hero
+   O botão primário do Starlight usa --sl-color-text-accent (azul). Este é o
+   par: mesma forma, cor da marca, para a segunda ação da home.
+   Fica fora de @layer, então vence os estilos do Starlight sem !important.
+--------------------------------------------------------------------------- */
+.sl-link-button.botao-ambar {
+  background: var(--rnds-botao-bg);
+  border-color: var(--rnds-botao-bg);
+  color: var(--rnds-botao-fg);
+}
+
+.sl-link-button.botao-ambar:hover,
+.sl-link-button.botao-ambar:focus-visible {
+  color: var(--rnds-botao-fg);
+  filter: brightness(1.08);
+}
