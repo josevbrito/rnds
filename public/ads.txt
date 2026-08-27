@@ -1,0 +1,6 @@
+# Este site não exibe anúncios.
+#
+# Arquivo versionado vazio de propósito: o AdSense exige ads.txt na raiz do
+# domínio para verificação e ter o caminho reservado evita mexer em DNS ou
+# roteamento caso a monetização seja ligada no futuro.
+
