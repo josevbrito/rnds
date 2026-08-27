@@ -1,0 +1,248 @@
+# Modelos de Informação da RNDS
+#
+# São onze os modelos catalogados aqui, sendo nove vigentes e dois mantidos como histórico.
+#
+# 'codigo_tipo_documento' refere-se ao CodeSystem BRTipoDocumento:
+#   https://rnds-fhir.saude.gov.br/CodeSystem-BRTipoDocumento.html
+# Só é preenchido onde o código foi conferido. Ausência do campo significa
+# "não verificado", nunca "não existe".
+
+- id: rel
+  sigla: REL
+  nome: Resultado de Exame Laboratorial
+  resumo: >-
+    Laudo de exame laboratorial. Foi o primeiro modelo implantado na RNDS e
+    segue sendo o mais maduro em exemplos e material de apoio, se você pode
+    escolher por onde começar, comece por ele.
+  status: producao
+  codigo_tipo_documento: REL
+  portaria_vigente: portaria-1068-2020
+  portarias: [portaria-1068-2020, portaria-1792-2020, gm-ms-1046-2021, gm-ms-3328-2022]
+  ig_oficial: https://rnds-fhir.saude.gov.br/
+  ordem: 1
+  fontes:
+    - tipo: ig
+      titulo: Guia de Implementação FHIR da RNDS - exemplos de REL (v2 e v3.2.1)
+      url: https://rnds-fhir.saude.gov.br/exemplos.html
+  verificado_em: 2026-08-26
+
+- id: rac
+  sigla: RAC
+  nome: Registro de Atendimento Clínico
+  resumo: >-
+    Consulta realizada na atenção básica, especializada ou domiciliar. Reúne
+    histórico clínico do pacientes: sintomas, medicamentos e procedimentos.
+  status: producao
+  codigo_tipo_documento: RAC
+  portaria_vigente: gm-ms-8347-2025
+  portarias: [gm-ms-8347-2025, gm-ms-234-2022]
+  ig_oficial: https://rnds-fhir.saude.gov.br/
+  ig_comunitario:
+    - nome: RAC Implementation Guide
+      autor: Igor Evangelista (igorevan)
+      url: https://igorevan.github.io/rac-ig/
+      repo: https://github.com/igorevan/rac-ig
+  ordem: 2
+  fontes:
+    - tipo: gov-br
+      titulo: Estrutura do Projeto RNDS - SEIDIGI
+      url: https://www.gov.br/saude/pt-br/composicao/seidigi/rnds/estrutura-do-projeto
+  verificado_em: 2026-08-26
+
+- id: ria
+  sigla: RIA
+  nome: Registro de Imunobiológico Administrado
+  resumo: >-
+    Dose de vacina aplicada. Na operação da RNDS o modelo se desdobra em dois
+    fluxos processados separadamente: RIA-R para vacinação de rotina e RIA-C
+    para campanha.
+  status: producao
+  codigo_tipo_documento: RIA
+  portaria_vigente: gm-ms-69-2021
+  portarias: [gm-ms-69-2021]
+  ig_oficial: https://rnds-fhir.saude.gov.br/
+  ig_comunitario:
+    - nome: RIA Implementation Guide
+      autor: Igor Evangelista (igorevan)
+      url: https://igorevan.github.io/ria-ig/
+      repo: https://github.com/igorevan/ria-ig
+  ordem: 3
+  fontes:
+    - tipo: gov-br
+      titulo: Estrutura do Projeto RNDS - SEIDIGI
+      url: https://www.gov.br/saude/pt-br/composicao/seidigi/rnds/estrutura-do-projeto
+  verificado_em: 2026-08-26
+
+- id: rira
+  sigla: RIRA
+  nome: Registro de Informações de Regulação Assistencial
+  resumo: >-
+    Dados da regulação assistencial no SUS, o fluxo de solicitação e
+    autorização de procedimentos, para continuidade do cuidado e otimização de
+    recursos.
+  status: producao
+  portaria_vigente: saes-seidigi-3-2023
+  portarias: [saes-seidigi-3-2023]
+  ig_oficial: https://rnds-fhir.saude.gov.br/
+  ig_comunitario:
+    - nome: RIRA Implementation Guide
+      autor: Igor Evangelista (igorevan)
+      url: https://igorevan.github.io/rira-ig/
+      repo: https://github.com/igorevan/rira-ig
+    - nome: Perfil Regulação Assistencial (Simplifier)
+      autor: Projeto RNDS no Simplifier
+      url: https://simplifier.net/redenacionaldedadosemsaude/brregulacaoassistencial
+    - nome: Perfil Requisição de Regulação Assistencial (Simplifier)
+      autor: Projeto RNDS no Simplifier
+      url: https://simplifier.net/redenacionaldedadosemsaude/brrequisicaoregulacaoassistencial
+  ordem: 4
+  fontes:
+    - tipo: gov-br
+      titulo: Estrutura do Projeto RNDS - SEIDIGI
+      url: https://www.gov.br/saude/pt-br/composicao/seidigi/rnds/estrutura-do-projeto
+  verificado_em: 2026-08-26
+
+- id: sa
+  sigla: SA
+  nome: Sumário de Alta
+  resumo: >-
+    Relatório clínico objetivo ao fim de uma internação: intervenções
+    realizadas, orientações para continuidade do cuidado após a alta e estado
+    de saúde do indivíduo no encerramento da estadia hospitalar.
+  status: producao
+  codigo_tipo_documento: SA
+  portaria_vigente: gm-ms-8026-2025
+  portarias: [gm-ms-8026-2025, portaria-701-2022]
+  ig_oficial: https://rnds-fhir.saude.gov.br/
+  ordem: 5
+  fontes:
+    - tipo: conass
+      titulo: Conass Informa n. 151/2025
+      url: https://www.conass.org.br/conass-informa-n-151-2025-publicada-a-portaria-gm-n-8-026-que-institui-o-modelo-de-informacao-do-sumario-de-alta-sa-no-ambito-da-rede-nacional-de-dados-em-saude-rnds/
+  verificado_em: 2026-08-26
+
+- id: sao
+  sigla: SAO
+  nome: Sumário de Alta Obstétrico
+  resumo: >-
+    Variante do Sumário de Alta para o contexto obstétrico, instituída no mesmo
+    dia que o SA. Não constava do guia original deste projeto.
+  status: producao
+  portaria_vigente: gm-ms-8025-2025
+  portarias: [gm-ms-8025-2025]
+  ig_oficial: https://rnds-fhir.saude.gov.br/
+  ordem: 6
+  fontes:
+    - tipo: gov-br
+      titulo: Legislação da RNDS - gov.br
+      url: https://www.gov.br/saude/pt-br/composicao/seidigi/rnds/legislacao/portaria-gm-ms-no-8-025-de-27-de-agosto-de-2025
+  verificado_em: 2026-08-26
+
+- id: cmd
+  sigla: CMD
+  nome: Conjunto Mínimo de Dados
+  resumo: >-
+    Dados do contato assistencial. É o modelo de escopo mais amplo: parte do
+    conceito de contato assistencial e foi desenhado para consolidar e
+    substituir uma série de sistemas de informação anteriores. É a via de envio
+    para estabelecimentos que não possuem prontuário eletrônico.
+  status: producao
+  codigo_tipo_documento: CMD
+  portarias: []
+  ig_oficial: https://rnds-fhir.saude.gov.br/
+  ordem: 7
+  fontes:
+    - tipo: gov-br
+      titulo: Wiki do CMD - Ministério da Saúde (material de governança, não especificação técnica)
+      url: https://wiki.saude.gov.br/cmd/index.php/P%C3%A1gina_principal
+    - tipo: ig
+      titulo: CodeSystem BRTipoDocumento
+      url: https://rnds-fhir.saude.gov.br/CodeSystem-BRTipoDocumento.html
+  verificado_em: 2026-08-26
+
+- id: repm
+  sigla: REPM
+  nome: Registro Eletrônico da Prescrição de Medicamentos
+  resumo: >-
+    Informações sobre medicamentos prescritos por profissional de saúde
+    habilitado. Sucede o RPM.
+  status: producao
+  portaria_vigente: gm-ms-6100-2024
+  portarias: [gm-ms-6100-2024]
+  sucede: rpm
+  ig_oficial: https://rnds-fhir.saude.gov.br/
+  ordem: 8
+  fontes:
+    - tipo: bvs
+      titulo: Portaria GM/MS nº 6.100/2024 - texto integral
+      url: https://bvsms.saude.gov.br/bvs/saudelegis/gm/2024/prt6100_18_12_2024.html
+  verificado_em: 2026-08-26
+
+- id: redfm
+  sigla: REDFM
+  nome: Registro Eletrônico de Dispensação ou Fornecimento de Medicamentos
+  resumo: >-
+    Informações da dispensação de medicamento realizada por profissional
+    farmacêutico, ou do fornecimento por profissional de saúde autorizado.
+    Registra, no mínimo, o medicamento fornecido segundo a OBM, a quantidade, a
+    data e hora, e a identificação do profissional responsável por CPF ou CNS.
+    Sucede o RDM.
+  status: producao
+  portaria_vigente: gm-ms-6100-2024
+  portarias: [gm-ms-6100-2024]
+  sucede: rdm
+  ig_oficial: https://rnds-fhir.saude.gov.br/
+  ig_comunitario:
+    - nome: REDFM Implementation Guide
+      autor: Igor Evangelista (igorevan)
+      url: https://igorevan.github.io/redfm-ig/
+      repo: https://github.com/igorevan/redfm-ig
+    - nome: Perfil REDFM (Simplifier)
+      autor: Projeto RNDS no Simplifier
+      url: https://simplifier.net/redenacionaldedadosemsaude/rndsregistroeletronicodispensacaofornecimentomedicamento
+  ordem: 9
+  fontes:
+    - tipo: bvs
+      titulo: Portaria GM/MS nº 6.100/2024 - texto integral
+      url: https://bvsms.saude.gov.br/bvs/saudelegis/gm/2024/prt6100_18_12_2024.html
+  verificado_em: 2026-08-26
+
+- id: rpm
+  sigla: RPM
+  nome: Registro de Prescrição de Medicamento
+  resumo: >-
+    Modelo original de prescrição, de 2022. Mantido aqui como histórico: para
+    implementações novas use o REPM.
+  status: historico
+  codigo_tipo_documento: RPM
+  portaria_vigente: saes-ms-50-2022
+  portarias: [saes-ms-50-2022]
+  sucedido_por: repm
+  ordem: 10
+  fontes:
+    - tipo: gov-br
+      titulo: Legislação da RNDS - gov.br
+      url: https://www.gov.br/saude/pt-br/composicao/seidigi/rnds/legislacao/portaria-saes-ms-no-50-de-9-de-fevereiro-de-2022
+  verificado_em: 2026-08-26
+
+- id: rdm
+  sigla: RDM
+  nome: Registro de Dispensação de Medicamento
+  resumo: >-
+    Modelo original de dispensação, de 2022. Mantido aqui como histórico: para
+    implementações novas use o REDFM.
+  status: historico
+  codigo_tipo_documento: RDM
+  portaria_vigente: saes-ms-50-2022
+  portarias: [saes-ms-50-2022]
+  sucedido_por: redfm
+  ig_comunitario:
+    - nome: Perfil Registro de Dispensação de Medicamento (Simplifier)
+      autor: Projeto RNDS no Simplifier
+      url: https://simplifier.net/redenacionaldedadosemsaude/brregistrodispensacaomedicamento
+  ordem: 11
+  fontes:
+    - tipo: gov-br
+      titulo: Legislação da RNDS - gov.br
+      url: https://www.gov.br/saude/pt-br/composicao/seidigi/rnds/legislacao/portaria-saes-ms-no-50-de-9-de-fevereiro-de-2022
+  verificado_em: 2026-08-26

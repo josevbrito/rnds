@@ -1,0 +1,42 @@
+# Ambientes da RNDS
+#
+# Fonte: https://rnds-guia.saude.gov.br/docs/rnds/ambientes/
+#
+# NENHUM dos dois ambientes é aberto. Homologação também exige certificado e
+# aprovação do DATASUS, não existe endpoint público para testar.
+
+- id: homologacao
+  nome: Homologação
+  tipo: homologacao
+  auth_host: ehr-auth-hmg.saude.gov.br
+  ehr_host: ehr-services.hmg.saude.gov.br
+  ehr_por_uf: false
+  aberto: false
+  observacao: >-
+    Ambiente nacional e único. Liberado pelo DATASUS após a aprovação da
+    solicitação de acesso feita pelo gestor do estabelecimento no Portal de
+    Serviços. É onde se produzem as evidências de conformidade exigidas para a
+    homologação em produção.
+  fontes:
+    - tipo: gov-br
+      titulo: Ambientes - Guia de Integração da RNDS
+      url: https://rnds-guia.saude.gov.br/docs/rnds/ambientes/
+  verificado_em: 2026-08-26
+
+- id: producao
+  nome: Produção
+  tipo: producao
+  auth_host: ehr-auth.saude.gov.br
+  ehr_host: '{uf}-ehr-services.saude.gov.br'
+  ehr_por_uf: true
+  aberto: false
+  observacao: >-
+    O serviço de autenticação é nacional, mas o endereço de troca de dados (EHR)
+    é por unidade federativa: o padrão é o prefixo da UF em minúsculas, por
+    exemplo `sp-ehr-services.saude.gov.br` para São Paulo e
+    `mg-ehr-services.saude.gov.br` para Minas Gerais.
+  fontes:
+    - tipo: gov-br
+      titulo: Ambientes - Guia de Integração da RNDS
+      url: https://rnds-guia.saude.gov.br/docs/rnds/ambientes/
+  verificado_em: 2026-08-26

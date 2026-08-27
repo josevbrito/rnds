@@ -1,0 +1,192 @@
+# Ferramentas e bibliotecas do ecossistema
+#
+# 'oficial: true' significa mantido pelo Ministério da Saúde, DATASUS ou HL7.
+# Todo o resto é comunidade, útil, mas confira na rnds-fhir.saude.gov.br
+# antes de depender de detalhes.
+
+- id: validator-cli
+  nome: Validador oficial do HL7 (validator_cli.jar)
+  categoria: validacao
+  oficial: true
+  descricao: >-
+    Ferramenta de referência para validar um recurso com os perfis de um
+    Implementation Guide. Roda offline, em Java. Use sempre a versão mais
+    recente, independentemente da versão de FHIR que você está validando, ela
+    é retrocompatível e recebe correções constantes. Vale colocar no CI.
+  url: https://confluence.hl7.org/spaces/FHIR/pages/35718580/Using+the+FHIR+Validator
+  repo: https://github.com/hapifhir/org.hl7.fhir.core
+  licenca: BSD-3-Clause
+  linguagens: [Java]
+  fontes:
+    - tipo: hl7
+      titulo: Using the FHIR Validator
+      url: https://confluence.hl7.org/spaces/FHIR/pages/35718580/Using+the+FHIR+Validator
+  verificado_em: 2026-08-26
+
+- id: hapi-fhir
+  nome: HAPI FHIR
+  categoria: servidor
+  oficial: false
+  descricao: >-
+    Implementação de referência do FHIR em Java. Serve como servidor de teste
+    local (roda em container) e como biblioteca cliente, com o modelo de objetos
+    mais completo do ecossistema. Não carrega os perfis brasileiros por padrão:
+    exercita mecânica FHIR, não conformidade RNDS.
+  url: https://hapifhir.io/
+  repo: https://github.com/hapifhir/hapi-fhir
+  licenca: Apache-2.0
+  linguagens: [Java]
+  fontes:
+    - tipo: gov-br
+      titulo: Ecossistema FHIR - Guia de Integração da RNDS
+      url: https://rnds-guia.saude.gov.br/docs/rnds/tecnologias/
+  verificado_em: 2026-08-26
+
+- id: hapi-servidor-publico
+  nome: Servidor público de testes do HAPI
+  categoria: servidor
+  oficial: false
+  descricao: >-
+    Instância pública do HAPI FHIR, recomendada pelo próprio guia da RNDS para
+    quem não quer subir nada localmente. Não use com dado real.
+  url: http://hapi.fhir.org/
+  linguagens: [Java]
+  fontes:
+    - tipo: gov-br
+      titulo: Ecossistema FHIR - Guia de Integração da RNDS
+      url: https://rnds-guia.saude.gov.br/docs/rnds/tecnologias/
+  verificado_em: 2026-08-26
+
+- id: kyriosdata-rnds
+  nome: kyriosdata/rnds
+  categoria: biblioteca
+  oficial: false
+  descricao: >-
+    O projeto comunitário mais completo sobre a RNDS, mantido pelo prof. Fábio
+    Nogueira de Lucena (UFG). Traz bibliotecas em Java e JavaScript, um
+    validador de linha de comando, ferramentas de FHIRPath e uma coleção Postman
+    documentada, excelente leitura mesmo antes de ter acesso, porque mostra a
+    forma exata das chamadas.
+  url: https://github.com/kyriosdata/rnds
+  repo: https://github.com/kyriosdata/rnds
+  linguagens: [Java, JavaScript]
+  fontes:
+    - tipo: outro
+      titulo: Coleção Postman da RNDS
+      url: https://github.com/kyriosdata/rnds/blob/master/tools/postman/rnds-postman-collection.json
+  verificado_em: 2026-08-26
+
+- id: simplifier-rnds
+  nome: Projeto RNDS no Simplifier
+  categoria: exploracao
+  oficial: false
+  descricao: >-
+    Portal para navegar e experimentar os perfis: consulta por FQL, inspeção via
+    FHIRPath e validação direto no navegador. A própria página avisa que NÃO é o
+    repositório oficial da RNDS e que parte dos artefatos ainda está em
+    homologação ('draft'). Para decisões de implementação, vale o
+    rnds-fhir.saude.gov.br.
+  url: https://simplifier.net/redenacionaldedadosemsaude
+  fontes:
+    - tipo: simplifier
+      titulo: Introdução do projeto RNDS no Simplifier
+      url: https://simplifier.net/RedeNacionaldeDadosemSaude/~introduction
+  verificado_em: 2026-08-26
+
+- id: br-core
+  nome: BR Core
+  categoria: documentacao
+  oficial: true
+  descricao: >-
+    Núcleo FHIR brasileiro, pacote `br.gov.saude.br-core.fhir`, em STU1
+    (v1.1.0, 2023). Define os perfis brasileiros de uso geral, BRCorePatient,
+    BRCorePractitioner, BRCoreOrganization. Os perfis da RNDS derivam daqui:
+    quando um campo parece arbitrário na RNDS, a explicação costuma estar uma
+    camada abaixo, no BR Core.
+  url: https://hl7.org.br/fhir/core/
+  fontes:
+    - tipo: hl7
+      titulo: BR Core - HL7 Brasil
+      url: https://hl7.org.br/fhir/core/
+  verificado_em: 2026-08-26
+
+- id: synthea
+  nome: Synthea
+  categoria: dados-sinteticos
+  oficial: false
+  descricao: >-
+    Gerador de históricos completos de pacientes fictícios como Bundles FHIR R4.
+    É a forma mais rápida de produzir massa para testar desempenho, paralelismo
+    e tratamento de erro. Sai nos perfis americanos, não nos brasileiros, serve
+    como volume, não como teste de conformidade.
+  url: https://github.com/synthetichealth/synthea
+  repo: https://github.com/synthetichealth/synthea
+  licenca: Apache-2.0
+  linguagens: [Java]
+  fontes:
+    - tipo: outro
+      titulo: Synthea - SyntheticMass
+      url: https://github.com/synthetichealth/synthea
+  verificado_em: 2026-08-26
+
+- id: firely-net-sdk
+  nome: Firely .NET SDK
+  categoria: biblioteca
+  oficial: false
+  descricao: >-
+    SDK FHIR para .NET, mantido pela mesma empresa que faz o Simplifier.
+  url: https://github.com/FirelyTeam/firely-net-sdk
+  repo: https://github.com/FirelyTeam/firely-net-sdk
+  licenca: BSD-3-Clause
+  linguagens: ['C#', .NET]
+  fontes:
+    - tipo: outro
+      titulo: Firely .NET SDK
+      url: https://github.com/FirelyTeam/firely-net-sdk
+  verificado_em: 2026-08-26
+
+- id: forge
+  nome: Forge
+  categoria: modelagem
+  oficial: false
+  descricao: >-
+    Editor visual de perfis FHIR, para Windows. Você provavelmente NÃO precisa
+    dele: a RNDS já definiu os perfis, e integrar não exige criar novos. Útil só
+    se o seu caso envolver estender a modelagem.
+  url: https://simplifier.net/forge
+  linguagens: ['C#']
+  fontes:
+    - tipo: simplifier
+      titulo: Forge - Simplifier
+      url: https://simplifier.net/forge
+  verificado_em: 2026-08-26
+
+- id: manual-barramento
+  nome: Manual de Integração do Barramento (PDF)
+  categoria: documentacao
+  oficial: true
+  descricao: >-
+    Manual técnico do barramento: contratos de serviço, códigos de erro e
+    detalhes de autenticação. Aberto, sem login. Confira a data no cabeçalho
+    antes de confiar: circulam versões antigas do mesmo arquivo.
+  url: https://datasus.saude.gov.br/wp-content/uploads/2020/04/SOA-RNDS_ManualIntegracaoBarramento_vSite.pdf
+  fontes:
+    - tipo: datasus
+      titulo: Portal do DATASUS
+      url: https://datasus.saude.gov.br/
+  verificado_em: 2026-08-26
+
+- id: sis-rfsaldanha
+  nome: 'Sistemas de Informação em Saúde no Brasil - capítulo RNDS'
+  categoria: documentacao
+  oficial: false
+  descricao: >-
+    Capítulo sobre a RNDS em um livro aberto sobre sistemas de informação em
+    saúde brasileiros. Bom material de contexto acadêmico, com enquadramento
+    histórico que a documentação técnica não dá.
+  url: https://rfsaldanha.github.io/sis/rnds.html
+  fontes:
+    - tipo: academico
+      titulo: Sistemas de Informação em Saúde no Brasil
+      url: https://rfsaldanha.github.io/sis/rnds.html
+  verificado_em: 2026-08-26

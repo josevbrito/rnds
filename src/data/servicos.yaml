@@ -1,0 +1,116 @@
+# Serviços web da RNDS
+#
+# Fonte: https://rnds-guia.saude.gov.br/docs/rnds/servicos/
+#
+# Os caminhos abaixo são relativos ao host do ambiente (ambientes.yaml).
+# Nenhum ambiente é aberto: mesmo homologação exige credencial.
+
+- id: token
+  nome: Obter token de acesso
+  metodo: GET
+  endpoint: /api/token
+  categoria: seguranca
+  descricao: >-
+    Troca a autenticação mútua TLS (mTLS, com certificado ICP-Brasil A1) por um
+    token de acesso JWT. É a primeira chamada de qualquer integração.
+  fontes:
+    - tipo: gov-br
+      titulo: Serviços - Guia de Integração da RNDS
+      url: https://rnds-guia.saude.gov.br/docs/rnds/servicos/
+  verificado_em: 2026-08-26
+
+- id: contexto-atendimento
+  nome: Contexto de atendimento
+  metodo: POST
+  endpoint: /api/contexto-atendimento
+  categoria: seguranca
+  descricao: >-
+    Obtém o token de autorização de contexto de atendimento, exigido para
+    acessar dados clínicos de um indivíduo sob um vínculo assistencial.
+  fontes:
+    - tipo: gov-br
+      titulo: Serviços - Guia de Integração da RNDS
+      url: https://rnds-guia.saude.gov.br/docs/rnds/servicos/
+  verificado_em: 2026-08-26
+
+- id: patient
+  nome: Consultar paciente
+  metodo: GET
+  endpoint: /api/fhir/r4/Patient
+  categoria: saude
+  descricao: Obtém informações sobre o indivíduo (paciente).
+  fontes:
+    - tipo: gov-br
+      titulo: Serviços - Guia de Integração da RNDS
+      url: https://rnds-guia.saude.gov.br/docs/rnds/servicos/
+  verificado_em: 2026-08-26
+
+- id: organization
+  nome: Consultar estabelecimento
+  metodo: GET
+  endpoint: /api/fhir/r4/Organization
+  categoria: saude
+  descricao: >-
+    Obtém informações sobre o estabelecimento de saúde ou organização,
+    tipicamente a partir do CNES.
+  fontes:
+    - tipo: gov-br
+      titulo: Serviços - Guia de Integração da RNDS
+      url: https://rnds-guia.saude.gov.br/docs/rnds/servicos/
+  verificado_em: 2026-08-26
+
+- id: practitioner
+  nome: Consultar profissional
+  metodo: GET
+  endpoint: /api/fhir/r4/Practitioner
+  categoria: saude
+  descricao: Obtém informações sobre o profissional de saúde.
+  fontes:
+    - tipo: gov-br
+      titulo: Serviços - Guia de Integração da RNDS
+      url: https://rnds-guia.saude.gov.br/docs/rnds/servicos/
+  verificado_em: 2026-08-26
+
+- id: practitioner-role
+  nome: Consultar papel do profissional
+  metodo: GET
+  endpoint: /api/fhir/r4/PractitionerRole
+  categoria: saude
+  descricao: >-
+    Obtém informações sobre os papéis desempenhados pelo profissional de saúde,
+    incluindo o vínculo com o estabelecimento e a ocupação (CBO).
+  fontes:
+    - tipo: gov-br
+      titulo: Serviços - Guia de Integração da RNDS
+      url: https://rnds-guia.saude.gov.br/docs/rnds/servicos/
+  verificado_em: 2026-08-26
+
+- id: bundle-submeter
+  nome: Submeter documento clínico
+  metodo: POST
+  endpoint: /api/fhir/r4/Bundle
+  categoria: saude
+  descricao: >-
+    Envia um documento clínico como Bundle do tipo `document`. É o serviço
+    central da integração, a primeira entrada do Bundle precisa ser
+    obrigatoriamente um Composition.
+  fontes:
+    - tipo: gov-br
+      titulo: Serviços - Guia de Integração da RNDS
+      url: https://rnds-guia.saude.gov.br/docs/rnds/servicos/
+  verificado_em: 2026-08-26
+
+- id: bundle-atualizar
+  nome: Atualizar documento clínico
+  metodo: POST
+  endpoint: /api/fhir/r4/Bundle
+  categoria: saude
+  descricao: >-
+    Substitui um documento enviado anteriormente. Documentos clínicos são
+    imutáveis por conceito: a correção não edita o original, gera um novo que
+    o substitui.
+  fontes:
+    - tipo: gov-br
+      titulo: Serviços - Guia de Integração da RNDS
+      url: https://rnds-guia.saude.gov.br/docs/rnds/servicos/
+  verificado_em: 2026-08-26
