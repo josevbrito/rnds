@@ -1,0 +1,52 @@
+---
+title: Ambientes
+description: >-
+  Homologação e produção da RNDS, os endereços de Auth e EHR de cada um, e por
+  que o endpoint de produção varia por unidade federativa.
+sidebar:
+  order: 4
+---
+
+import TabelaAmbientes from '../../../components/TabelaAmbientes.astro';
+
+A RNDS tem dois ambientes. **Nenhum dos dois é aberto**, até a homologação inclusive
+exige credencial. Não existe sandbox público para testar.
+
+Cada ambiente expõe dois endereços distintos: um para obter o token
+(**Auth**) e outro para trocar dados (**EHR**).
+
+<TabelaAmbientes />
+
+## O detalhe que pega: produção é por UF
+
+O serviço de autenticação é nacional e único, mas o endereço de troca de dados
+em produção é **por unidade federativa**. O padrão é o prefixo da UF em
+minúsculas:
+
+```
+sp-ehr-services.saude.gov.br    # São Paulo
+mg-ehr-services.saude.gov.br    # Minas Gerais
+ba-ehr-services.saude.gov.br    # Bahia
+```
+
+Se o seu sistema atende estabelecimentos em mais de um estado, isso precisa ser
+configuração, não constante. Vale desenhar assim desde o começo  - trocar depois
+costuma implicar mexer em todas as chamadas.
+
+Em homologação não existe essa divisão: o ambiente é nacional e único, o que
+significa que **a topologia que você testa não é a que vai rodar em produção**.
+Vale ter isso em mente ao planejar o teste de aceite.
+
+:::caution[Homologação não é ambiente aberto]
+Assumir que homologação é pública é uma das perdas de tempo mais comuns. Sem
+certificado ICP-Brasil A1 e sem aprovação do DATASUS, não há endpoint que
+responda, nem em homologação.
+
+Enquanto o acesso não sai, dá para trabalhar bastante:
+[testando sem acesso](/ferramentas/testando-sem-acesso/).
+:::
+
+## Fonte
+
+A relação oficial de ambientes está em
+[rnds-guia.saude.gov.br/docs/rnds/ambientes](https://rnds-guia.saude.gov.br/docs/rnds/ambientes/).

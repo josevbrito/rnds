@@ -1,0 +1,55 @@
+---
+title: Ecossistema
+description: >-
+  Bibliotecas, validadores, servidores e guias de implementação do ecossistema
+  RNDS e FHIR brasileiro - oficiais e comunitários.
+sidebar:
+  order: 4
+---
+
+import TabelaFerramentas from '../../../components/TabelaFerramentas.astro';
+
+O ecossistema em torno da RNDS é pequeno mas útil. Vale conhecer o que existe
+antes de escrever do zero, especialmente validação de CNS, montagem de Bundle e
+coleções de requisição.
+
+<TabelaFerramentas />
+
+## Guias de implementação comunitários
+
+Além do IG oficial, há guias mantidos por terceiros que cobrem modelos
+específicos. Costumam ser mais navegáveis que o oficial e em alguns casos mais
+atualizados, mas **não são normativos**.
+
+O trabalho mais consistente é o de **Igor Evangelista**, que publica IGs
+completos em GitHub Pages para quatro modelos:
+
+| Modelo | Guia |
+|---|---|
+| [RAC](/modelos/rac/) | [igorevan.github.io/rac-ig](https://igorevan.github.io/rac-ig/) |
+| [RIA](/modelos/ria/) | [igorevan.github.io/ria-ig](https://igorevan.github.io/ria-ig/) |
+| [RIRA](/modelos/rira/) | [igorevan.github.io/rira-ig](https://igorevan.github.io/rira-ig/) |
+| [REDFM](/modelos/redfm/) | [igorevan.github.io/redfm-ig](https://igorevan.github.io/redfm-ig/) |
+
+Há também um [espelho do IG](https://kyriosdata.github.io/rnds-ig/toc.html)
+mantido pelo projeto kyriosdata, por vezes mais navegável que o oficial.
+
+:::caution
+Guias comunitários são material de apoio. Antes de depender de um detalhe
+(cardinalidade, código, extensão) confira contra o
+[rnds-fhir.saude.gov.br](https://rnds-fhir.saude.gov.br/), que é a referência
+canônica.
+:::
+
+## O que você provavelmente não precisa
+
+**Forge** e outras ferramentas de modelagem de perfil. A RNDS já definiu os
+perfis, e integrar não exige criar novos. Só entram em cena se o seu caso
+envolver estender a modelagem, o que é raro em projeto de integração.
+
+## Faltou alguma?
+
+Este catálogo vive em
+[`src/data/ferramentas.yaml`](https://github.com/josevbrito/rnds/blob/main/src/data/ferramentas.yaml).
+Se você mantém ou conhece uma ferramenta relevante,
+[abra uma issue ou um PR](https://github.com/josevbrito/rnds/issues/new/choose).

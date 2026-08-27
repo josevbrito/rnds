@@ -1,0 +1,61 @@
+---
+title: Serviços
+description: >-
+  Os serviços web da RNDS - obtenção de token, contexto de atendimento, consulta
+  de entidades FHIR e envio de documentos clínicos.
+sidebar:
+  order: 5
+---
+
+import TabelaServicos from '../../../components/TabelaServicos.astro';
+
+A integração com a RNDS acontece por serviços web REST sobre FHIR R4. Os
+caminhos abaixo são relativos ao host do ambiente que muda entre homologação e
+produção, e em produção varia por UF. Veja em [ambientes](/integracao/ambientes/).
+
+<TabelaServicos />
+
+## A ordem das chamadas
+
+Toda integração segue a mesma sequência:
+
+1. **`GET /api/token`** apresentando o certificado A1 em mTLS → devolve um JWT
+2. **`POST /api/fhir/r4/Bundle`** com o token no header
+   `X-Authorization-Server` → envia o documento
+
+Para acessar dados clínicos de um indivíduo, entra um passo a mais: o
+`POST /api/contexto-atendimento`, que produz o token de autorização de contexto
+assistencial. A RNDS não entrega dado clínico sem vínculo de atendimento
+declarado.
+
+:::caution[O header não é `Authorization`]
+O barramento espera **`X-Authorization-Server`**. Usar o `Authorization`
+convencional é o erro mais comum da primeira tentativa, e a mensagem de erro
+resultante costuma ser genérica e não apontar o header. Veja
+[autenticação](/integracao/autenticacao/).
+:::
+
+## Documento clínico é imutável
+
+Repare que "atualizar" também é um `POST` de Bundle, não um `PUT`. Isso não é
+descuido de API: conceitualmente, um documento clínico é um instantâneo
+assinado. Correção não edita o documento original, gera um novo que substitui o
+anterior.
+
+Se o seu modelo de dados assume atualização em campo, essa é uma diferença de
+desenho que vale acertar antes de escrever código.
+
+## Onde está o contrato completo
+
+Esta página é um índice. Os contratos de serviço detalhados, os códigos de erro
+e o comportamento de cada operação estão no **Manual de Integração do
+Barramento**, publicado em PDF aberto pelo DATASUS:
+
+[SOA-RNDS_ManualIntegracaoBarramento_vSite.pdf](https://datasus.saude.gov.br/wp-content/uploads/2020/04/SOA-RNDS_ManualIntegracaoBarramento_vSite.pdf)
+
+Confira a data no cabeçalho antes de confiar: circulam versões antigas do mesmo
+arquivo.
+
+Para ver a forma exata das requisições antes de ter acesso, a
+[coleção Postman do kyriosdata/rnds](https://github.com/kyriosdata/rnds/blob/master/tools/postman/rnds-postman-collection.json)
+é excelente material de leitura.
