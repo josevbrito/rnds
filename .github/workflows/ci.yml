@@ -1,0 +1,72 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    # Segunda-feira, 09:00 UTC - pega link do gov.br que morreu na semana.
+    - cron: '0 9 * * 1'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Validação do dataset e construir
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      # Integridade do dataset: ids únicos, referências que resolvem e a regra
+      # editorial de que todo registro tem fonte pública e data de verificação.
+      # Roda separado do build para o log dizer claramente o que quebrou.
+      - name: Validação de integridade do dataset
+        run: npm run validar
+
+      - name: Conferindo se as páginas de modelo estão em dia
+        run: |
+          npm run gerar:modelos
+          if ! git diff --quiet -- src/content/docs/modelos/; then
+            echo "::error::As páginas em src/content/docs/modelos/ estão dessincronizadas de src/data/modelos.yaml."
+            echo "Rode 'npm run gerar:modelos' e inclua o resultado no commit."
+            git diff --stat -- src/content/docs/modelos/
+            exit 1
+          fi
+
+      - run: npm run build
+
+  links:
+    name: Links externos
+    runs-on: ubuntu-latest
+    # As URLs do gov.br mudam com frequência e um link morto num guia normativo
+    # é um bug de conteúdo. Mas verificar a cada commit dá falso positivo por
+    # rate limit, então isto roda semanalmente e sob demanda, não em cada PR.
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Checar links
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >-
+            --no-progress
+            --max-retries 2
+            --timeout 30
+            --accept 200,206,429
+            --exclude-path node_modules
+            'src/data/**/*.yaml'
+            'src/content/**/*.md'
+            'src/content/**/*.mdx'
+          fail: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
