@@ -13,8 +13,8 @@ import {
 
 /**
  * As coleções de dados são a fonte da verdade do site: nenhuma tabela é escrita
- * à mão em MDX. Os schemas rodam no build, então YAML malformado — ou uma
- * referência para uma portaria que não existe — quebra o build em vez de virar
+ * à mão em MDX. Os schemas rodam no build, então YAML malformado ou uma
+ * referência para uma portaria que não existe, isso quebra o build em vez de virar
  * uma página errada em produção.
  */
 export const collections = {
