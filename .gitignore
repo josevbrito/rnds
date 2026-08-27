@@ -1,0 +1,25 @@
+# build
+dist/
+.astro/
+
+# deps
+node_modules/
+
+# ambiente
+.env
+.env.production
+.env.local
+
+# vercel
+.vercel
+
+# ferramentas locais
+.claude/
+
+# sistema
+.DS_Store
+Thumbs.db
+
+# logs
+*.log
+npm-debug.log*
