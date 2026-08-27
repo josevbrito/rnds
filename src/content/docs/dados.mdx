@@ -1,0 +1,128 @@
+---
+title: Dados abertos (JSON)
+description: >-
+  Todo o conteúdo estruturado deste guia (portarias, modelos, serviços,
+  ambientes e ferramentas) disponível como JSON aberto, com CORS liberado.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+Tudo que alimenta as tabelas deste site vem de arquivos YAML versionados no
+repositório, e é publicado também como JSON. Se você precisa do dado e não do
+texto, consuma daqui em vez de raspar as páginas.
+
+Todos os endpoints são **estáticos**, servidos com `Access-Control-Allow-Origin: *`.
+
+## Endpoints
+
+| Endpoint | Conteúdo |
+|---|---|
+| [`/api/portarias.json`](/api/portarias.json) | Legislação da RNDS |
+| [`/api/modelos.json`](/api/modelos.json) | Modelos de informação |
+| [`/api/servicos.json`](/api/servicos.json) | Serviços web e endpoints |
+| [`/api/ambientes.json`](/api/ambientes.json) | Homologação e produção |
+| [`/api/ferramentas.json`](/api/ferramentas.json) | Ecossistema de ferramentas |
+| [`/api/tudo.json`](/api/tudo.json) | Tudo acima, num arquivo só |
+
+## Formato
+
+Cada resposta traz um envelope com licença, data de geração e total, seguido do
+array de registros:
+
+```json
+{
+  "licenca": {
+    "dados": "CC BY 4.0",
+    "atribuicao": "Guia RNDS para Desenvolvedores - rnds.josevbrito.com",
+    "aviso": "Material independente e não oficial..."
+  },
+  "gerado_em": "2026-08-26T00:00:00.000Z",
+  "total": 15,
+  "portarias": [ ... ]
+}
+```
+
+Dois campos aparecem em **todo** registro, e são o que torna o dataset
+confiável:
+
+- **`fontes`** - array com pelo menos uma URL pública de onde o dado saiu
+- **`verificado_em`** - data (ISO `YYYY-MM-DD`) em que essa fonte foi conferida
+  pela última vez
+
+Se `verificado_em` está velho, trate o registro com desconfiança. É de propósito
+que essa informação seja explícita.
+
+## Exemplos de uso
+
+<Tabs>
+<TabItem label="curl">
+
+```bash
+# Quantas portarias estão catalogadas?
+curl -s https://rnds.josevbrito.com/api/portarias.json | jq '.total'
+
+# Quais normas faltam na lista oficial do gov.br?
+curl -s https://rnds.josevbrito.com/api/portarias.json \
+  | jq '.portarias[] | select(.ausente_da_lista_oficial) | {numero, data, ementa}'
+```
+
+</TabItem>
+<TabItem label="JavaScript">
+
+```js
+const r = await fetch('https://rnds.josevbrito.com/api/modelos.json');
+const { modelos } = await r.json();
+
+const emProducao = modelos.filter((m) => m.status === 'producao');
+console.log(emProducao.map((m) => `${m.sigla} - ${m.nome}`));
+```
+
+</TabItem>
+<TabItem label="Python">
+
+```python
+import urllib.request, json
+
+url = "https://rnds.josevbrito.com/api/tudo.json"
+with urllib.request.urlopen(url) as r:
+    dados = json.load(r)
+
+for m in dados["modelos"]:
+    if m["status"] == "producao":
+        print(m["sigla"], "→", m.get("portaria_vigente", "a mapear"))
+```
+
+</TabItem>
+</Tabs>
+
+## Referências entre coleções
+
+Os campos que apontam para outros registros usam o `id` como string. Por
+exemplo, em `modelos.json`:
+
+```json
+{
+  "id": "redfm",
+  "sigla": "REDFM",
+  "portaria_vigente": "gm-ms-6100-2024",
+  "sucede": "rdm"
+}
+```
+
+Esse `gm-ms-6100-2024` casa com o `id` de uma entrada em `portarias.json`. As
+referências são validadas no build: se um id não existir, o site não compila.
+
+## Licença e atribuição
+
+Os dados estão sob
+[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.pt-br). Use como
+quiser, inclusive comercialmente, desde que cite a origem.
+
+:::caution
+Este é um dataset **não oficial**, compilado de fontes públicas por um
+mantenedor independente. Ele pode conter erro, defasagem ou lacuna. Para
+qualquer decisão que dependa de conformidade normativa, vá à fonte oficial
+que está linkada em cada registro.
+:::
+
+Achou um erro? [Abra uma issue.](https://github.com/josevbrito/rnds/issues/new/choose)
