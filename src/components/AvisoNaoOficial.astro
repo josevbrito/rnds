@@ -1,0 +1,72 @@
+---
+/**
+ * Aviso de material independente. Aparece no rodapé de TODA página, não só na
+ * home: quem chega por busca cai numa página interna e precisa saber na hora
+ * que isto não é fonte oficial.
+ */
+interface Props {
+  /** `destaque` usa a variante em caixa, para o topo da home. */
+  variante?: 'rodape' | 'destaque';
+}
+
+const { variante = 'rodape' } = Astro.props;
+---
+
+<aside class:list={['aviso-nao-oficial', variante]}>
+  <p>
+    <strong>Material independente e não oficial.</strong> Sem vínculo com o
+    Ministério da Saúde, o DATASUS ou o HL7. Tudo aqui foi compilado de
+    documentação pública e aberta, e cada afirmação carrega a data em que sua
+    fonte foi conferida. <strong>As fontes oficiais sempre prevalecem</strong> sobre o que está escrito neste guia.
+  </p>
+  <p class="marcas">
+    FHIR<sup>&reg;</sup> é marca registrada da HL7 International, usada aqui
+    apenas para identificar o padrão. O símbolo de chama deste site é um
+    desenho próprio, não o logotipo oficial do HL7.
+  </p>
+</aside>
+
+<style>
+  .aviso-nao-oficial {
+    border-inline-start: 2px solid var(--sl-color-gray-5);
+    padding: 0.4rem 0 0.4rem 1rem;
+    margin-block: 1.5rem;
+    font-size: var(--sl-text-xs);
+    color: var(--sl-color-gray-3);
+  }
+
+  .aviso-nao-oficial p {
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .marcas {
+    margin-block-start: 0.5rem !important;
+    color: var(--sl-color-gray-4);
+  }
+
+  /* A ressalva de marca só faz sentido no rodapé, onde o aviso é permanente. */
+  .destaque .marcas {
+    display: none;
+  }
+
+  .aviso-nao-oficial strong {
+    color: var(--sl-color-white);
+    font-weight: 600;
+  }
+
+  .aviso-nao-oficial.destaque {
+    border: 1px solid var(--sl-color-gray-5);
+    border-inline-start-width: 3px;
+    border-inline-start-color: var(--rnds-alerta);
+    border-radius: 0.25rem;
+    background: var(--sl-color-gray-7, transparent);
+    padding: 1rem 1.25rem;
+    font-size: var(--sl-text-sm);
+    color: var(--sl-color-gray-2);
+  }
+
+  .aviso-nao-oficial.destaque strong {
+    color: var(--sl-color-white);
+  }
+</style>

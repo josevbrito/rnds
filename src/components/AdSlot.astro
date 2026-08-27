@@ -1,0 +1,62 @@
+---
+/**
+ * Slot de anúncio - INERTE por padrão.
+ *
+ * Não renderiza absolutamente nada enquanto `PUBLIC_ADS_ENABLED` não for
+ * exatamente "true".
+ *
+ * Para ligar:
+ *   1. Definir PUBLIC_ADS_ENABLED=true e PUBLIC_ADSENSE_CLIENT=ca-pub-XXXX
+ *      nas variáveis de ambiente do projeto na Vercel.
+ *   2. Preencher public/ads.txt com a linha que o painel do AdSense indicar.
+ *   3. Montar o componente de consentimento LGPD.
+ *   4. Passar `data-ad-slot` real via a prop `id`.
+ *
+ * Enquanto isso, os pontos de inserção ficam marcados no layout sem custo:
+ * zero JS, zero requisição, zero cookie.
+ */
+interface Props {
+  /** Posição lógica do slot: topo, meio ou rodapé. */
+  slot_: 'topo' | 'meio' | 'rodape';
+  /** data-ad-slot do painel do AdSense. Sem ele, nada é renderizado. */
+  id?: string;
+}
+
+const { slot_, id } = Astro.props;
+
+const ativo =
+  import.meta.env.PUBLIC_ADS_ENABLED === 'true' &&
+  Boolean(import.meta.env.PUBLIC_ADSENSE_CLIENT) &&
+  Boolean(id);
+---
+
+{
+  ativo && (
+    <aside class="ad-slot" data-posicao={slot_} aria-label="Publicidade">
+      <span class="ad-rotulo">Publicidade</span>
+      <ins
+        class="adsbygoogle"
+        style="display:block"
+        data-ad-client={import.meta.env.PUBLIC_ADSENSE_CLIENT}
+        data-ad-slot={id}
+        data-ad-format="auto"
+        data-full-width-responsive="true"
+      />
+    </aside>
+  )
+}
+
+<style>
+  .ad-slot {
+    margin-block: 2rem;
+  }
+
+  .ad-rotulo {
+    display: block;
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--sl-color-gray-4);
+    margin-block-end: 0.35rem;
+  }
+</style>
