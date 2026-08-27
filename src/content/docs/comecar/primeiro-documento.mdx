@@ -1,0 +1,189 @@
+---
+title: Seu primeiro documento
+description: >-
+  Tutorial prático montando um Bundle FHIR do zero, resolvendo referências por
+  fullUrl e validando localmente, tudo sem precisar de credencial da RNDS.
+sidebar:
+  order: 3
+---
+
+import { Steps, Aside, Tabs, TabItem } from '@astrojs/starlight/components';
+
+Este é um tutorial autoral: monta um documento clínico do zero, explica cada
+decisão de estrutura e valida o resultado. **Não exige credencial da RNDS**,
+tudo aqui roda na sua máquina.
+
+O objetivo não é produzir um documento pronto para produção e sim entender a
+mecânica. Para os campos exatos do seu caso, a fonte é sempre o
+[perfil publicado](/integracao/perfis-e-br-core/).
+
+## Antes de começar
+
+<Steps>
+
+1. **Baixe um exemplo oficial.** O
+   [índice de artefatos](https://rnds-fhir.saude.gov.br/artifacts.html) do Guia
+   de Implementação traz instâncias completas de Bundle em JSON. Um documento
+   válido de verdade ensina mais rápido que qualquer descrição.
+
+2. **Instale o validador.** É um JAR, roda offline:
+   [releases do org.hl7.fhir.core](https://github.com/hapifhir/org.hl7.fhir.core/releases).
+
+</Steps>
+
+## Passo 1 - gere os identificadores primeiro
+
+Esta é a inversão que pega todo mundo. Num documento FHIR, os recursos se
+referenciam por `fullUrl`, e o `Composition` precisa apontar para recursos que
+ainda não existem quando você começa a escrever.
+
+A saída é gerar os UUIDs **antes** de montar qualquer coisa:
+
+```js
+import { randomUUID } from 'node:crypto';
+
+const ref = () => `urn:uuid:${randomUUID()}`;
+
+const id = {
+  composition: ref(),
+  paciente: ref(),
+  organizacao: ref(),
+  observacao: ref(),
+};
+```
+
+Agora você pode montar os recursos em qualquer ordem, porque toda referência já
+tem destino conhecido.
+
+## Passo 2 - o Composition vem primeiro, sempre
+
+Para Bundles do tipo `document`, a especificação FHIR é normativa: **a primeira
+entrada é obrigatoriamente um `Composition`**. Ele é o índice do documento - não
+contém os dados clínicos, aponta para quem contém.
+
+```js
+const composition = {
+  resourceType: 'Composition',
+  status: 'final',
+  type: {
+    coding: [{
+      system: 'https://rnds-fhir.saude.gov.br/CodeSystem/BRTipoDocumento',
+      code: 'REL',
+    }],
+  },
+  date: new Date().toISOString(),
+  title: 'Resultado de Exame Laboratorial',
+  subject:   { reference: id.paciente },
+  author:    [{ reference: id.organizacao }],
+  custodian: { reference: id.organizacao },
+  section: [{
+    title: 'Resultados',
+    entry: [{ reference: id.observacao }],
+  }],
+};
+```
+
+<Aside type="caution">
+Os valores de `system` acima são ilustrativos. As URIs canônicas reais estão nos
+NamingSystems e CodeSystems do Guia de Implementação, **copie de lá**. Escrever
+URI de memória é uma das causas mais frequentes de rejeição. Veja em
+[identificadores](/integracao/identificadores/).
+</Aside>
+
+## Passo 3 - os recursos referenciados
+
+```js
+const paciente = {
+  resourceType: 'Patient',
+  identifier: [{ system: '<URI-do-CNS>', value: '700000000000000' }],
+  name: [{ text: 'Paciente de Teste' }],
+  gender: 'female',
+  birthDate: '1985-03-12',
+};
+
+const organizacao = {
+  resourceType: 'Organization',
+  identifier: [{ system: '<URI-do-CNES>', value: '0000000' }],
+  name: 'Laboratório de Teste',
+};
+```
+
+<Aside type="danger" title="Nunca use dado real">
+Dado de saúde é dado pessoal sensível sob a LGPD, com regime mais restritivo que
+o de dado pessoal comum. Não use dado real de paciente em desenvolvimento e não
+coloque documento clínico real em repositório, nem privado.
+</Aside>
+
+## Passo 4 - empacote o Bundle
+
+```js
+const bundle = {
+  resourceType: 'Bundle',
+  type: 'document',
+  timestamp: new Date().toISOString(),
+  entry: [
+    { fullUrl: id.composition,  resource: composition },
+    { fullUrl: id.paciente,     resource: paciente },
+    { fullUrl: id.organizacao,  resource: organizacao },
+    { fullUrl: id.observacao,   resource: observacao },
+  ],
+};
+```
+
+Repare que cada entrada casa `fullUrl` com o UUID gerado no passo 1, e que as
+referências dentro dos recursos apontam para esses mesmos valores, **nunca para
+um ID de banco de dados**. O documento é autocontido: tudo que ele referencia
+está dentro dele.
+
+## Passo 5 - valide
+
+```bash
+java -jar validator_cli.jar documento.json \
+  -version 4.0.1 \
+  -ig br.gov.saude.br-core.fhir
+```
+
+Se acusar erro, a primeira pergunta útil é **em qual camada o perfil violado
+está**: no BR Core ou na RNDS. Saber isso acelera muito o diagnóstico, veja em
+[perfis e BR Core](/integracao/perfis-e-br-core/).
+
+## Passo 6 - leia de volta
+
+Ler é a metade que costuma ser subestimada. Navegar índice a índice
+(`bundle.entry[3].resource...`) funciona no primeiro documento e quebra no
+segundo, porque a ordem das entradas não é garantida.
+
+<Tabs>
+<TabItem label="Índice de fullUrl">
+
+```js
+const porUrl = new Map(
+  bundle.entry.map((e) => [e.fullUrl, e.resource])
+);
+
+const comp = bundle.entry[0].resource;
+const paciente = porUrl.get(comp.subject.reference);
+```
+
+</TabItem>
+<TabItem label="FHIRPath">
+
+```
+Bundle.entry.resource.ofType(Patient).identifier
+  .where(system = '<URI-do-CNS>').value
+```
+
+Devolve vazio em vez de explodir se o campo não existir. Veja em
+[FHIRPath](/ferramentas/fhirpath/).
+
+</TabItem>
+</Tabs>
+
+## O que fazer em seguida
+
+- Baixe **todos** os exemplos oficiais e use como fixtures dos seus testes
+- Coloque a validação no CI, para pegar regressão antes do barramento
+- Escreva casos de teste **negativos**, código fora do ValueSet, dígito
+  verificador inválido, campo obrigatório ausente. O barramento rejeita por
+  motivos que não aparecem nos exemplos.
+- Leia os [erros comuns](/erros-comuns/) antes de gastar tempo com eles

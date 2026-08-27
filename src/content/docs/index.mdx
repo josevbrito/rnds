@@ -1,0 +1,103 @@
+---
+title: Guia RNDS para Desenvolvedores
+description: >-
+  Guia aberto e independente para quem precisa integrar sistemas de saúde à RNDS.
+  Legislação, modelos de informação, serviços FHIR e ferramentas, com fonte linkada
+  e data de verificação em cada afirmação.
+# Sem isto o Starlight concatena título da página + do site e a home fica
+# "Guia RNDS para Desenvolvedores | Guia RNDS para Desenvolvedores".
+head:
+  - tag: title
+    content: Guia RNDS para Desenvolvedores
+hero:
+  tagline: >-
+    Integrar com a RNDS significa juntar documentação espalhada por cinco portais diferentes.
+    Este guia já fez isso e mostra, em cada afirmação, de onde ela saiu e quando foi conferida.
+  actions:
+    - text: Começar do zero
+      link: /comecar/
+      icon: right-arrow
+      variant: primary
+    - text: Ver a legislação
+      link: /legislacao/
+      icon: document
+      variant: secondary
+      attrs:
+        class: botao-ambar
+---
+
+import { CardGrid, LinkCard, Aside } from '@astrojs/starlight/components';
+import AvisoNaoOficial from '../../components/AvisoNaoOficial.astro';
+
+## Por onde começar
+
+<CardGrid>
+  <LinkCard
+    title="Nunca integrei nada"
+    href="/comecar/"
+    description="O caminho guiado: o que é a RNDS, por que FHIR, e como montar seu primeiro documento sem precisar de credencial."
+  />
+  <LinkCard
+    title="Qual portaria vale hoje?"
+    href="/legislacao/"
+    description="A linha do tempo completa, com ementa, status, o que cada norma revogou e incluindo as que faltam na lista oficial."
+  />
+  <LinkCard
+    title="Qual modelo devo implementar?"
+    href="/modelos/"
+    description="Os onze modelos de informação catalogados: nove em produção e dois mantidos como histórico."
+  />
+  <LinkCard
+    title="Quero o dado, não o texto"
+    href="/dados/"
+    description="Tudo que alimenta este site, publicado como JSON aberto com CORS liberado."
+  />
+</CardGrid>
+
+<Aside type="tip" title="Com pressa?">
+Se você pode escolher a porta de entrada, comece pelo [REL](/modelos/rel/), porque
+foi o primeiro modelo implantado e é o que tem mais exemplos.
+
+E dispare o [processo de acesso](/integracao/acesso/) hoje: o gargalo do projeto
+costuma ser a burocracia, não o desenvolvimento.
+</Aside>
+
+## Por que este guia existe
+
+A documentação da RNDS é aberta, mas está espalhada: a legislação fica no
+gov.br, os perfis FHIR no [rnds-fhir.saude.gov.br](rnds-fhir.saude.gov.br), a parte narrativa no
+[rnds-guia.saude.gov.br](rnds-guia.saude.gov.br), os exemplos no Simplifier, e o processo de acesso no
+Portal de Serviços do DATASUS. Juntar tudo isso é a primeira semana de trabalho
+de qualquer integrador  e todo mundo refaz esse mesmo trabalho do zero.
+
+Há também um problema mais concreto. **A página oficial de legislação da RNDS
+está incompleta**: em agosto de 2026 ela não listava a Portaria GM/MS
+nº 6.100/2024, que instituiu o REPM e o REDFM, nem a GM/MS nº 8.347/2025, que
+substituiu o modelo do RAC. Quem confia só nela implementa o modelo errado.
+
+Este guia tenta ser o índice que falta. Três regras sustentam isso:
+
+1. **Toda afirmação técnica tem fonte pública linkada.**
+2. **Toda afirmação tem data de verificação**, mostrada na página.
+3. **Nada de dado real de paciente**, em nenhuma hipótese.
+
+<AvisoNaoOficial variante="destaque" />
+
+## Como ajudar
+
+O projeto é aberto sob [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.pt-br)
+(texto) e MIT (código). A contribuição mais valiosa não é código: é avisar que
+saiu portaria nova ou que algo aqui está errado.
+
+<CardGrid>
+  <LinkCard
+    title="Abrir uma issue"
+    href="https://github.com/josevbrito/rnds/issues/new/choose"
+    description="Há template para 'saiu portaria nova' para contribuição."
+  />
+  <LinkCard
+    title="Ver o repositório"
+    href="https://github.com/josevbrito/rnds"
+    description="Os dados vivem em YAML versionado. Corrigir uma portaria é editar um arquivo."
+  />
+</CardGrid>

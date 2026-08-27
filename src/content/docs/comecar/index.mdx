@@ -1,0 +1,62 @@
+---
+title: Começar do zero
+description: >-
+  O caminho mínimo para integrar um sistema de saúde à RNDS, do primeiro dia ao
+  primeiro documento aceito — incluindo o que pode ser feito sem credencial.
+sidebar:
+  order: 0
+---
+
+import { Steps, Aside } from '@astrojs/starlight/components';
+
+Se você acabou de receber "precisamos integrar com a RNDS" e não sabe por onde
+pegar, esta página é o mapa. Leva uns dez minutos e evita as duas perdas de
+tempo mais comuns: começar pelo modelo errado e descobrir tarde que o gargalo
+do projeto é burocrático, não técnico.
+
+## O ponto que muda o cronograma
+
+<Aside type="caution" title="Requerir o acesso é o primeiro passo">
+O desenvolvimento não é a parte crítica. A primeira barreira é conseguir o
+certificado digital, por meio da conta do gov.br e aprovação do DATASUS. **Quem faz isso é
+o gestor do/a estabelecimento/instituição, não o desenvolvedor**.
+
+Comece [o processo de acesso](/integracao/acesso/) no dia 1 e desenvolva contra
+ambiente local enquanto o gestor verifica o acesso. É perfeitamente possível: veja
+[testando sem acesso](/ferramentas/testando-sem-acesso/).
+</Aside>
+
+## O caminho
+
+<Steps>
+
+1. **Entenda o que a rede é:** a RNDS troca documentos clínicos estruturados via
+   API, não arquivos de remessa em lote. Isso muda tudo no desenho da
+   integração. → [O que é a RNDS](/comecar/o-que-e-a-rnds/)
+
+2. **Entenda o motivo de ser FHIR:** você vai produzir e consumir grafos de recursos e
+   a conformidade é verificável automaticamente contra perfis publicados.
+   → [Por que FHIR](/comecar/por-que-fhir/)
+
+3. **Descubra qual modelo é o seu:** são onze modelos de informação, cada um com
+   sua portaria. Implementar o errado é o erro mais caro do projeto.
+   → [Modelos de informação](/modelos/)
+
+4. **Dispare o processo de acesso** com o gestor do estabelecimento, em paralelo
+   com tudo o mais. → [Como conseguir acesso](/integracao/acesso/)
+
+5. **Monte um documento e valide localmente**, sem esperar credencial nenhuma.
+   → [Seu primeiro documento](/comecar/primeiro-documento/)
+
+</Steps>
+
+## Se você tem pressa
+
+Comece pelo **REL** (Resultado de Exame Laboratorial). Foi o primeiro modelo
+implantado, é o mais maduro e tem mais exemplos e material de apoio do que
+qualquer outro. Se o seu caso de uso permite escolher a porta de entrada,
+entrar por ele encurta a curva.
+
+Se o seu caso é registrar atendimento de forma genérica e o estabelecimento não
+tem prontuário eletrônico, o modelo relevante é provavelmente o
+[CMD](/modelos/cmd/).
