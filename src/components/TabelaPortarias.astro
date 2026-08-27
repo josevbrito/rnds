@@ -1,0 +1,346 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+import { dataCurta, dataISO, dataLonga, ano, rotuloStatus, rotuloFonte } from '../lib/formato';
+
+/**
+ * Linha do tempo da legislação da RNDS.
+ *
+ * Renderizada a partir de src/data/portarias.yaml, nunca escrita à mão. O
+ * filtro é vanilla JS sobre o HTML já renderizado: o conteúdo completo existe
+ * sem JavaScript, então busca e leitor de tela enxergam tudo.
+ */
+const portarias = (await getCollection('portarias')).sort(
+  (a, b) => b.data.data.getTime() - a.data.data.getTime()
+);
+
+// Resolve as referências para modelos, para exibir as siglas.
+const linhas = await Promise.all(
+  portarias.map(async (p) => {
+    const modelos = await Promise.all(
+      p.data.modelos.map(async (ref) => {
+        const m = await getEntry(ref);
+        return m ? { id: m.id, sigla: m.data.sigla } : null;
+      })
+    );
+    const revoga = await Promise.all(
+      p.data.revoga.map(async (ref) => {
+        const r = await getEntry(ref);
+        return r ? r.data.numero : null;
+      })
+    );
+    const revogadaPor = await Promise.all(
+      p.data.revogada_por.map(async (ref) => {
+        const r = await getEntry(ref);
+        return r ? r.data.numero : null;
+      })
+    );
+    return {
+      ...p.data,
+      id: p.id,
+      modelos: modelos.filter(Boolean) as { id: string; sigla: string }[],
+      revoga: revoga.filter(Boolean) as string[],
+      revogadaPor: revogadaPor.filter(Boolean) as string[],
+    };
+  })
+);
+
+const anos = [...new Set(linhas.map((l) => ano(l.data)))].sort((a, b) => b - a);
+const siglas = [...new Set(linhas.flatMap((l) => l.modelos.map((m) => m.sigla)))].sort();
+const totalAusentes = linhas.filter((l) => l.ausente_da_lista_oficial).length;
+---
+
+<div class="legislacao">
+  <div class="resumo">
+    <strong>{linhas.length}</strong> normas catalogadas.
+    {
+      totalAusentes > 0 && (
+        <>
+          {' '}
+          <span class="marca-ausente">
+            {totalAusentes} não constam da lista oficial do gov.br.
+          </span>
+        </>
+      )
+    }
+  </div>
+
+  <div class="filtros">
+    <label>
+      Modelo
+      <select data-filtro="modelo">
+        <option value="">todos</option>
+        {siglas.map((s) => <option value={s}>{s}</option>)}
+      </select>
+    </label>
+    <label>
+      Ano
+      <select data-filtro="ano">
+        <option value="">todos</option>
+        {anos.map((a) => <option value={String(a)}>{a}</option>)}
+      </select>
+    </label>
+    <label class="checkbox">
+      <input type="checkbox" data-filtro="ausente" />
+      só as ausentes do gov.br
+    </label>
+  </div>
+
+  <ol class="timeline">
+    {
+      linhas.map((l) => (
+        <li
+          class="norma"
+          data-modelos={l.modelos.map((m) => m.sigla).join(' ')}
+          data-ano={ano(l.data)}
+          data-ausente={String(l.ausente_da_lista_oficial)}
+          id={l.id}
+        >
+          <div class="cabecalho">
+            <h3>
+              Portaria {l.numero}
+              <span class="etiqueta" data-status={l.status}>
+                {rotuloStatus[l.status]}
+              </span>
+            </h3>
+            <time datetime={dataISO(l.data)} title={dataLonga(l.data)}>
+              {dataCurta(l.data)}
+            </time>
+          </div>
+
+          <p class="ementa">{l.ementa}</p>
+
+          {l.ausente_da_lista_oficial && (
+            <p class="alerta-ausente">
+              <strong>Não consta da página oficial de legislação da RNDS</strong> no
+              gov.br. Compilada de outras fontes públicas, listadas abaixo.
+            </p>
+          )}
+
+          <ul class="meta">
+            {l.modelos.length > 0 && (
+              <li>
+                <span class="rotulo">Modelos</span>
+                {l.modelos.map((m) => (
+                  <a href={`/modelos/${m.id}/`}>{m.sigla}</a>
+                ))}
+              </li>
+            )}
+            {l.revoga.length > 0 && (
+              <li>
+                <span class="rotulo">Revoga</span>
+                {l.revoga.join(', ')}
+              </li>
+            )}
+            {l.revogadaPor.length > 0 && (
+              <li>
+                <span class="rotulo">Revogada por</span>
+                {l.revogadaPor.join(', ')}
+              </li>
+            )}
+          </ul>
+
+          {l.notas && <p class="notas">{l.notas}</p>}
+
+          <p class="fontes">
+            {l.fontes.map((f) => (
+              <a href={f.url} rel="noopener external">
+                {f.titulo ?? rotuloFonte[f.tipo]}
+              </a>
+            ))}
+            <span class="verificado">conferido em {dataCurta(l.verificado_em)}</span>
+          </p>
+        </li>
+      ))
+    }
+  </ol>
+
+  <p class="vazio" hidden>Nenhuma norma corresponde a esses filtros.</p>
+</div>
+
+<script>
+  const raiz = document.querySelector<HTMLElement>('.legislacao');
+  if (raiz) {
+    const normas = [...raiz.querySelectorAll<HTMLElement>('.norma')];
+    const vazio = raiz.querySelector<HTMLElement>('.vazio');
+    const seletores = raiz.querySelectorAll<HTMLSelectElement | HTMLInputElement>('[data-filtro]');
+
+    const aplicar = () => {
+      const modelo = raiz.querySelector<HTMLSelectElement>('[data-filtro="modelo"]')!.value;
+      const anoSel = raiz.querySelector<HTMLSelectElement>('[data-filtro="ano"]')!.value;
+      const soAusentes = raiz.querySelector<HTMLInputElement>('[data-filtro="ausente"]')!.checked;
+
+      let visiveis = 0;
+      for (const n of normas) {
+        const ok =
+          (!modelo || (n.dataset.modelos ?? '').split(' ').includes(modelo)) &&
+          (!anoSel || n.dataset.ano === anoSel) &&
+          (!soAusentes || n.dataset.ausente === 'true');
+        n.hidden = !ok;
+        if (ok) visiveis++;
+      }
+      if (vazio) vazio.hidden = visiveis > 0;
+    };
+
+    seletores.forEach((s) => s.addEventListener('change', aplicar));
+  }
+</script>
+
+<style>
+  .resumo {
+    font-size: var(--sl-text-sm);
+    color: var(--sl-color-gray-2);
+    margin-block-end: 1rem;
+  }
+
+  .filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.375rem;
+    margin-block-end: 2rem;
+    font-size: var(--sl-text-sm);
+  }
+
+  .filtros label {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--sl-color-gray-2);
+  }
+
+  .filtros select {
+    background: var(--sl-color-black);
+    color: var(--sl-color-white);
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.25rem;
+    padding: 0.25rem 0.4rem;
+    font: inherit;
+  }
+
+  .timeline {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-inline-start: 1px solid var(--sl-color-gray-5);
+  }
+
+  .norma {
+    position: relative;
+    padding: 0 0 2rem 1.5rem;
+  }
+
+  .norma::before {
+    content: '';
+    position: absolute;
+    inset-inline-start: -4.5px;
+    top: 0.55rem;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--sl-color-gray-4);
+  }
+
+  /* As ausentes da lista oficial usam a cor da marca: são o ponto do site. */
+  .norma[data-ausente='true']::before {
+    background: var(--rnds-alerta);
+    box-shadow: 0 0 0 3px var(--sl-color-accent-low);
+  }
+
+  .cabecalho {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .cabecalho h3 {
+    margin: 0;
+    font-size: var(--sl-text-base);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .cabecalho time {
+    font-size: var(--sl-text-xs);
+    color: var(--sl-color-gray-3);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ementa {
+    margin: 0.5rem 0 0;
+    color: var(--sl-color-gray-2);
+    font-size: var(--sl-text-sm);
+    line-height: 1.6;
+  }
+
+  .alerta-ausente {
+    margin: 0.6rem 0 0;
+    padding: 0.5rem 0.75rem;
+    border-inline-start: 2px solid var(--rnds-alerta);
+    background: var(--sl-color-gray-7, transparent);
+    font-size: var(--sl-text-xs);
+    color: var(--sl-color-gray-2);
+  }
+
+  .alerta-ausente strong {
+    color: var(--rnds-alerta);
+  }
+
+  .meta {
+    list-style: none;
+    padding: 0;
+    margin: 0.75rem 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 1.25rem;
+    font-size: var(--sl-text-xs);
+  }
+
+  .meta li {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .rotulo {
+    color: var(--sl-color-gray-4);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 0.6875rem;
+  }
+
+  .notas {
+    margin: 0.75rem 0 0;
+    font-size: var(--sl-text-xs);
+    color: var(--sl-color-gray-3);
+    line-height: 1.6;
+  }
+
+  .fontes {
+    margin: 0.75rem 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 1rem;
+    align-items: center;
+    font-size: var(--sl-text-xs);
+  }
+
+  .vazio {
+    padding: 2rem 0;
+    color: var(--sl-color-gray-3);
+    font-size: var(--sl-text-sm);
+  }
+
+  @media (max-width: 50rem) {
+    .filtros {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+</style>

@@ -1,0 +1,83 @@
+---
+import { getCollection } from 'astro:content';
+
+interface Props {
+  /** Filtra por categoria. Sem a prop, lista tudo. */
+  categoria?: string;
+}
+
+const { categoria } = Astro.props;
+
+const todas = await getCollection('ferramentas');
+const ferramentas = categoria
+  ? todas.filter((f) => f.data.categoria === categoria)
+  : todas;
+
+// Oficiais primeiro: numa dúvida de conformidade, é para lá que se deve olhar.
+ferramentas.sort((a, b) => Number(b.data.oficial) - Number(a.data.oficial));
+---
+
+<ul class="ferramentas">
+  {
+    ferramentas.map((f) => (
+      <li>
+        <div class="cabecalho">
+          <a href={f.data.url}>
+            <strong>{f.data.nome}</strong>
+          </a>
+          {f.data.oficial && <span class="etiqueta" data-status="vigente">oficial</span>}
+          {f.data.licenca && <span class="licenca">{f.data.licenca}</span>}
+          {f.data.linguagens.map((l) => (
+            <span class="linguagem">{l}</span>
+          ))}
+        </div>
+        <p>{f.data.descricao}</p>
+        {f.data.repo && f.data.repo !== f.data.url && (
+          <p class="repo">
+            <a href={f.data.repo}>repositório</a>
+          </p>
+        )}
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .ferramentas {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .ferramentas li {
+    padding-block: 1rem;
+    border-block-end: 1px solid var(--sl-color-gray-6);
+  }
+
+  .cabecalho {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .ferramentas p {
+    margin: 0.4rem 0 0;
+    font-size: var(--sl-text-sm);
+    color: var(--sl-color-gray-2);
+    line-height: 1.65;
+  }
+
+  .licenca,
+  .linguagem {
+    font-size: 0.6875rem;
+    color: var(--sl-color-gray-4);
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.2rem;
+    padding: 0.05rem 0.35rem;
+  }
+
+  .repo {
+    font-size: var(--sl-text-xs) !important;
+  }
+</style>

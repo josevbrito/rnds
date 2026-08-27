@@ -1,0 +1,87 @@
+---
+import { getCollection } from 'astro:content';
+import { dataCurta } from '../lib/formato';
+
+// Homologação primeiro: é por onde todo integrador passa antes de produção.
+const ordem = { homologacao: 0, producao: 1 };
+const ambientes = (await getCollection('ambientes')).sort(
+  (a, b) => ordem[a.data.tipo] - ordem[b.data.tipo]
+);
+---
+
+<table class="tabela-dados">
+  <thead>
+    <tr>
+      <th>Ambiente</th>
+      <th>Auth (obter token)</th>
+      <th>EHR (trocar dados)</th>
+    </tr>
+  </thead>
+  <tbody>
+    {
+      ambientes.map((a) => (
+        <tr>
+          <td>
+            <strong>{a.data.nome}</strong>
+            <br />
+            <span class="etiqueta" data-status={a.data.aberto ? 'vigente' : 'revogada'}>
+              {a.data.aberto ? 'aberto' : 'exige credencial'}
+            </span>
+          </td>
+          <td>
+            <code>{a.data.auth_host}</code>
+          </td>
+          <td>
+            <code>{a.data.ehr_host}</code>
+            {a.data.ehr_por_uf && <span class="por-uf">por UF</span>}
+          </td>
+        </tr>
+      ))
+    }
+  </tbody>
+</table>
+
+<ul class="observacoes">
+  {
+    ambientes.map(
+      (a) =>
+        a.data.observacao && (
+          <li>
+            <strong>{a.data.nome}.</strong> {a.data.observacao}
+          </li>
+        )
+    )
+  }
+</ul>
+
+{
+  ambientes[0] && (
+    <p class="verificado">Conferido em {dataCurta(ambientes[0].data.verificado_em)}.</p>
+  )
+}
+
+<style>
+  td strong {
+    color: var(--sl-color-white);
+  }
+
+  .por-uf {
+    display: inline-block;
+    margin-inline-start: 0.4rem;
+    font-size: 0.6875rem;
+    color: var(--rnds-alerta);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .observacoes {
+    margin-block-start: 1rem;
+    font-size: var(--sl-text-sm);
+    color: var(--sl-color-gray-2);
+    line-height: 1.65;
+  }
+
+  .observacoes strong {
+    color: var(--sl-color-white);
+  }
+</style>

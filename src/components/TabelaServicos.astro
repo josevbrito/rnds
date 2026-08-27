@@ -1,0 +1,90 @@
+---
+import { getCollection } from 'astro:content';
+import { dataCurta } from '../lib/formato';
+
+const servicos = await getCollection('servicos');
+const grupos = [
+  { chave: 'seguranca', titulo: 'Segurança', nota: 'Obtenção de token e de contexto assistencial.' },
+  { chave: 'saude', titulo: 'Saúde', nota: 'Consulta de entidades e envio de documentos clínicos.' },
+] as const;
+
+const verificado = servicos[0]?.data.verificado_em;
+---
+
+{
+  grupos.map((g) => {
+    const itens = servicos.filter((s) => s.data.categoria === g.chave);
+    return (
+      <section class="grupo">
+        <h3>{g.titulo}</h3>
+        <p class="nota">{g.nota}</p>
+        <table class="tabela-dados">
+          <thead>
+            <tr>
+              <th>Método</th>
+              <th>Caminho</th>
+              <th>O que faz</th>
+            </tr>
+          </thead>
+          <tbody>
+            {itens.map((s) => (
+              <tr>
+                <td>
+                  <span class="metodo" data-metodo={s.data.metodo}>
+                    {s.data.metodo}
+                  </span>
+                </td>
+                <td>
+                  <code>{s.data.endpoint}</code>
+                </td>
+                <td>
+                  <strong>{s.data.nome}</strong>
+                  <br />
+                  {s.data.descricao}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
+    );
+  })
+}
+
+{verificado && <p class="verificado">Conferido em {dataCurta(verificado)}.</p>}
+
+<style>
+  .grupo {
+    margin-block-end: 2rem;
+  }
+
+  .grupo h3 {
+    margin-block-end: 0.25rem;
+  }
+
+  .nota {
+    margin-block: 0 0.75rem;
+    font-size: var(--sl-text-xs);
+    color: var(--sl-color-gray-3);
+  }
+
+  .metodo {
+    font-family: var(--__sl-font-mono, monospace);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    padding: 0.1rem 0.4rem;
+    border-radius: 0.2rem;
+    border: 1px solid currentcolor;
+  }
+
+  .metodo[data-metodo='GET'] {
+    color: var(--rnds-vigente);
+  }
+  .metodo[data-metodo='POST'] {
+    color: var(--sl-color-accent-high);
+  }
+
+  td strong {
+    color: var(--sl-color-white);
+  }
+</style>

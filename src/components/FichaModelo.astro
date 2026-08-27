@@ -1,0 +1,317 @@
+---
+import { getEntry } from 'astro:content';
+import { dataCurta, dataLonga, dataISO, rotuloStatus, rotuloFonte } from '../lib/formato';
+
+/**
+ * Ficha de um modelo de informação, montada a partir de src/data/modelos.yaml.
+ *
+ * As páginas MDX em content/docs/modelos/ carregam só o frontmatter (título e
+ * descrição, que a sidebar e o SEO precisam) e delegam o conteúdo factual para
+ * este componente. Assim o dado tem um lugar só, e mudar uma portaria não exige
+ * editar prosa.
+ *
+ * O bloco de atributos usa linhas rótulo/valor em vez de uma grade de colunas:
+ * o número de atributos varia por modelo (um tem código BRTipoDocumento, outro
+ * tem sucessão, outro tem os dois) e qualquer grade de N colunas deixa órfão
+ * quando a contagem não é múltipla de N.
+ */
+interface Props {
+  id: string;
+}
+
+const { id } = Astro.props;
+
+const modelo = await getEntry('modelos', id);
+if (!modelo) {
+  throw new Error(
+    `FichaModelo: modelo "${id}" não existe em src/data/modelos.yaml. ` +
+      `Confira o id usado na página MDX.`
+  );
+}
+
+const d = modelo.data;
+
+const vigente = d.portaria_vigente ? await getEntry(d.portaria_vigente) : null;
+const portarias = (
+  await Promise.all(d.portarias.map((ref) => getEntry(ref)))
+).filter(Boolean);
+const sucedidoPor = d.sucedido_por ? await getEntry(d.sucedido_por) : null;
+const sucede = d.sucede ? await getEntry(d.sucede) : null;
+---
+
+<div class="ficha">
+  <p class="resumo">{d.resumo}</p>
+
+  {
+    d.status === 'historico' && sucedidoPor && (
+      <aside class="aviso-historico">
+        <strong>Modelo histórico.</strong> Para implementações novas, use o{' '}
+        <a href={`/modelos/${sucedidoPor.id}/`}>
+          {sucedidoPor.data.sigla} - {sucedidoPor.data.nome}
+        </a>
+        , que o sucedeu.
+      </aside>
+    )
+  }
+
+  <dl class="atributos">
+    <dt>Situação</dt>
+    <dd>
+      <span class="etiqueta" data-status={d.status}>{rotuloStatus[d.status]}</span>
+    </dd>
+
+    {
+      vigente && (
+        <>
+          <dt>Norma vigente</dt>
+          <dd>
+            <a href={`/legislacao/#${vigente.id}`}>Portaria {vigente.data.numero}</a>
+            <span class="secundario">
+              de <time datetime={dataISO(vigente.data.data)}>{dataLonga(vigente.data.data)}</time>
+            </span>
+            {vigente.data.ausente_da_lista_oficial && (
+              <span class="marca-ausente">ausente da lista do gov.br</span>
+            )}
+          </dd>
+        </>
+      )
+    }
+
+    {
+      sucede && (
+        <>
+          <dt>Sucede</dt>
+          <dd>
+            <a href={`/modelos/${sucede.id}/`}>{sucede.data.sigla}</a>
+            <span class="secundario">{sucede.data.nome}</span>
+          </dd>
+        </>
+      )
+    }
+
+    {
+      sucedidoPor && (
+        <>
+          <dt>Sucedido por</dt>
+          <dd>
+            <a href={`/modelos/${sucedidoPor.id}/`}>{sucedidoPor.data.sigla}</a>
+            <span class="secundario">{sucedidoPor.data.nome}</span>
+          </dd>
+        </>
+      )
+    }
+
+    {
+      d.codigo_tipo_documento && (
+        <>
+          <dt>Tipo de documento</dt>
+          <dd>
+            <code>{d.codigo_tipo_documento}</code>
+            <span class="secundario">
+              no{' '}
+              <a href="https://rnds-fhir.saude.gov.br/CodeSystem-BRTipoDocumento.html">
+                CodeSystem BRTipoDocumento
+              </a>
+            </span>
+          </dd>
+        </>
+      )
+    }
+  </dl>
+
+  {
+    portarias.length > 0 && (
+      <section>
+        <h2>Base normativa</h2>
+        <ul class="normas">
+          {portarias.map((p) => (
+            <li>
+              <div class="norma-topo">
+                <a href={`/legislacao/#${p!.id}`}>Portaria {p!.data.numero}</a>
+                <span class="etiqueta" data-status={p!.data.status}>
+                  {rotuloStatus[p!.data.status]}
+                </span>
+                <time class="secundario" datetime={dataISO(p!.data.data)}>
+                  {dataCurta(p!.data.data)}
+                </time>
+                {p!.data.ausente_da_lista_oficial && (
+                  <span class="marca-ausente">ausente do gov.br</span>
+                )}
+              </div>
+              <p class="ementa">{p!.data.ementa}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  <section>
+    <h2>Onde está a especificação</h2>
+    <ul class="links">
+      {
+        d.ig_oficial && (
+          <li>
+            <a href={d.ig_oficial}>Guia de Implementação FHIR da RNDS</a>
+            <span class="etiqueta" data-status="vigente">oficial</span>
+            <p class="secundario">É o que vale para decisão de implementação.</p>
+          </li>
+        )
+      }
+      {
+        d.ig_comunitario.map((ig) => (
+          <li>
+            <a href={ig.url}>{ig.nome}</a>
+            <span class="etiqueta" data-status="historico">não oficial</span>
+            <p class="secundario">
+              {ig.autor}
+              {ig.repo && (
+                <>
+                  {' · '}
+                  <a href={ig.repo}>repositório</a>
+                </>
+              )}
+            </p>
+          </li>
+        ))
+      }
+    </ul>
+    {
+      d.ig_comunitario.length > 0 && (
+        <p class="ressalva">
+          Guias não oficiais costumam ser mais navegáveis, mas podem estar
+          defasados. Confira contra o <code>rnds-fhir.saude.gov.br</code> antes
+          de depender de detalhes.
+        </p>
+      )
+    }
+  </section>
+
+  <p class="fontes">
+    {d.fontes.map((f) => <a href={f.url}>{f.titulo ?? rotuloFonte[f.tipo]}</a>)}
+    <span class="verificado">conferido em {dataCurta(d.verificado_em)}</span>
+  </p>
+</div>
+
+<style>
+  .resumo {
+    font-size: var(--sl-text-lg);
+    line-height: 1.6;
+    color: var(--sl-color-white);
+  }
+
+  .aviso-historico {
+    border-inline-start: 3px solid var(--rnds-alerta);
+    padding: 0.75rem 1rem;
+    margin-block: 1.5rem;
+    background: var(--sl-color-gray-7, transparent);
+    font-size: var(--sl-text-sm);
+  }
+
+  /* Linhas rótulo/valor: uma por atributo, sem órfão qualquer que seja a
+     quantidade. Colapsa para uma coluna no celular. */
+  .atributos {
+    display: grid;
+    grid-template-columns: minmax(7rem, max-content) 1fr;
+    gap: 0;
+    margin-block: 2rem;
+    border-block-start: 1px solid var(--sl-color-gray-5);
+  }
+
+  .atributos dt {
+    grid-column: 1;
+    padding: 0.7rem 1.5rem 0.7rem 0;
+    font-size: var(--sl-text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--sl-color-gray-3);
+    border-block-end: 1px solid var(--sl-color-gray-6);
+    white-space: nowrap;
+  }
+
+  .atributos dd {
+    grid-column: 2;
+    margin: 0;
+    padding: 0.7rem 0;
+    font-size: var(--sl-text-sm);
+    border-block-end: 1px solid var(--sl-color-gray-6);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.25rem 0.6rem;
+  }
+
+  .secundario {
+    color: var(--sl-color-gray-3);
+    font-size: var(--sl-text-xs);
+  }
+
+  h2 {
+    font-size: var(--sl-text-h5);
+    margin-block: 2rem 0.75rem;
+  }
+
+  .normas,
+  .links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .normas li,
+  .links li {
+    padding-block: 0.8rem;
+    border-block-end: 1px solid var(--sl-color-gray-6);
+  }
+
+  .norma-topo,
+  .links li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .normas .ementa,
+  .links .secundario {
+    flex-basis: 100%;
+    margin: 0.3rem 0 0;
+    font-size: var(--sl-text-xs);
+    color: var(--sl-color-gray-3);
+    line-height: 1.6;
+  }
+
+  .ressalva {
+    font-size: var(--sl-text-xs);
+    color: var(--sl-color-gray-3);
+    margin-block-start: 0.75rem;
+  }
+
+  .fontes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 1rem;
+    align-items: center;
+    font-size: var(--sl-text-xs);
+    margin-block-start: 2rem;
+    padding-block-start: 1rem;
+    border-block-start: 1px solid var(--sl-color-gray-5);
+  }
+
+  @media (max-width: 45rem) {
+    .atributos {
+      grid-template-columns: 1fr;
+    }
+
+    .atributos dt {
+      grid-column: 1;
+      padding-block-end: 0.15rem;
+      border-block-end: none;
+    }
+
+    .atributos dd {
+      grid-column: 1;
+      padding-block-start: 0;
+    }
+  }
+</style>

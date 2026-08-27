@@ -1,0 +1,107 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+import { dataCurta, rotuloStatus } from '../lib/formato';
+
+const modelos = (await getCollection('modelos')).sort((a, b) => a.data.ordem - b.data.ordem);
+
+const linhas = await Promise.all(
+  modelos.map(async (m) => {
+    const vigente = m.data.portaria_vigente ? await getEntry(m.data.portaria_vigente) : null;
+    return { id: m.id, ...m.data, vigente };
+  })
+);
+
+const emProducao = linhas.filter((l) => l.status === 'producao');
+const historicos = linhas.filter((l) => l.status === 'historico');
+---
+
+<p class="resumo">
+  <strong>{linhas.length}</strong> modelos catalogados —
+  {emProducao.length} em produção e {historicos.length} mantidos como histórico.
+  O material que circula por aí costuma falar em "os sete tipos de documento";
+  isso ficou desatualizado quando entraram SAO, RIRA, REPM e REDFM.
+</p>
+
+<table class="tabela-dados">
+  <thead>
+    <tr>
+      <th>Sigla</th>
+      <th>Modelo</th>
+      <th>Situação</th>
+      <th>Norma vigente</th>
+    </tr>
+  </thead>
+  <tbody>
+    {
+      linhas.map((l) => (
+        <tr>
+          <td>
+            <a href={`/modelos/${l.id}/`}>
+              <strong>{l.sigla}</strong>
+            </a>
+          </td>
+          <td>
+            {l.nome}
+            <p class="resumo-linha">{l.resumo}</p>
+          </td>
+          <td>
+            <span class="etiqueta" data-status={l.status}>
+              {rotuloStatus[l.status]}
+            </span>
+          </td>
+          <td>
+            {l.vigente ? (
+              <a href={`/legislacao/#${l.vigente.id}`}>{l.vigente.data.numero}</a>
+            ) : (
+              <span class="lacuna" title="Norma não localizada nas fontes consultadas">
+                a mapear
+              </span>
+            )}
+          </td>
+        </tr>
+      ))
+    }
+  </tbody>
+</table>
+
+{
+  linhas.some((l) => !l.vigente) && (
+    <p class="lacuna-nota">
+      "A mapear" significa que a norma instituidora não foi localizada nas fontes
+      públicas consultadas - não que ela não exista. Se você tiver a referência,{' '}
+      <a href="https://github.com/josevbrito/rnds/issues/new/choose">abra uma issue</a>.
+    </p>
+  )
+}
+
+<p class="verificado">
+  Conferido em {dataCurta(linhas[0]!.verificado_em)}.
+</p>
+
+<style>
+  .resumo {
+    font-size: var(--sl-text-sm);
+    color: var(--sl-color-gray-2);
+    line-height: 1.65;
+  }
+
+  .resumo-linha {
+    margin: 0.25rem 0 0;
+    font-size: var(--sl-text-xs);
+    color: var(--sl-color-gray-3);
+    line-height: 1.55;
+    max-width: 44ch;
+  }
+
+  .lacuna {
+    font-size: var(--sl-text-xs);
+    color: var(--rnds-alerta);
+    font-style: italic;
+  }
+
+  .lacuna-nota {
+    font-size: var(--sl-text-xs);
+    color: var(--sl-color-gray-3);
+    margin-block-start: 1rem;
+  }
+</style>
