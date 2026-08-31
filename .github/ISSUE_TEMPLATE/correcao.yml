@@ -1,0 +1,55 @@
+name: 🔧 Isto está errado
+description: Reportar erro, informação defasada ou link quebrado
+title: '[correção] '
+labels: ['correção']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Obrigado por avisar. Como este guia trata de conteúdo normativo,
+        **toda correção precisa de fonte pública** - é a regra que mantém o
+        material confiável.
+
+  - type: input
+    id: pagina
+    attributes:
+      label: Onde
+      description: URL da página, ou o arquivo do repositório.
+      placeholder: https://rnds.josevbrito.com/modelos/rac/
+    validations:
+      required: true
+
+  - type: textarea
+    id: problema
+    attributes:
+      label: O que está errado
+      placeholder: A página diz que o modelo vigente é X, mas foi substituído em...
+    validations:
+      required: true
+
+  - type: textarea
+    id: correto
+    attributes:
+      label: O que deveria dizer
+
+  - type: input
+    id: fonte
+    attributes:
+      label: Link da fonte que comprova
+      description: >-
+        Documentação oficial, texto da norma, ou o Guia de Implementação. Sem
+        fonte pública verificável não é possível aplicar a correção.
+      placeholder: https://rnds-fhir.saude.gov.br/...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: gravidade
+    attributes:
+      label: Alguém pode implementar errado por causa disso?
+      options:
+        - 'Sim - informação normativa incorreta'
+        - 'Talvez - pode confundir'
+        - 'Não - erro de digitação, link quebrado, formatação'
+    validations:
+      required: true

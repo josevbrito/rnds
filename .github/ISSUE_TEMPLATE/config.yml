@@ -1,0 +1,17 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 📖 Documentação oficial da RNDS
+    url: https://rnds-fhir.saude.gov.br/
+    about: >-
+      Este guia é material independente e não oficial. Para a especificação
+      canônica dos perfis FHIR, vá ao Guia de Implementação do Ministério da Saúde.
+
+  - name: 🔑 Solicitar acesso à RNDS
+    url: https://servicos-datasus.saude.gov.br/
+    about: >-
+      Este projeto não intermedeia acesso nem emite certificado. O credenciamento
+      é feito pelo gestor do estabelecimento no Portal de Serviços do DATASUS.
+
+  - name: ❓ Dúvidas de processo
+    url: https://rnds.saude.gov.br/perguntas-e-respostas/
+    about: Quem pode solicitar, o que conta como estabelecimento, prazos - no FAQ oficial.

@@ -1,0 +1,73 @@
+name: 📜 Saiu portaria nova
+description: Avisar sobre uma norma da RNDS que ainda não está no guia
+title: '[portaria] '
+labels: ['legislação']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Esta é a contribuição mais valiosa que o projeto pode receber.
+
+        A lista oficial de legislação da RNDS no gov.br está incompleta, então
+        avisos como este são a principal forma de o guia não ficar defasado.
+        Você não precisa preencher tudo - número e link já ajudam muito.
+
+  - type: input
+    id: numero
+    attributes:
+      label: Número da portaria
+      description: Como aparece na publicação, incluindo o órgão emissor.
+      placeholder: GM/MS nº 8.347
+    validations:
+      required: true
+
+  - type: input
+    id: data
+    attributes:
+      label: Data
+      placeholder: 08/10/2025
+    validations:
+      required: true
+
+  - type: textarea
+    id: ementa
+    attributes:
+      label: Ementa
+      description: O texto que resume o que a portaria institui.
+      placeholder: >-
+        Institui o Modelo de Informação do Registro de Atendimento Clínico
+        (RAC), no âmbito da Rede Nacional de Dados em Saúde (RNDS).
+
+  - type: input
+    id: fonte
+    attributes:
+      label: Link da fonte
+      description: >-
+        gov.br, DOU, BVS Saúde Legis, CONASS - qualquer fonte pública onde a
+        norma possa ser lida. Sem link, não conseguimos incluir.
+      placeholder: https://bvsms.saude.gov.br/bvs/saudelegis/...
+    validations:
+      required: true
+
+  - type: input
+    id: modelos
+    attributes:
+      label: Modelos afetados
+      description: Siglas dos modelos de informação que a norma institui ou altera.
+      placeholder: RAC
+
+  - type: textarea
+    id: revogacao
+    attributes:
+      label: Revoga alguma norma anterior?
+      description: >-
+        Se souber, cite o artigo de revogação literalmente. É o que permite
+        montar a cadeia de sucessão entre as portarias.
+      placeholder: 'Art. 5º Fica revogada a Portaria GM/MS nº 234, de 18 de julho de 2022.'
+
+  - type: checkboxes
+    id: lista-oficial
+    attributes:
+      label: Lista oficial
+      options:
+        - label: Esta norma **não** aparece na página de legislação da RNDS no gov.br

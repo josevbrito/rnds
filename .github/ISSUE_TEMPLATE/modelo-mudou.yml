@@ -1,0 +1,67 @@
+name: 🔄 Modelo de informação mudou
+description: Um modelo foi criado, substituído ou saiu de produção
+title: '[modelo] '
+labels: ['modelo']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use este template quando um **modelo de informação** muda de estado —
+        um novo entra em produção, um antigo é sucedido, uma sigla muda.
+
+        Se o que mudou foi só a norma que rege um modelo já catalogado, o
+        template de **portaria nova** é mais direto.
+
+  - type: input
+    id: sigla
+    attributes:
+      label: Sigla
+      placeholder: REDFM
+    validations:
+      required: true
+
+  - type: input
+    id: nome
+    attributes:
+      label: Nome completo
+      placeholder: Registro Eletrônico de Dispensação ou Fornecimento de Medicamentos
+
+  - type: dropdown
+    id: mudanca
+    attributes:
+      label: O que mudou
+      options:
+        - 'Modelo novo, ainda não catalogado'
+        - 'Modelo existente foi sucedido por outro'
+        - 'Mudou de situação (homologação → produção, ou saiu de produção)'
+        - 'Sigla ou nome mudou'
+        - 'Outra coisa'
+    validations:
+      required: true
+
+  - type: input
+    id: sucessao
+    attributes:
+      label: Sucede ou é sucedido por qual modelo?
+      description: Se aplicável - é o que permite mostrar ao leitor o que usar no lugar.
+      placeholder: sucede o RDM
+
+  - type: input
+    id: portaria
+    attributes:
+      label: Norma que institui
+      placeholder: GM/MS nº 6.100, de 17/12/2024
+
+  - type: input
+    id: ig
+    attributes:
+      label: Guia de Implementação
+      description: Link do IG oficial ou comunitário, se houver.
+      placeholder: https://rnds-fhir.saude.gov.br/
+
+  - type: input
+    id: fonte
+    attributes:
+      label: Link da fonte
+    validations:
+      required: true
