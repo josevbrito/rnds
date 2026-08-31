@@ -1,0 +1,45 @@
+---
+title: Linha do tempo da legislação
+description: >-
+  Todas as portarias da RNDS em ordem cronológica: número, data, ementa, o que
+  cada uma instituiu e o que revogou. Inclui as normas ausentes da lista oficial
+  do gov.br.
+---
+
+import TabelaPortarias from '../../components/TabelaPortarias.astro';
+
+A RNDS é definida por portaria. Cada modelo de informação foi instituído por uma
+norma específica, e essas normas são substituídas com frequência. Implementar
+contra a portaria errada é o erro mais caro que um projeto de integração pode
+cometer.
+
+Esta página compila o que foi possível verificar em fontes públicas.
+
+:::caution[A lista oficial está incompleta]
+A [página de legislação da RNDS no gov.br](https://www.gov.br/saude/pt-br/composicao/seidigi/rnds/legislacao)
+é a fonte primária desta compilação, mas em agosto de 2026 ela **não listava**
+duas normas relevantes:
+
+- **Portaria GM/MS nº 6.100/2024**, que instituiu o REPM e o REDFM
+- **Portaria GM/MS nº 8.347/2025**, que substituiu integralmente o modelo do RAC
+
+Ambas foram compiladas aqui a partir de CONASS e BVS Saúde Legis, e estão
+marcadas na linha do tempo. Use o filtro abaixo para ver só elas.
+:::
+
+<TabelaPortarias />
+
+## Sobre a citação de normas
+
+Textos de lei, decreto e portaria não são protegidos por direito autoral no
+Brasil - [Lei nº 9.610/1998, art. 8º, inciso IV](https://www.planalto.gov.br/ccivil_03/leis/l9610.htm).
+Citar ementa e conteúdo normativo aqui é lícito. Ainda assim, cada entrada linka
+a fonte para que você leia o texto integral: **esta página é índice, não
+substituto da norma**.
+
+## Encontrou uma portaria que falta?
+
+É uma das contribuições mais valiosas que este projeto pode receber.
+[Abra uma issue](https://github.com/josevbrito/rnds/issues/new/choose) com
+número, data, ementa e link, o template pede exatamente esses campos e leva
+uns trinta segundos.
