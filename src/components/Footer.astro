@@ -1,5 +1,7 @@
 ---
 import Default from '@astrojs/starlight/components/Footer.astro';
+import Analytics from '@vercel/analytics/astro';
+import SpeedInsights from '@vercel/speed-insights/astro';
 import AvisoNaoOficial from './AvisoNaoOficial.astro';
 import AdSlot from './AdSlot.astro';
 ---
@@ -7,3 +9,6 @@ import AdSlot from './AdSlot.astro';
 <AdSlot slot_="rodape" />
 <Default><slot /></Default>
 <AvisoNaoOficial />
+
+<Analytics />
+<SpeedInsights />
