@@ -21,7 +21,8 @@
     "validar": "node scripts/validar-dados.mjs",
     "gerar:modelos": "node scripts/gerar-paginas-modelos.mjs",
     "astro": "astro",
-    "gerar:favicon": "node scripts/gerar-favicon.mjs"
+    "gerar:favicon": "node scripts/gerar-favicon.mjs",
+    "gerar:og": "node scripts/gerar-og.mjs"
   },
   "dependencies": {
     "@astrojs/starlight": "^0.41.9",

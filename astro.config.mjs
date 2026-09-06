@@ -3,9 +3,10 @@ import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 
 const REPO = 'https://github.com/josevbrito/rnds';
+const SITE = 'https://rnds.josevbrito.com';
 
 export default defineConfig({
-  site: 'https://rnds.josevbrito.com',
+  site: SITE,
   integrations: [
     starlight({
       title: 'Guia RNDS para Desenvolvedores',
@@ -50,6 +51,36 @@ export default defineConfig({
         {
           tag: 'meta',
           attrs: { name: 'theme-color', content: '#b45309' },
+        },
+        // O Starlight emite og:title, og:description e twitter:card sozinho,
+        // Gerada por `npm run gerar:og`.
+        {
+          tag: 'meta',
+          attrs: { property: 'og:image', content: `${SITE}/og.png` },
+        },
+        {
+          tag: 'meta',
+          attrs: { property: 'og:image:type', content: 'image/png' },
+        },
+        {
+          tag: 'meta',
+          attrs: { property: 'og:image:width', content: '1200' },
+        },
+        {
+          tag: 'meta',
+          attrs: { property: 'og:image:height', content: '630' },
+        },
+        {
+          tag: 'meta',
+          attrs: {
+            property: 'og:image:alt',
+            content:
+              'Guia RNDS para Desenvolvedores - material independente, não oficial',
+          },
+        },
+        {
+          tag: 'meta',
+          attrs: { name: 'twitter:image', content: `${SITE}/og.png` },
         },
       ],
       sidebar: [
