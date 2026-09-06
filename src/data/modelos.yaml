@@ -31,7 +31,7 @@
   nome: Registro de Atendimento Clínico
   resumo: >-
     Consulta realizada na atenção básica, especializada ou domiciliar. Reúne
-    histórico clínico do pacientes: sintomas, medicamentos e procedimentos.
+    histórico clínico do paciente: sintomas, medicamentos e procedimentos.
   status: producao
   codigo_tipo_documento: RAC
   portaria_vigente: gm-ms-8347-2025

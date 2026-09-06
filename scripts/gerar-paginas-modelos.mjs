@@ -25,6 +25,16 @@ await mkdir(destino, { recursive: true });
 
 const escapar = (s) => s.replace(/"/g, '\\"').replace(/\s+/g, ' ').trim();
 
+const MAX_DESCRICAO = 155;
+
+const resumir = (texto) => {
+  const t = escapar(texto);
+  if (t.length <= MAX_DESCRICAO) return t;
+
+  const corte = t.lastIndexOf(' ', MAX_DESCRICAO - 1);
+  return t.slice(0, corte).replace(/[\s,;:.\-–—]+$/, '') + '…';
+};
+
 const badge = (status) =>
   ({
     historico: "\n    badge: { text: 'histórico', variant: 'note' }",
@@ -40,7 +50,7 @@ for (const m of modelos) {
 
   const conteudo = `---
 title: ${m.sigla} - ${m.nome}
-description: "${escapar(m.resumo).slice(0, 155)}"
+description: "${resumir(m.resumo)}"
 sidebar:
     label: ${m.sigla}
     order: ${m.ordem ?? 99}${badge(m.status)}
