@@ -3,13 +3,63 @@
 # Fonte primária: página de legislação da RNDS no gov.br.
 #   https://www.gov.br/saude/pt-br/composicao/seidigi/rnds/legislacao
 #
-# ATENÇÃO: essa página oficial está INCOMPLETA. Em 26/08/2026 ela não listava
-# a Portaria GM/MS nº 6.100/2024 (REPM e REDFM) nem a GM/MS nº 8.347/2025
-# (novo modelo do RAC). As entradas marcadas com 'ausente_da_lista_oficial: true'
-# foram compiladas de outras fontes públicas (CONASS, BVS Saúde Legis, DOU).
+# ATENÇÃO: essa página oficial está INCOMPLETA. Em 09/10/2026 ela listava só
+# 13 normas e não trazia, entre outras, a Portaria GM/MS nº 6.100/2024 (REPM e
+# REDFM), a GM/MS nº 8.347/2025 (novo modelo do RAC) nem nenhuma norma de 2026.
+# As entradas marcadas com 'ausente_da_lista_oficial: true' foram compiladas de
+# outras fontes públicas (CONASS, BVS Saúde Legis, DOU).
 #
 # Regra de contribuição: toda entrada precisa de pelo menos uma fonte pública
 # linkada e de 'verificado_em' atualizado. Ver CONTRIBUTING.md.
+
+- id: gm-ms-11952-2026
+  numero: GM/MS nº 11.952
+  orgao: GM/MS
+  data: 2026-07-13
+  ementa: >-
+    Altera a Portaria de Consolidação nº 1, de 28 de setembro de 2017, para
+    instituir o Modelo de Informação do Conjunto Mínimo de Dados (CMD).
+  status: vigente
+  modelos: [cmd]
+  ausente_da_lista_oficial: true
+  notas: >-
+    Primeira norma a instituir formalmente o modelo do CMD. O anexo determina
+    que as informações sejam "enviadas regularmente à RNDS" e atribui ao DATASUS
+    as adequações para a operacionalização técnica do modelo na rede. Vigora
+    desde a publicação, com efeitos operacionais na RNDS na competência
+    seguinte. Não constava da página de legislação da RNDS no gov.br em
+    09/10/2026.
+  fontes:
+    - tipo: conass
+      titulo: Conass Informa n. 126/2026
+      url: https://www.conass.org.br/altera-a-portaria-de-consolidacao-no-1-de-28-de-setembro-de-2017-para-instituir-o-modelo-de-informacao-do-conjunto-minimo-de-dados-cmd/
+  verificado_em: 2026-10-09
+
+- id: gm-ms-10341-2026
+  numero: GM/MS nº 10.341
+  orgao: GM/MS
+  data: 2026-03-12
+  ementa: >-
+    Altera a Portaria de Consolidação nº 1, de 28 de setembro de 2017, para
+    instituir o Modelo de Informação para Registro de Atendimento via
+    Teleconsultoria (RATC) e o Modelo de Informação de Resultado de Exame com
+    Laudo Clínico (RELC) no âmbito da Rede Nacional de Dados em Saúde (RNDS).
+  status: vigente
+  modelos: [ratc, relc]
+  ausente_da_lista_oficial: true
+  notas: >-
+    Publicada no DOU de 16/03/2026. Insere os arts. 254-CA (RATC) e 254-CB
+    (RELC) na consolidação. Não traz revogação expressa. As especificações
+    técnicas de envio ficam a cargo do Portal de Serviços do DATASUS. Não
+    constava da página de legislação da RNDS no gov.br em 09/10/2026.
+  fontes:
+    - tipo: dou
+      titulo: Diário Oficial da União - Portaria GM/MS nº 10.341/2026
+      url: https://www.in.gov.br/web/dou/-/portaria-gm/ms-n-10.341-de-12-de-marco-de-2026-692755299
+    - tipo: conass
+      titulo: Conass Informa n. 47/2026
+      url: https://www.conass.org.br/conass-informa-n-47-2026-publicada-a-portaria-gm-n-10-341-que-altera-a-portaria-de-consolidacao-no-1-17-para-instituir-o-modelo-de-informacao-para-registro-de-atendimento-via-telecon/
+  verificado_em: 2026-10-09
 
 - id: gm-ms-8347-2025
   numero: GM/MS nº 8.347
@@ -25,12 +75,32 @@
   notas: >-
     Substitui integralmente o modelo do RAC instituído em 2022. O art. 5º traz a
     revogação expressa: "Fica revogada a Portaria GM/MS nº 234, de 18 de julho
-    de 2022." Não constava da página de legislação da RNDS no gov.br em 26/08/2026.
+    de 2022." Não constava da página de legislação da RNDS no gov.br em 09/10/2026.
   fontes:
     - tipo: conass
       titulo: Conass Informa n. 191/2025
       url: https://www.conass.org.br/conass-informa-n-191-2025-publicada-a-portaria-gm-n-8-347-que-institui-o-modelo-de-informacao-do-registro-de-atendimento-clinico-rac-no-ambito-da-rede-nacional-de-dados-em-saude/
-  verificado_em: 2026-08-26
+  verificado_em: 2026-10-09
+
+- id: gm-ms-8323-2025
+  numero: GM/MS nº 8.323
+  orgao: GM/MS
+  data: 2025-10-03
+  ementa: >-
+    Institui o Modelo de Informação para Teleinterconsulta no âmbito da Rede
+    Nacional de Dados em Saúde (RNDS).
+  status: vigente
+  modelos: [rati]
+  ausente_da_lista_oficial: true
+  notas: >-
+    Institui o RATI (Registro de Atendimento via Teleinterconsulta). Não traz
+    revogação expressa. Não constava da página de legislação da RNDS no gov.br
+    em 09/10/2026.
+  fontes:
+    - tipo: conass
+      titulo: Conass Informa n. 183/2025
+      url: https://www.conass.org.br/conass-informa-n-183-2025-publicada-a-portaria-gm-n-8-323-que-institui-o-modelo-de-informacao-para-teleinterconsulta-no-ambito-da-rede-nacional-de-dados-em-saude-rnds/
+  verificado_em: 2026-10-09
 
 - id: gm-ms-8026-2025
   numero: GM/MS nº 8.026
@@ -52,7 +122,7 @@
     - tipo: conass
       titulo: Conass Informa n. 151/2025
       url: https://www.conass.org.br/conass-informa-n-151-2025-publicada-a-portaria-gm-n-8-026-que-institui-o-modelo-de-informacao-do-sumario-de-alta-sa-no-ambito-da-rede-nacional-de-dados-em-saude-rnds/
-  verificado_em: 2026-08-26
+  verificado_em: 2026-10-09
 
 - id: gm-ms-8025-2025
   numero: GM/MS nº 8.025
@@ -67,7 +137,7 @@
     - tipo: gov-br
       titulo: Legislação da RNDS - gov.br
       url: https://www.gov.br/saude/pt-br/composicao/seidigi/rnds/legislacao/portaria-gm-ms-no-8-025-de-27-de-agosto-de-2025
-  verificado_em: 2026-08-26
+  verificado_em: 2026-10-09
 
 - id: gm-ms-6100-2024
   numero: GM/MS nº 6.100
@@ -86,7 +156,7 @@
     e os Anexos LX e LXI da Portaria SAES/MS de Consolidação nº 1, de 22 de
     fevereiro de 2022", dispositivos onde os modelos de 2022 haviam sido
     consolidados. Não constava da página de legislação da RNDS no gov.br em
-    26/08/2026.
+    09/10/2026.
   fontes:
     - tipo: bvs
       titulo: BVS Saúde Legis - texto integral
@@ -94,7 +164,30 @@
     - tipo: conass
       titulo: Conass Informa n. 218/2024
       url: https://www.conass.org.br/conass-informa-n-218-2024-publicada-a-portaria-gm-n-6-100-que-institui-os-modelos-de-informacao-de-registro-eletronico-da-prescricao-de-medicamentos-e-de-registro-eletronico-de-dispen/
-  verificado_em: 2026-08-26
+  verificado_em: 2026-10-09
+
+- id: gm-ms-5663-2024
+  numero: GM/MS nº 5.663
+  orgao: GM/MS
+  data: 2024-10-31
+  ementa: >-
+    Altera a Portaria de Consolidação GM/MS nº 1, de 2017, para padronizar e
+    centralizar na RNDS os registros de vacinação.
+  status: vigente
+  modelos: [ria]
+  ausente_da_lista_oficial: true
+  notas: >-
+    Não cria modelo novo: determina que os dados de vacinação sigam
+    exclusivamente para a RNDS no modelo RIA vigente, via PEC, CDS ou sistema
+    próprio integrado, com prazo de 24 horas para salas com conectividade e 15
+    dias para as sem. Desativa a integração de vacinas pelo layout e-SUS LEDI
+    APS (Thrift/XML). Ementa resumida, confira o texto no DOU. Não constava da
+    página de legislação da RNDS no gov.br em 09/10/2026.
+  fontes:
+    - tipo: dou
+      titulo: Diário Oficial da União - Portaria GM/MS nº 5.663/2024
+      url: https://www.in.gov.br/web/dou/-/portaria-gm/ms-n-5.663-de-31-de-outubro-de-2024-593693777
+  verificado_em: 2026-10-09
 
 - id: saes-seidigi-3-2023
   numero: Portaria Conjunta SAES/SEIDIGI nº 3
@@ -109,7 +202,7 @@
     - tipo: gov-br
       titulo: Legislação da RNDS - gov.br
       url: https://www.gov.br/saude/pt-br/composicao/seidigi/rnds/legislacao/portaria-conjunta-saes-seidigi-no-3-de-18-de-abril-de-2023
-  verificado_em: 2026-08-26
+  verificado_em: 2026-10-09
 
 - id: portaria-701-2022
   numero: Portaria nº 701
@@ -128,7 +221,7 @@
     - tipo: gov-br
       titulo: Legislação da RNDS - gov.br
       url: https://www.gov.br/saude/pt-br/composicao/seidigi/rnds/legislacao/portaria-no-701-de-29-de-setembro-de-2022
-  verificado_em: 2026-08-26
+  verificado_em: 2026-10-09
 
 - id: gm-ms-3328-2022
   numero: GM/MS nº 3.328
@@ -146,7 +239,7 @@
     - tipo: gov-br
       titulo: Legislação da RNDS - gov.br
       url: https://www.gov.br/saude/pt-br/composicao/seidigi/rnds/legislacao/portaria-gm-ms-no-3-328-de-22-de-agosto-de-2022
-  verificado_em: 2026-08-26
+  verificado_em: 2026-10-09
 
 - id: gm-ms-234-2022
   numero: GM/MS nº 234
@@ -165,7 +258,7 @@
     - tipo: gov-br
       titulo: Legislação da RNDS - gov.br
       url: https://www.gov.br/saude/pt-br/composicao/seidigi/rnds/legislacao/portaria-no-234-de-18-de-julho-de-2022
-  verificado_em: 2026-08-26
+  verificado_em: 2026-10-09
 
 - id: saes-ms-50-2022
   numero: SAES/MS nº 50
@@ -187,7 +280,7 @@
     - tipo: gov-br
       titulo: Legislação da RNDS - gov.br
       url: https://www.gov.br/saude/pt-br/composicao/seidigi/rnds/legislacao/portaria-saes-ms-no-50-de-9-de-fevereiro-de-2022
-  verificado_em: 2026-08-26
+  verificado_em: 2026-10-09
 
 - id: gm-ms-1046-2021
   numero: GM/MS nº 1.046
@@ -202,7 +295,7 @@
     - tipo: gov-br
       titulo: Legislação da RNDS - gov.br
       url: https://www.gov.br/saude/pt-br/composicao/seidigi/rnds/legislacao/portaria-gm-ms-no-1-046-de-24-de-maio-de-2021
-  verificado_em: 2026-08-26
+  verificado_em: 2026-10-09
 
 - id: gm-ms-69-2021
   numero: GM/MS nº 69
@@ -220,7 +313,7 @@
     - tipo: gov-br
       titulo: Legislação da RNDS - gov.br
       url: https://www.gov.br/saude/pt-br/composicao/seidigi/rnds/legislacao/portaria-gm-ms-no-69-de-14-de-janeiro-de-2021
-  verificado_em: 2026-08-26
+  verificado_em: 2026-10-09
 
 - id: gm-ms-3632-2020
   numero: GM/MS nº 3.632
@@ -238,7 +331,7 @@
     - tipo: gov-br
       titulo: Legislação da RNDS - gov.br
       url: https://www.gov.br/saude/pt-br/composicao/seidigi/rnds/legislacao/portaria-gm-ms-no-3-632-de-21-de-dezembro-de-2020
-  verificado_em: 2026-08-26
+  verificado_em: 2026-10-09
 
 - id: portaria-1068-2020
   numero: Portaria nº 1.068
@@ -256,7 +349,7 @@
     - tipo: gov-br
       titulo: Legislação da RNDS - gov.br
       url: https://www.gov.br/saude/pt-br/composicao/seidigi/rnds/legislacao/portaria-no-1-068-de-17-de-novembo-de-2020
-  verificado_em: 2026-08-26
+  verificado_em: 2026-10-09
 
 - id: portaria-1792-2020
   numero: Portaria nº 1.792
@@ -271,7 +364,7 @@
     - tipo: gov-br
       titulo: Legislação da RNDS - gov.br
       url: https://www.gov.br/saude/pt-br/composicao/seidigi/rnds/legislacao/portaria-no-1-792-de-17-de-julho-de-2020
-  verificado_em: 2026-08-26
+  verificado_em: 2026-10-09
 
 - id: portaria-1434-2020
   numero: Portaria nº 1.434
@@ -289,4 +382,4 @@
     - tipo: gov-br
       titulo: Legislação da RNDS - gov.br
       url: https://www.gov.br/saude/pt-br/composicao/seidigi/rnds/legislacao/portaria-no-1-434-de-28-de-maio-de-2020
-  verificado_em: 2026-08-26
+  verificado_em: 2026-10-09

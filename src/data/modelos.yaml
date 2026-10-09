@@ -1,6 +1,6 @@
 # Modelos de Informação da RNDS
 #
-# São onze os modelos catalogados aqui, sendo nove vigentes e dois mantidos como histórico.
+# São catorze os modelos catalogados aqui, sendo doze vigentes e dois mantidos como histórico.
 #
 # 'codigo_tipo_documento' refere-se ao CodeSystem BRTipoDocumento:
 #   https://rnds-fhir.saude.gov.br/CodeSystem-BRTipoDocumento.html
@@ -59,7 +59,7 @@
   status: producao
   codigo_tipo_documento: RIA
   portaria_vigente: gm-ms-69-2021
-  portarias: [gm-ms-69-2021]
+  portarias: [gm-ms-5663-2024, gm-ms-69-2021]
   ig_oficial: https://rnds-fhir.saude.gov.br/
   ig_comunitario:
     - nome: RIA Implementation Guide
@@ -71,7 +71,10 @@
     - tipo: gov-br
       titulo: Estrutura do Projeto RNDS - SEIDIGI
       url: https://www.gov.br/saude/pt-br/composicao/seidigi/rnds/estrutura-do-projeto
-  verificado_em: 2026-08-26
+    - tipo: dou
+      titulo: Portaria GM/MS nº 5.663/2024 - centraliza na RNDS os registros de vacinação
+      url: https://www.in.gov.br/web/dou/-/portaria-gm/ms-n-5.663-de-31-de-outubro-de-2024-593693777
+  verificado_em: 2026-10-09
 
 - id: rira
   sigla: RIRA
@@ -148,17 +151,21 @@
     para estabelecimentos que não possuem prontuário eletrônico.
   status: producao
   codigo_tipo_documento: CMD
-  portarias: []
+  portaria_vigente: gm-ms-11952-2026
+  portarias: [gm-ms-11952-2026]
   ig_oficial: https://rnds-fhir.saude.gov.br/
   ordem: 7
   fontes:
+    - tipo: conass
+      titulo: Conass Informa n. 126/2026 - Portaria GM/MS nº 11.952/2026
+      url: https://www.conass.org.br/altera-a-portaria-de-consolidacao-no-1-de-28-de-setembro-de-2017-para-instituir-o-modelo-de-informacao-do-conjunto-minimo-de-dados-cmd/
     - tipo: gov-br
       titulo: Wiki do CMD - Ministério da Saúde (material de governança, não especificação técnica)
       url: https://wiki.saude.gov.br/cmd/index.php/P%C3%A1gina_principal
     - tipo: ig
       titulo: CodeSystem BRTipoDocumento
       url: https://rnds-fhir.saude.gov.br/CodeSystem-BRTipoDocumento.html
-  verificado_em: 2026-08-26
+  verificado_em: 2026-10-09
 
 - id: repm
   sigla: REPM
@@ -207,6 +214,62 @@
       url: https://bvsms.saude.gov.br/bvs/saudelegis/gm/2024/prt6100_18_12_2024.html
   verificado_em: 2026-08-26
 
+- id: rati
+  sigla: RATI
+  nome: Registro de Atendimento via Teleinterconsulta
+  resumo: >-
+    Atendimento realizado por teleinterconsulta, instituído em 2025. A
+    especificação técnica ainda não foi conferida no Guia de Implementação.
+  status: planejado
+  portaria_vigente: gm-ms-8323-2025
+  portarias: [gm-ms-8323-2025]
+  ordem: 10
+  fontes:
+    - tipo: conass
+      titulo: Conass Informa n. 183/2025
+      url: https://www.conass.org.br/conass-informa-n-183-2025-publicada-a-portaria-gm-n-8-323-que-institui-o-modelo-de-informacao-para-teleinterconsulta-no-ambito-da-rede-nacional-de-dados-em-saude-rnds/
+  verificado_em: 2026-10-09
+
+- id: ratc
+  sigla: RATC
+  nome: Registro de Atendimento via Teleconsultoria
+  resumo: >-
+    Atendimento realizado por teleconsultoria, instituído em 2026 junto com o
+    RELC. A portaria remete as especificações técnicas de envio ao Portal de
+    Serviços do DATASUS.
+  status: planejado
+  portaria_vigente: gm-ms-10341-2026
+  portarias: [gm-ms-10341-2026]
+  ordem: 11
+  fontes:
+    - tipo: dou
+      titulo: Diário Oficial da União - Portaria GM/MS nº 10.341/2026
+      url: https://www.in.gov.br/web/dou/-/portaria-gm/ms-n-10.341-de-12-de-marco-de-2026-692755299
+    - tipo: conass
+      titulo: Conass Informa n. 47/2026
+      url: https://www.conass.org.br/conass-informa-n-47-2026-publicada-a-portaria-gm-n-10-341-que-altera-a-portaria-de-consolidacao-no-1-17-para-instituir-o-modelo-de-informacao-para-registro-de-atendimento-via-telecon/
+  verificado_em: 2026-10-09
+
+- id: relc
+  sigla: RELC
+  nome: Resultado de Exame com Laudo Clínico
+  resumo: >-
+    Resultado de exame acompanhado de laudo clínico, instituído em 2026 junto
+    com o RATC. A portaria remete as especificações técnicas de envio ao Portal
+    de Serviços do DATASUS. Não confundir com o REL, de exame laboratorial.
+  status: planejado
+  portaria_vigente: gm-ms-10341-2026
+  portarias: [gm-ms-10341-2026]
+  ordem: 12
+  fontes:
+    - tipo: dou
+      titulo: Diário Oficial da União - Portaria GM/MS nº 10.341/2026
+      url: https://www.in.gov.br/web/dou/-/portaria-gm/ms-n-10.341-de-12-de-marco-de-2026-692755299
+    - tipo: conass
+      titulo: Conass Informa n. 47/2026
+      url: https://www.conass.org.br/conass-informa-n-47-2026-publicada-a-portaria-gm-n-10-341-que-altera-a-portaria-de-consolidacao-no-1-17-para-instituir-o-modelo-de-informacao-para-registro-de-atendimento-via-telecon/
+  verificado_em: 2026-10-09
+
 - id: rpm
   sigla: RPM
   nome: Registro de Prescrição de Medicamento
@@ -218,7 +281,7 @@
   portaria_vigente: saes-ms-50-2022
   portarias: [saes-ms-50-2022]
   sucedido_por: repm
-  ordem: 10
+  ordem: 13
   fontes:
     - tipo: gov-br
       titulo: Legislação da RNDS - gov.br
@@ -240,7 +303,7 @@
     - nome: Perfil Registro de Dispensação de Medicamento (Simplifier)
       autor: Projeto RNDS no Simplifier
       url: https://simplifier.net/redenacionaldedadosemsaude/brregistrodispensacaomedicamento
-  ordem: 11
+  ordem: 14
   fontes:
     - tipo: gov-br
       titulo: Legislação da RNDS - gov.br
