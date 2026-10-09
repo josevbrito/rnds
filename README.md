@@ -16,13 +16,15 @@ Juntar essa documentação é a primeira semana de trabalho de qualquer integrad
 e todo mundo refaz esse mesmo trabalho do zero.
 
 E há uma lacuna concreta: **a página oficial de legislação da RNDS está
-incompleta.** Em agosto de 2026 ela não listava a Portaria GM/MS nº 6.100/2024,
+incompleta.** Em outubro de 2026 ela não listava a Portaria GM/MS nº 6.100/2024,
 que instituiu o REPM e o REDFM, nem a GM/MS nº 8.347/2025, que substituiu
-integralmente o modelo do RAC. Quem confia só nela implementa o modelo errado.
+integralmente o modelo do RAC, nem nenhuma norma de 2026, como a GM/MS
+nº 11.952/2026, que instituiu o modelo do CMD. Quem confia só nela implementa o
+modelo errado.
 
 Outro efeito colateral disso: muito material em circulação ainda fala em "os
-sete tipos de documento" da RNDS. **São onze modelos**, entraram SAO, RIRA,
-REPM e REDFM.
+sete tipos de documento" da RNDS. **São catorze modelos**, entraram SAO, RIRA,
+REPM, REDFM, RATI, RATC e RELC.
 
 ## Dados abertos
 

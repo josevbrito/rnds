@@ -13,13 +13,16 @@ const linhas = await Promise.all(
 
 const emProducao = linhas.filter((l) => l.status === 'producao');
 const historicos = linhas.filter((l) => l.status === 'historico');
+const planejados = linhas.filter((l) => l.status === 'planejado');
 ---
 
 <p class="resumo">
   <strong>{linhas.length}</strong> modelos catalogados —
-  {emProducao.length} em produção e {historicos.length} mantidos como histórico.
+  {emProducao.length} em produção,{' '}
+  {planejados.length > 0 && <>{planejados.length} instituídos sem especificação conferida{' '}</>}
+  e {historicos.length} mantidos como histórico.
   O material que circula por aí costuma falar em "os sete tipos de documento";
-  isso ficou desatualizado quando entraram SAO, RIRA, REPM e REDFM.
+  isso ficou desatualizado quando entraram SAO, RIRA, REPM, REDFM, RATI, RATC e RELC.
 </p>
 
 <table class="tabela-dados">
