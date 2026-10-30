@@ -1,11 +1,21 @@
 ---
 import { getCollection } from 'astro:content';
+import TextoInline from './TextoInline.astro';
 import { dataCurta } from '../lib/formato';
 
-const servicos = await getCollection('servicos');
+const servicos = (await getCollection('servicos')).sort((a, b) => a.data.ordem - b.data.ordem);
 const grupos = [
   { chave: 'seguranca', titulo: 'Segurança', nota: 'Obtenção de token e de contexto assistencial.' },
-  { chave: 'saude', titulo: 'Saúde', nota: 'Consulta de entidades e envio de documentos clínicos.' },
+  {
+    chave: 'saude',
+    titulo: 'Documentos clínicos',
+    nota: 'Envio, substituição, exclusão e recuperação de documentos.',
+  },
+  {
+    chave: 'auxiliar',
+    titulo: 'Consultas auxiliares',
+    nota: 'Servidor, pessoas, estabelecimentos e terminologias.',
+  },
 ] as const;
 
 const verificado = servicos[0]?.data.verificado_em;
@@ -40,7 +50,7 @@ const verificado = servicos[0]?.data.verificado_em;
                 <td>
                   <strong>{s.data.nome}</strong>
                   <br />
-                  {s.data.descricao}
+                  <TextoInline texto={s.data.descricao} />
                 </td>
               </tr>
             ))}
@@ -82,6 +92,9 @@ const verificado = servicos[0]?.data.verificado_em;
   }
   .metodo[data-metodo='POST'] {
     color: var(--sl-color-accent-high);
+  }
+  .metodo[data-metodo='DELETE'] {
+    color: var(--rnds-revogada);
   }
 
   td strong {

@@ -1,0 +1,13 @@
+---
+/**
+ * Texto do YAML com `código` entre crases virando <code>. Só isso: o resto
+ * fica texto puro, sem interpretar Markdown nem HTML.
+ */
+interface Props {
+  texto: string;
+}
+
+const partes = Astro.props.texto.split('`');
+---
+
+{partes.map((parte, i) => (i % 2 === 1 ? <code>{parte}</code> : parte))}

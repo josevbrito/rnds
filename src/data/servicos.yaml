@@ -1,116 +1,244 @@
 # Serviços web da RNDS
 #
-# Fonte: https://rnds-guia.saude.gov.br/docs/rnds/servicos/
+# Fontes:
+#   https://fhir.saude.gov.br/pt-BR/integracao.html (Guia de Implementação, out/2026)
+#   https://rnds-guia.saude.gov.br/docs/rnds/servicos/ (guia narrativo, anterior)
 #
 # Os caminhos abaixo são relativos ao host do ambiente (ambientes.yaml).
 # Nenhum ambiente é aberto: mesmo homologação exige credencial.
+#
+# 'categoria' segue a divisão do Guia de Implementação: 'saude' são os serviços
+# principais (documentos clínicos) e 'auxiliar' os de apoio. 'ordem' é a
+# posição dentro da categoria.
+
+# --- Segurança --------------------------------------------------------------
 
 - id: token
   nome: Obter token de acesso
   metodo: GET
   endpoint: /api/token
   categoria: seguranca
+  ordem: 1
   descricao: >-
-    Troca a autenticação mútua TLS (mTLS, com certificado ICP-Brasil A1) por um
-    token de acesso JWT. É a primeira chamada de qualquer integração.
+    Troca a autenticação mútua TLS, com certificado digital ICP-Brasil e-CNPJ
+    ou e-CPF, por um token de acesso. A resposta é um JSON com o campo
+    `access_token`, válido por 30 minutos. Reutilize o token enquanto ele vale:
+    o certificado serve só para obtê-lo.
   fontes:
+    - tipo: ig
+      titulo: Integração - Guia de Implementação da RNDS
+      url: https://fhir.saude.gov.br/pt-BR/integracao.html
     - tipo: gov-br
       titulo: Serviços - Guia de Integração da RNDS
       url: https://rnds-guia.saude.gov.br/docs/rnds/servicos/
-  verificado_em: 2026-08-26
+  verificado_em: 2026-10-30
 
 - id: contexto-atendimento
   nome: Contexto de atendimento
   metodo: POST
   endpoint: /api/contexto-atendimento
   categoria: seguranca
+  ordem: 2
   descricao: >-
     Obtém o token de autorização de contexto de atendimento, exigido para
-    acessar dados clínicos de um indivíduo sob um vínculo assistencial.
+    acessar dados clínicos de um indivíduo sob um vínculo assistencial. Consta
+    só do guia narrativo anterior: o Guia de Implementação de outubro de 2026
+    não o menciona. Confira antes de depender dele.
   fontes:
     - tipo: gov-br
       titulo: Serviços - Guia de Integração da RNDS
       url: https://rnds-guia.saude.gov.br/docs/rnds/servicos/
-  verificado_em: 2026-08-26
+  verificado_em: 2026-10-30
+
+# --- Documentos clínicos (serviços principais) ------------------------------
+
+- id: bundle-submeter
+  nome: Enviar documento clínico
+  metodo: POST
+  endpoint: /api/fhir/r4/Bundle
+  categoria: saude
+  ordem: 1
+  descricao: >-
+    Envia um documento clínico como Bundle do tipo `document`, com um
+    Composition como primeira entrada. Sucesso é `201 Created`, com o ID RNDS
+    nos headers `location` e `content-location`; rejeição costuma ser `422`,
+    com um OperationOutcome explicando o erro. Guarde o identificador local e o
+    ID RNDS: sem eles não há como consultar, substituir ou excluir depois.
+  fontes:
+    - tipo: ig
+      titulo: Integração - Guia de Implementação da RNDS
+      url: https://fhir.saude.gov.br/pt-BR/integracao.html
+    - tipo: gov-br
+      titulo: Serviços - Guia de Integração da RNDS
+      url: https://rnds-guia.saude.gov.br/docs/rnds/servicos/
+  verificado_em: 2026-10-30
+
+- id: bundle-atualizar
+  nome: Substituir documento clínico
+  metodo: POST
+  endpoint: /api/fhir/r4/Bundle
+  categoria: saude
+  ordem: 2
+  descricao: >-
+    Retifica um documento enviando um novo, que passa a ser o registro ativo.
+    O novo Bundle repete o identificador local do original e traz
+    `Composition.relatesTo` com `code: replaces` apontando para o ID RNDS do
+    original. Cada documento só pode ser substituído uma vez.
+  fontes:
+    - tipo: ig
+      titulo: Integração - Guia de Implementação da RNDS
+      url: https://fhir.saude.gov.br/pt-BR/integracao.html
+    - tipo: gov-br
+      titulo: Serviços - Guia de Integração da RNDS
+      url: https://rnds-guia.saude.gov.br/docs/rnds/servicos/
+  verificado_em: 2026-10-30
+
+- id: bundle-excluir
+  nome: Excluir documento clínico
+  metodo: DELETE
+  endpoint: /api/fhir/r4/Bundle/{id-rnds}
+  categoria: saude
+  ordem: 3
+  descricao: >-
+    Exclusão lógica de um documento, pelo ID RNDS recebido no envio. Use o
+    endpoint da mesma UF de onde o documento foi enviado. Só vale para
+    documento com status `final`; sucesso é `204 No Content`.
+  fontes:
+    - tipo: ig
+      titulo: Integração - Guia de Implementação da RNDS
+      url: https://fhir.saude.gov.br/pt-BR/integracao.html
+  verificado_em: 2026-10-30
+
+- id: composition-document
+  nome: Recuperar documento pelo ID RNDS
+  metodo: GET
+  endpoint: /api/fhir/r4/Composition/{id-rnds}/$document
+  categoria: saude
+  ordem: 4
+  descricao: >-
+    Devolve o Bundle completo do documento a partir do ID RNDS.
+  fontes:
+    - tipo: ig
+      titulo: Integração - Guia de Implementação da RNDS
+      url: https://fhir.saude.gov.br/pt-BR/integracao.html
+  verificado_em: 2026-10-30
+
+- id: identifier
+  nome: Consultar documento pelo identificador local
+  metodo: GET
+  endpoint: /api/identifier
+  categoria: saude
+  ordem: 5
+  descricao: >-
+    Consulta pelo identificador que o seu sistema deu ao documento, com os
+    parâmetros `system`, `value` e `docType` (o modelo). Devolve uma lista
+    resumida, que inclui as substituições e o status de cada registro.
+  fontes:
+    - tipo: ig
+      titulo: Integração - Guia de Implementação da RNDS
+      url: https://fhir.saude.gov.br/pt-BR/integracao.html
+  verificado_em: 2026-10-30
+
+# --- Consultas auxiliares ---------------------------------------------------
+
+- id: metadata
+  nome: Consultar o servidor
+  metodo: GET
+  endpoint: /api/fhir/r4/metadata
+  categoria: auxiliar
+  ordem: 1
+  descricao: >-
+    Devolve o CapabilityStatement do servidor FHIR da RNDS. Serve para
+    verificar se o ambiente está disponível e o que ele aceita.
+  fontes:
+    - tipo: ig
+      titulo: Integração - Guia de Implementação da RNDS
+      url: https://fhir.saude.gov.br/pt-BR/integracao.html
+  verificado_em: 2026-10-30
 
 - id: patient
   nome: Consultar paciente
   metodo: GET
   endpoint: /api/fhir/r4/Patient
-  categoria: saude
-  descricao: Obtém informações sobre o indivíduo (paciente).
-  fontes:
-    - tipo: gov-br
-      titulo: Serviços - Guia de Integração da RNDS
-      url: https://rnds-guia.saude.gov.br/docs/rnds/servicos/
-  verificado_em: 2026-08-26
-
-- id: organization
-  nome: Consultar estabelecimento
-  metodo: GET
-  endpoint: /api/fhir/r4/Organization
-  categoria: saude
+  categoria: auxiliar
+  ordem: 2
   descricao: >-
-    Obtém informações sobre o estabelecimento de saúde ou organização,
-    tipicamente a partir do CNES.
+    Busca o indivíduo por id, em `Patient/{id}`, onde o id é o CNS definitivo,
+    ou por CPF ou CNS no parâmetro `identifier`, no formato
+    `{system}|{número}`.
   fontes:
+    - tipo: ig
+      titulo: Integração - Guia de Implementação da RNDS
+      url: https://fhir.saude.gov.br/pt-BR/integracao.html
     - tipo: gov-br
       titulo: Serviços - Guia de Integração da RNDS
       url: https://rnds-guia.saude.gov.br/docs/rnds/servicos/
-  verificado_em: 2026-08-26
+  verificado_em: 2026-10-30
 
 - id: practitioner
   nome: Consultar profissional
   metodo: GET
   endpoint: /api/fhir/r4/Practitioner
-  categoria: saude
-  descricao: Obtém informações sobre o profissional de saúde.
+  categoria: auxiliar
+  ordem: 3
+  descricao: >-
+    Busca o profissional de saúde por id, em `Practitioner/{id}`, ou por CPF
+    ou CNS no parâmetro `identifier`.
   fontes:
+    - tipo: ig
+      titulo: Integração - Guia de Implementação da RNDS
+      url: https://fhir.saude.gov.br/pt-BR/integracao.html
     - tipo: gov-br
       titulo: Serviços - Guia de Integração da RNDS
       url: https://rnds-guia.saude.gov.br/docs/rnds/servicos/
-  verificado_em: 2026-08-26
+  verificado_em: 2026-10-30
 
 - id: practitioner-role
-  nome: Consultar papel do profissional
+  nome: Consultar lotação do profissional
   metodo: GET
   endpoint: /api/fhir/r4/PractitionerRole
-  categoria: saude
+  categoria: auxiliar
+  ordem: 4
   descricao: >-
-    Obtém informações sobre os papéis desempenhados pelo profissional de saúde,
-    incluindo o vínculo com o estabelecimento e a ocupação (CBO).
+    Devolve o papel do profissional num estabelecimento, com a ocupação em
+    CBO. O id combina os dois números: `PractitionerRole/{CNS}-{CNES}`.
   fontes:
+    - tipo: ig
+      titulo: Integração - Guia de Implementação da RNDS
+      url: https://fhir.saude.gov.br/pt-BR/integracao.html
     - tipo: gov-br
       titulo: Serviços - Guia de Integração da RNDS
       url: https://rnds-guia.saude.gov.br/docs/rnds/servicos/
-  verificado_em: 2026-08-26
+  verificado_em: 2026-10-30
 
-- id: bundle-submeter
-  nome: Submeter documento clínico
-  metodo: POST
-  endpoint: /api/fhir/r4/Bundle
-  categoria: saude
+- id: organization
+  nome: Consultar estabelecimento
+  metodo: GET
+  endpoint: /api/fhir/r4/Organization
+  categoria: auxiliar
+  ordem: 5
   descricao: >-
-    Envia um documento clínico como Bundle do tipo `document`. É o serviço
-    central da integração, a primeira entrada do Bundle precisa ser
-    obrigatoriamente um Composition.
+    Devolve o estabelecimento de saúde pelo CNES, em `Organization/{CNES}`.
   fontes:
+    - tipo: ig
+      titulo: Integração - Guia de Implementação da RNDS
+      url: https://fhir.saude.gov.br/pt-BR/integracao.html
     - tipo: gov-br
       titulo: Serviços - Guia de Integração da RNDS
       url: https://rnds-guia.saude.gov.br/docs/rnds/servicos/
-  verificado_em: 2026-08-26
+  verificado_em: 2026-10-30
 
-- id: bundle-atualizar
-  nome: Atualizar documento clínico
-  metodo: POST
-  endpoint: /api/fhir/r4/Bundle
-  categoria: saude
+- id: codesystem-lookup
+  nome: Consultar código de terminologia
+  metodo: GET
+  endpoint: /api/fhir/r4/CodeSystem/$lookup
+  categoria: auxiliar
+  ordem: 6
   descricao: >-
-    Substitui um documento enviado anteriormente. Documentos clínicos são
-    imutáveis por conceito: a correção não edita o original, gera um novo que
-    o substitui.
+    Detalha um código de um CodeSystem da RNDS, com os parâmetros `system` e
+    `code`. Por exemplo, um código da CID-10 devolve a descrição e a versão.
   fontes:
-    - tipo: gov-br
-      titulo: Serviços - Guia de Integração da RNDS
-      url: https://rnds-guia.saude.gov.br/docs/rnds/servicos/
-  verificado_em: 2026-08-26
+    - tipo: ig
+      titulo: Integração - Guia de Implementação da RNDS
+      url: https://fhir.saude.gov.br/pt-BR/integracao.html
+  verificado_em: 2026-10-30

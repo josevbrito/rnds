@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import TextoInline from './TextoInline.astro';
 import { dataCurta } from '../lib/formato';
 
 // Homologação primeiro: é por onde todo integrador passa antes de produção.
@@ -34,6 +35,11 @@ const ambientes = (await getCollection('ambientes')).sort(
           <td>
             <code>{a.data.ehr_host}</code>
             {a.data.ehr_por_uf && <span class="por-uf">por UF</span>}
+            {a.data.ehr_host_anterior && (
+              <span class="anterior">
+                guia anterior: <code>{a.data.ehr_host_anterior}</code>
+              </span>
+            )}
           </td>
         </tr>
       ))
@@ -47,7 +53,7 @@ const ambientes = (await getCollection('ambientes')).sort(
       (a) =>
         a.data.observacao && (
           <li>
-            <strong>{a.data.nome}.</strong> {a.data.observacao}
+            <strong>{a.data.nome}.</strong> <TextoInline texto={a.data.observacao} />
           </li>
         )
     )
@@ -63,6 +69,13 @@ const ambientes = (await getCollection('ambientes')).sort(
 <style>
   td strong {
     color: var(--sl-color-white);
+  }
+
+  .anterior {
+    display: block;
+    margin-block-start: 0.4rem;
+    font-size: var(--sl-text-xs);
+    color: var(--sl-color-gray-3);
   }
 
   .por-uf {

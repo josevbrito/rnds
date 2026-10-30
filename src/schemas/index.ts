@@ -112,8 +112,14 @@ export const servicoSchema = z.object({
   nome: z.string(),
   metodo: z.enum(['GET', 'POST', 'PUT', 'PATCH', 'DELETE']),
   endpoint: z.string(),
-  categoria: z.enum(['seguranca', 'saude']),
+  categoria: z.enum([
+    'seguranca', // token e contexto de atendimento
+    'saude', // envio, substituição, exclusão e recuperação de documentos clínicos
+    'auxiliar', // consultas de apoio: servidor, pessoas, estabelecimentos, terminologia
+  ]),
   descricao: z.string(),
+  /** Posição dentro da categoria, na ordem em que o integrador usa. */
+  ordem: z.number().default(99),
   ...rastreavel,
 });
 
@@ -123,6 +129,11 @@ export const ambienteSchema = z.object({
   tipo: z.enum(['homologacao', 'producao']),
   auth_host: z.string(),
   ehr_host: z.string(),
+  /**
+   * Host citado por uma fonte mais antiga que ainda resolve. Fica registrado
+   * para quem já usa o endereço antigo; o válido é `ehr_host`.
+   */
+  ehr_host_anterior: z.string().optional(),
   /** Em produção o EHR é por UF (ex.: sp-ehr-services.saude.gov.br). */
   ehr_por_uf: z.boolean().default(false),
   aberto: z.boolean().default(false),

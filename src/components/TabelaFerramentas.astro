@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import TextoInline from './TextoInline.astro';
 
 interface Props {
   /** Filtra por categoria. Sem a prop, lista tudo. */
@@ -31,7 +32,7 @@ ferramentas.sort((a, b) => Number(b.data.oficial) - Number(a.data.oficial));
             <span class="linguagem">{l}</span>
           ))}
         </div>
-        <p>{f.data.descricao}</p>
+        <p><TextoInline texto={f.data.descricao} /></p>
         {f.data.repo && f.data.repo !== f.data.url && (
           <p class="repo">
             <a href={f.data.repo}>repositório</a>

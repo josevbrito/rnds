@@ -1,6 +1,8 @@
 # Ambientes da RNDS
 #
-# Fonte: https://rnds-guia.saude.gov.br/docs/rnds/ambientes/
+# Fontes:
+#   https://fhir.saude.gov.br/pt-BR/integracao.html (Guia de Implementação, out/2026)
+#   https://rnds-guia.saude.gov.br/docs/rnds/ambientes/ (guia narrativo, anterior)
 #
 # NENHUM dos dois ambientes é aberto. Homologação também exige certificado e
 # aprovação do DATASUS, não existe endpoint público para testar.
@@ -9,19 +11,28 @@
   nome: Homologação
   tipo: homologacao
   auth_host: ehr-auth-hmg.saude.gov.br
-  ehr_host: ehr-services.hmg.saude.gov.br
+  ehr_host: ehr-services-hmg.saude.gov.br
+  ehr_host_anterior: ehr-services.hmg.saude.gov.br
   ehr_por_uf: false
   aberto: false
   observacao: >-
     Ambiente nacional e único. Liberado pelo DATASUS após a aprovação da
     solicitação de acesso feita pelo gestor do estabelecimento no Portal de
-    Serviços. É onde se produzem as evidências de conformidade exigidas para a
-    homologação em produção.
+    Serviços, e os dados trafegados ficam restritos aos estabelecimentos (CNES)
+    informados no credenciamento. É onde se produzem as evidências de
+    conformidade exigidas para pedir produção. Atenção ao endereço de dados: o
+    Guia de Implementação de outubro de 2026 usa `ehr-services-hmg`, com hífen,
+    que também aparece nas respostas de exemplo do próprio servidor; o guia
+    narrativo anterior cita `ehr-services.hmg`, com ponto. Em 30/10/2026 os dois
+    resolviam, para infraestruturas diferentes. Prefira o do guia novo.
   fontes:
+    - tipo: ig
+      titulo: Integração - Guia de Implementação da RNDS
+      url: https://fhir.saude.gov.br/pt-BR/integracao.html
     - tipo: gov-br
       titulo: Ambientes - Guia de Integração da RNDS
       url: https://rnds-guia.saude.gov.br/docs/rnds/ambientes/
-  verificado_em: 2026-08-26
+  verificado_em: 2026-10-30
 
 - id: producao
   nome: Produção
@@ -34,9 +45,14 @@
     O serviço de autenticação é nacional, mas o endereço de troca de dados (EHR)
     é por unidade federativa: o padrão é o prefixo da UF em minúsculas, por
     exemplo `sp-ehr-services.saude.gov.br` para São Paulo e
-    `mg-ehr-services.saude.gov.br` para Minas Gerais.
+    `mg-ehr-services.saude.gov.br` para Minas Gerais. A credencial fica
+    associada a uma UF no credenciamento, e chamadas ao endereço de outra UF são
+    bloqueadas automaticamente.
   fontes:
+    - tipo: ig
+      titulo: Integração - Guia de Implementação da RNDS
+      url: https://fhir.saude.gov.br/pt-BR/integracao.html
     - tipo: gov-br
       titulo: Ambientes - Guia de Integração da RNDS
       url: https://rnds-guia.saude.gov.br/docs/rnds/ambientes/
-  verificado_em: 2026-08-26
+  verificado_em: 2026-10-30

@@ -10,6 +10,23 @@
 #
 # O site ordena pela data, da mais recente para a mais antiga; no mesmo dia,
 # pelo id em ordem alfabética. Escreva aqui na mesma ordem, para facilitar.
+#
+# Segunda novidade no mesmo dia? Ponha hora na data da mais nova, por exemplo
+# 2026-10-30T15:00:00-03:00, para ela ficar em primeiro. É a primeira da lista
+# que dispara o aviso para quem volta ao site. Use horário antes das 21h, que a
+# data é exibida em UTC.
+
+- id: servicos-ambientes-guia-implementacao
+  data: 2026-10-30T15:00:00-03:00
+  titulo: Serviços e ambientes conferidos no novo Guia de Implementação
+  texto: >-
+    Entram cinco serviços documentados pelo guia: exclusão de documento,
+    recuperação pelo ID RNDS, consulta pelo identificador local, consulta ao
+    servidor e consulta de terminologia. A substituição de documento só pode ser
+    feita uma vez. Em homologação, o endereço de dados passa a ser
+    ehr-services-hmg.saude.gov.br, com hífen; o antigo, com ponto, fica
+    registrado.
+  link: /integracao/servicos/
 
 - id: guia-implementacao-fhir-saude
   data: 2026-10-30

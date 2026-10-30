@@ -30,8 +30,10 @@ ba-ehr-services.saude.gov.br    # Bahia
 ```
 
 Se o seu sistema atende estabelecimentos em mais de um estado, isso precisa ser
-configuração, não constante. Vale desenhar assim desde o começo  - trocar depois
-costuma implicar mexer em todas as chamadas.
+configuração, não constante. E não é só o endereço: a credencial fica associada
+a uma UF no credenciamento, e a RNDS bloqueia chamadas ao endereço de outra UF.
+Vale desenhar assim desde o começo - trocar depois costuma implicar mexer em
+todas as chamadas.
 
 Em homologação não existe essa divisão: o ambiente é nacional e único, o que
 significa que **a topologia que você testa não é a que vai rodar em produção**.
@@ -46,7 +48,10 @@ Enquanto o acesso não sai, dá para trabalhar bastante:
 [testando sem acesso](/ferramentas/testando-sem-acesso/).
 :::
 
-## Fonte
+## Fontes
 
-A relação oficial de ambientes está em
-[rnds-guia.saude.gov.br/docs/rnds/ambientes](https://rnds-guia.saude.gov.br/docs/rnds/ambientes/).
+A relação oficial de ambientes, com o endereço de cada UF, está na
+[página de integração do Guia de Implementação](https://fhir.saude.gov.br/pt-BR/integracao.html).
+O guia narrativo anterior também a traz, em
+[rnds-guia.saude.gov.br/docs/rnds/ambientes](https://rnds-guia.saude.gov.br/docs/rnds/ambientes/),
+mas com o endereço antigo de homologação.
