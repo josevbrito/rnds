@@ -35,8 +35,10 @@ A RNDS publica NamingSystems para os identificadores nacionais:
 
 :::danger[Copie as URIs, não as escreva de memória]
 A relação completa, com as URIs canônicas de cada um, está no
-[índice de artefatos](https://rnds-fhir.saude.gov.br/artifacts.html), seção
-*Naming Systems*.
+[índice de artefatos do guia anterior](https://rnds-fhir.saude.gov.br/artifacts.html),
+seção *Sistemas de nomenclatura*. O Guia de Implementação de outubro de 2026 não
+publica essa lista; os exemplos de cada modelo mostram os identificadores em
+uso.
 
 **Copie de lá.** Escrever a URI de memória ou inventar uma que "pareça certa",
 é uma das causas mais frequentes de rejeição de documento e o erro que volta

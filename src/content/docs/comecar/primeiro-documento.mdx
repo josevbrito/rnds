@@ -21,10 +21,10 @@ mecânica. Para os campos exatos do seu caso, a fonte é sempre o
 
 <Steps>
 
-1. **Baixe um exemplo oficial.** O
-   [índice de artefatos](https://rnds-fhir.saude.gov.br/artifacts.html) do Guia
-   de Implementação traz instâncias completas de Bundle em JSON. Um documento
-   válido de verdade ensina mais rápido que qualquer descrição.
+1. **Baixe um exemplo oficial.** Cada guia por modelo do Guia de Implementação
+   tem uma página de exemplos com Bundles completos em JSON, como os
+   [exemplos do REL](https://fhir.saude.gov.br/rel/pt-BR/exemplos.html). Um
+   documento válido de verdade ensina mais rápido que qualquer descrição.
 
 2. **Instale o validador.** É um JAR, roda offline:
    [releases do org.hl7.fhir.core](https://github.com/hapifhir/org.hl7.fhir.core/releases).
@@ -67,7 +67,7 @@ const composition = {
   status: 'final',
   type: {
     coding: [{
-      system: 'https://rnds-fhir.saude.gov.br/CodeSystem/BRTipoDocumento',
+      system: 'http://www.saude.gov.br/fhir/r4/CodeSystem/BRTipoDocumento',
       code: 'REL',
     }],
   },
@@ -84,9 +84,10 @@ const composition = {
 ```
 
 <Aside type="caution">
-Os valores de `system` acima são ilustrativos. As URIs canônicas reais estão nos
-NamingSystems e CodeSystems do Guia de Implementação, **copie de lá**. Escrever
-URI de memória é uma das causas mais frequentes de rejeição. Veja em
+O `system` do tipo de documento acima é o que aparece nos exemplos oficiais. Os
+outros valores de `system` deste tutorial são marcadores: as URIs reais estão
+nos CodeSystems e NamingSystems do Guia de Implementação, **copie de lá**.
+Escrever URI de memória é uma das causas mais frequentes de rejeição. Veja em
 [identificadores](/integracao/identificadores/).
 </Aside>
 

@@ -73,9 +73,10 @@ Para navegação mais robusta que índices posicionais, use em
 
 ## Comece pelos exemplos reais
 
-Os exemplos oficiais estão no
-[índice de artefatos do Guia de Implementação](https://rnds-fhir.saude.gov.br/artifacts.html),
-com instâncias completas de Bundle em JSON prontas para baixar.
+Os exemplos oficiais estão na página de exemplos de cada guia por modelo do
+[Guia de Implementação](https://fhir.saude.gov.br/), como os
+[exemplos do REL](https://fhir.saude.gov.br/rel/pt-BR/exemplos.html), com
+Bundles completos em JSON prontos para baixar.
 
 **Comece por eles.** Ler um documento válido de verdade ensina mais rápido do
 que qualquer descrição, inclusive esta.

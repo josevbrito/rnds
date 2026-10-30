@@ -15,11 +15,14 @@ mútua TLS). Não há usuário e senha, e não há chave de API.
 
 ```
 1. mTLS no endereço Auth, apresentando o certificado A1
-   → recebe um token de acesso (JWT)
+   → recebe um JSON com o token de acesso, válido por 30 minutos
 
 2. Chamada ao endereço EHR
    → token vai no header X-Authorization-Server
 ```
+
+O certificado serve só para obter o token. Reutilize o token enquanto ele vale e
+peça outro quando expirar, em vez de repetir a autenticação a cada chamada.
 
 :::danger[O header não é `Authorization`]
 O barramento espera **`X-Authorization-Server`**, não o `Authorization`
@@ -50,17 +53,20 @@ conceito é sempre o mesmo: o certificado vai na camada TLS da conexão, não nu
 header.
 
 ```js
-// Node.js - o certificado vai no agente TLS
-import { Agent } from 'node:https';
+// Node.js - o certificado vai na conexão TLS, via undici (npm i undici).
+// O fetch nativo ignora a opção `agent` do node:https.
+import { Agent, fetch } from 'undici';
 import { readFileSync } from 'node:fs';
 
-const agent = new Agent({
-  pfx: readFileSync(process.env.RNDS_CERT_PATH),
-  passphrase: process.env.RNDS_CERT_PASS,
+const dispatcher = new Agent({
+  connect: {
+    pfx: readFileSync(process.env.RNDS_CERT_PATH),
+    passphrase: process.env.RNDS_CERT_PASS,
+  },
 });
 
-const r = await fetch('https://ehr-auth-hmg.saude.gov.br/api/token', { agent });
-const token = await r.text();
+const r = await fetch('https://ehr-auth-hmg.saude.gov.br/api/token', { dispatcher });
+const { access_token: token } = await r.json(); // vale 30 minutos
 ```
 
 Depois, o token vai no header em toda chamada ao EHR:
@@ -84,6 +90,7 @@ terceiros enviem dados em nome do estabelecimento.
 
 ## Onde está o detalhamento
 
-O comportamento completo: validade do token, renovação, códigos de erro - está
-no [Manual de Integração do Barramento](https://datasus.saude.gov.br/wp-content/uploads/2020/04/SOA-RNDS_ManualIntegracaoBarramento_vSite.pdf)
-e na [página de integração do Guia de Implementação](https://fhir.saude.gov.br/pt-BR/integracao.html).
+O comportamento completo, com exemplos de resposta e códigos de erro, está na
+[página de integração do Guia de Implementação](https://fhir.saude.gov.br/pt-BR/integracao.html).
+Uma versão mais antiga está no
+[Manual de Integração do Barramento](https://datasus.saude.gov.br/wp-content/uploads/2020/04/SOA-RNDS_ManualIntegracaoBarramento_vSite.pdf).

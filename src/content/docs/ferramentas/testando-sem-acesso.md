@@ -16,8 +16,9 @@ cronograma, saber trabalhar em paralelo com ele vale semanas.
 
 ## Use os exemplos oficiais como massa de teste
 
-O [índice de artefatos](https://rnds-fhir.saude.gov.br/artifacts.html) traz
-instâncias completas de Bundle em JSON.
+Cada guia por modelo do [Guia de Implementação](https://fhir.saude.gov.br/) tem
+uma página de exemplos com Bundles completos em JSON, como os
+[exemplos do REL](https://fhir.saude.gov.br/rel/pt-BR/exemplos.html).
 
 Baixe **todas**, coloque no seu diretório de fixtures e escreva os testes do
 leitor contra elas. São documentos válidos, produzidos pela mesma fonte que
