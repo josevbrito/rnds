@@ -53,9 +53,11 @@ conformidade.
 ## Leia a coleção Postman
 
 A [coleção Postman do kyriosdata/rnds](https://github.com/kyriosdata/rnds/blob/master/tools/postman/rnds-postman-collection.json)
-documenta a forma exata das requisições ao barramento. É excelente material de
-leitura mesmo sem poder executá-la: mostra headers, corpo e sequência de
-chamadas antes de você ter qualquer credencial.
+documenta a forma das requisições ao barramento. É boa leitura mesmo sem poder
+executá-la: mostra headers, corpo e sequência de chamadas antes de você ter
+qualquer credencial. Ela é anterior ao Guia de Implementação de outubro de 2026:
+para o comportamento atual de cada serviço, confira a
+[página de serviços](/integracao/servicos/).
 
 ## Um aviso sobre dados de teste
 

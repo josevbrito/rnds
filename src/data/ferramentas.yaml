@@ -62,19 +62,23 @@
   categoria: biblioteca
   oficial: false
   descricao: >-
-    O projeto comunitário mais completo sobre a RNDS, mantido pelo prof. Fábio
-    Nogueira de Lucena (UFG). Traz bibliotecas em Java e JavaScript, um
-    validador de linha de comando, ferramentas de FHIRPath e uma coleção Postman
-    documentada, excelente leitura mesmo antes de ter acesso, porque mostra a
-    forma exata das chamadas.
+    Projeto comunitário sobre a RNDS mantido pelo prof. Fábio Nogueira de
+    Lucena (UFG). Traz bibliotecas em Java e JavaScript, um validador de linha
+    de comando, ferramentas de FHIRPath e uma coleção Postman documentada, que
+    mostra a forma das chamadas mesmo antes de ter acesso. Não recebe commits
+    desde agosto de 2024, antes do Guia de Implementação de outubro de 2026:
+    confira contra ele antes de depender de detalhes.
   url: https://github.com/kyriosdata/rnds
   repo: https://github.com/kyriosdata/rnds
   linguagens: [Java, JavaScript]
   fontes:
     - tipo: outro
+      titulo: Repositório kyriosdata/rnds
+      url: https://github.com/kyriosdata/rnds
+    - tipo: outro
       titulo: Coleção Postman da RNDS
       url: https://github.com/kyriosdata/rnds/blob/master/tools/postman/rnds-postman-collection.json
-  verificado_em: 2026-08-26
+  verificado_em: 2026-10-30
 
 - id: simplifier-rnds
   nome: Projeto RNDS no Simplifier
@@ -130,6 +134,61 @@
     - tipo: ig
       titulo: Pacote do REL no Guia de Implementação (package.json lista as dependências)
       url: https://fhir.saude.gov.br/rel/package.tgz
+  verificado_em: 2026-10-30
+
+- id: br-terminologia
+  nome: Terminologias do Brasil
+  categoria: terminologia
+  oficial: true
+  descricao: >-
+    Guia que reúne, de forma navegável, os sistemas de código e os conjuntos de
+    valores citados nos guias de implementação publicados pelo Ministério da
+    Saúde. Pacote `br.gov.saude.terminologia.fhir`, versão 1.1.0 (STU1). Ajuda
+    a achar o significado de um código sem abrir o guia de cada modelo.
+  url: https://terminologia.saude.gov.br/fhir/
+  fontes:
+    - tipo: ig
+      titulo: Terminologias do Brasil
+      url: https://terminologia.saude.gov.br/fhir/
+    - tipo: ig
+      titulo: Guia de Implementação da RNDS - outras plataformas
+      url: https://fhir.saude.gov.br/pt-BR/index.html
+  verificado_em: 2026-10-30
+
+- id: ocl-terminologias
+  nome: OCL das terminologias da RNDS
+  categoria: terminologia
+  oficial: true
+  descricao: >-
+    Instância do Open Concept Lab (OCL) com as terminologias da RNDS, listada
+    pelo Guia de Implementação entre as plataformas de apoio. É uma aplicação
+    web e precisa de JavaScript habilitado.
+  url: https://terminologia.saude.gov.br/
+  fontes:
+    - tipo: ig
+      titulo: Guia de Implementação da RNDS - outras plataformas
+      url: https://fhir.saude.gov.br/pt-BR/index.html
+  verificado_em: 2026-10-30
+
+- id: ips-brasil
+  nome: IPS Brasil
+  categoria: documentacao
+  oficial: true
+  descricao: >-
+    Guia de implementação do Sumário Internacional do Paciente (IPS) no Brasil,
+    versão 1.2.0 (STU1). Projeto do Ministério da Saúde, executado pelo
+    Hospital Sírio-Libanês pelo PROADI, que cobre imunização, exames,
+    alergias, procedimentos e medicamentos a partir das terminologias adotadas
+    na RNDS. Não é um modelo de envio à RNDS: o Guia de Implementação o lista
+    entre as plataformas relacionadas.
+  url: https://hl7.org.br/fhir/ips/
+  fontes:
+    - tipo: hl7
+      titulo: IPS Brasil - HL7 Brasil
+      url: https://hl7.org.br/fhir/ips/
+    - tipo: ig
+      titulo: Guia de Implementação da RNDS - outras plataformas
+      url: https://fhir.saude.gov.br/pt-BR/index.html
   verificado_em: 2026-10-30
 
 - id: synthea

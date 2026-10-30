@@ -75,7 +75,7 @@ Para checagem pontual, sem montar pipeline:
 - O [Simplifier](https://simplifier.net/redenacionaldedadosemsaude) valida direto
   no navegador
 - O [kyriosdata/rnds](https://github.com/kyriosdata/rnds) inclui um validador de
-  linha de comando com foco na RNDS
+  linha de comando com foco na RNDS, sem atualização desde agosto de 2024
 
 Nenhum dos dois substitui o validador oficial no CI, mas ambos são úteis para
 responder rápido a "por que este documento não passa?".
