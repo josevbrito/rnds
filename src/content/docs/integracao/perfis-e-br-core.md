@@ -22,12 +22,15 @@ pacote `br.gov.saude.br-core.fhir`.
 Define os perfis brasileiros de uso geral: `BRCorePatient`,
 `BRCorePractitioner`, `BRCoreOrganization` e afins. Foi desenvolvido pela
 Secretaria de Informação e Saúde Digital com apoio do HL7 International e da
-OPAS, e está em **STU1 (versão 1.1.0, de 2023)**.
+OPAS, e está em **STU1 (versão 1.7.1, de outubro de 2026)**.
 
 ## Camada 2 - RNDS
 
-A camada específica da rede, publicada em
-[rnds-fhir.saude.gov.br](https://rnds-fhir.saude.gov.br/).
+A camada específica da rede, publicada no Guia de Implementação oficial, em
+[fhir.saude.gov.br](https://fhir.saude.gov.br/), com um guia geral e um guia
+por modelo de informação. O guia anterior, em
+[rnds-fhir.saude.gov.br](https://rnds-fhir.saude.gov.br/), segue no ar com o
+build de 2022.
 
 Deriva do BR Core e acrescenta o que a RNDS precisa: perfis de amostra
 biológica, condição de saúde, diagnóstico laboratorial, estabelecimento e
@@ -60,7 +63,7 @@ e validação direto no navegador.
 A própria página avisa: **não é o repositório oficial da RNDS** e parte dos
 artefatos ainda está marcada como *draft*.
 
-Para decisões de implementação, o que vale é o `rnds-fhir.saude.gov.br`. Use o
+Para decisões de implementação, o que vale é o `fhir.saude.gov.br`. Use o
 Simplifier para explorar, não para decidir.
 :::
 

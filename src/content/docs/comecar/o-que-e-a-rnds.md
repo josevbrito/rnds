@@ -49,20 +49,22 @@ decide orçamento.
 
 ## Onde ficam as fontes oficiais
 
-A documentação está distribuída em cinco lugares e saber qual serve para o quê
+A documentação está distribuída em seis lugares e saber qual serve para o quê
 poupa tempo:
 
 | Onde | Para quê |
 |---|---|
 | [rnds.saude.gov.br](https://rnds.saude.gov.br/) | Portal institucional e FAQ |
 | [rnds-guia.saude.gov.br](https://rnds-guia.saude.gov.br/) | Guia narrativo: ambientes, serviços, passo a passo |
-| [rnds-fhir.saude.gov.br](https://rnds-fhir.saude.gov.br/) | **A referência canônica** dos perfis FHIR e dos exemplos |
+| [fhir.saude.gov.br](https://fhir.saude.gov.br/) | **A referência canônica**: Guia de Implementação geral e um guia por modelo |
+| [rnds-fhir.saude.gov.br](https://rnds-fhir.saude.gov.br/) | Guia de Implementação anterior (build de 2022), ainda com exemplos do REL |
 | [servicos-datasus.saude.gov.br](https://servicos-datasus.saude.gov.br/) | Solicitação de acesso (exige conta gov.br) |
 | [gov.br/saude — SEIDIGI](https://www.gov.br/saude/pt-br/composicao/seidigi/rnds/legislacao) | Legislação, mas veja o aviso abaixo |
 
 :::caution[A lista oficial de legislação está incompleta]
-Em agosto de 2026, a página de legislação da RNDS no gov.br não listava a
-Portaria GM/MS nº 6.100/2024 (REPM e REDFM) nem a GM/MS nº 8.347/2025 (novo
-modelo do RAC). A [linha do tempo deste guia](/legislacao/) marca explicitamente
+Em outubro de 2026, a página de legislação da RNDS no gov.br não listava,
+entre outras, a Portaria GM/MS nº 6.100/2024 (REPM e REDFM), a GM/MS
+nº 8.347/2025 (novo modelo do RAC) nem a GM/MS nº 8.276/2025 (novo modelo do
+REL). A [linha do tempo deste guia](/legislacao/) marca explicitamente
 quais normas estão ausentes de lá.
 :::

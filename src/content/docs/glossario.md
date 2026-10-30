@@ -73,8 +73,10 @@ Assistencial.
 **RPM** e **RDM** - modelos de prescrição e dispensação de 2022, sucedidos por
 REPM e REDFM.
 
-**RIA-R** e **RIA-C** - os dois fluxos do RIA: rotina e campanha, processados
-separadamente.
+**RIA-R** e **RIA-C** - os perfis do RIA para rotina e campanha. Desde
+fevereiro de 2026 o vigente é o RIA-R 2.0, que recebe também as doses de
+campanha; RIA-C 2.0, RIA-R 1.0 e RIA Carga serão desativados. Ver
+[RIA](/modelos/ria/).
 
 **OBM** - a base de medicamentos referenciada pelo REDFM.
 

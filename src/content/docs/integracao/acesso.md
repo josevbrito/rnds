@@ -48,7 +48,7 @@ escrever os testes. Veja
 Quem pode solicitar, o que conta como estabelecimento e prazos está no
 [FAQ oficial da RNDS](https://rnds.saude.gov.br/perguntas-e-respostas/).
 
-A seção de [credenciamento do Guia de Implementação](https://rnds-fhir.saude.gov.br/credenciamento.html)
+A seção de [credenciamento do Guia de Implementação](https://fhir.saude.gov.br/pt-BR/credenciamento.html)
 traz o roteiro do lado técnico.
 
 :::note

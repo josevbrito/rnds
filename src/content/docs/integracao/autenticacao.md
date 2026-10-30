@@ -86,4 +86,4 @@ terceiros enviem dados em nome do estabelecimento.
 
 O comportamento completo: validade do token, renovação, códigos de erro - está
 no [Manual de Integração do Barramento](https://datasus.saude.gov.br/wp-content/uploads/2020/04/SOA-RNDS_ManualIntegracaoBarramento_vSite.pdf)
-e na [seção de segurança do Guia de Implementação](https://rnds-fhir.saude.gov.br/seguranca.html).
+e na [página de integração do Guia de Implementação](https://fhir.saude.gov.br/pt-BR/integracao.html).
