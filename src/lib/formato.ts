@@ -25,6 +25,13 @@ export const dataISO = (d: Date) => d.toISOString().slice(0, 10);
 
 export const ano = (d: Date) => d.getUTCFullYear();
 
+/**
+ * "Portaria GM/MS nº 8.347". O `numero` das portarias conjuntas já começa com
+ * "Portaria Conjunta", e aí não leva o prefixo de novo.
+ */
+export const nomePortaria = (numero: string) =>
+  numero.startsWith('Portaria') ? numero : `Portaria ${numero}`;
+
 /** Rótulo correspondente a um status. */
 export const rotuloStatus: Record<string, string> = {
   vigente: 'Vigente',
