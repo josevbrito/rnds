@@ -34,11 +34,12 @@ A RNDS publica NamingSystems para os identificadores nacionais:
 | **CBO** | Ocupação do profissional (Classificação Brasileira de Ocupações) |
 
 :::danger[Copie as URIs, não as escreva de memória]
-A relação completa, com as URIs canônicas de cada um, está no
+Nos documentos, as URIs dos identificadores estão nos perfis e nos exemplos de
+cada guia por modelo, no [Guia de Implementação](https://fhir.saude.gov.br/). A
+lista de NamingSystems está no
 [índice de artefatos do guia anterior](https://rnds-fhir.saude.gov.br/artifacts.html),
-seção *Sistemas de nomenclatura*. O Guia de Implementação de outubro de 2026 não
-publica essa lista; os exemplos de cada modelo mostram os identificadores em
-uso.
+seção *Sistemas de nomenclatura*: o guia de outubro de 2026 não publica essa
+lista.
 
 **Copie de lá.** Escrever a URI de memória ou inventar uma que "pareça certa",
 é uma das causas mais frequentes de rejeição de documento e o erro que volta
@@ -73,13 +74,47 @@ O CNS tem regras distintas conforme o número comece com 1/2 (definitivo) ou 7/8
 [kyriosdata/rnds](https://github.com/kyriosdata/rnds) traz utilitários prontos
 em Java e JavaScript.
 
-## Onde isso aparece no documento
+## Onde isso aparece
 
-- `Patient.identifier` - CNS e/ou CPF do indivíduo
-- `Organization.identifier` - CNES do estabelecimento
-- `Practitioner.identifier` - CPF ou CNS do profissional
-- `PractitionerRole` - o vínculo, incluindo a ocupação em CBO
+Há dois lugares, e as URIs são diferentes em cada um.
 
-Repare que o profissional aparece em dois recursos: `Practitioner` é a pessoa,
-`PractitionerRole` é o papel dela num estabelecimento. Confundir os dois é
-comum e o perfil rejeita.
+### No documento que você envia
+
+Paciente, estabelecimento e profissional não entram como recursos: são
+referenciados pelo identificador, e o perfil do modelo fixa o `system`. Repare
+que ele é a URL de um **perfil**, não de um NamingSystem. Nos exemplos
+oficiais:
+
+| Quem | `system` (prefixo `http://www.saude.gov.br/fhir/r4/StructureDefinition/`) | Valor |
+|---|---|---|
+| Paciente | `BRIndividuo-1.0` | CPF ou CNS |
+| Estabelecimento | `BREstabelecimentoSaude-1.0` | CNES |
+| Lotação do profissional | `BRLotacaoProfissional-1.0` | `{CNS}-{CNES}` |
+| Laboratório como pessoa jurídica (REL) | `BRPessoaJuridicaProfissionalLiberal-1.0` | CNPJ |
+
+```json
+"subject": {
+  "identifier": {
+    "system": "http://www.saude.gov.br/fhir/r4/StructureDefinition/BRIndividuo-1.0",
+    "value": "706004324048847"
+  }
+}
+```
+
+Há exceções por modelo: o REDFM, por exemplo, inclui `PractitionerRole`,
+`Practitioner` e `Organization` dentro do documento. Confira sempre o exemplo
+oficial do seu modelo.
+
+### Nas consultas à RNDS
+
+Os recursos que a RNDS devolve nas consultas de `Patient` e `Practitioner` usam
+os NamingSystems `http://rnds.saude.gov.br/fhir/r4/NamingSystem/cpf` e
+`.../cns`, e é com eles que se busca pelo parâmetro `identifier`. Ver em
+[serviços](/integracao/servicos/).
+
+### Profissional: pessoa e papel
+
+O profissional aparece em dois recursos: `Practitioner` é a pessoa,
+`PractitionerRole` é o papel dela num estabelecimento, com a ocupação em CBO.
+Na consulta à RNDS, o id do `PractitionerRole` combina os dois números:
+`{CNS}-{CNES}`. Confundir pessoa e papel é comum, e o perfil rejeita.

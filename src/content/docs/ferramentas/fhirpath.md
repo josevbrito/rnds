@@ -24,18 +24,20 @@ primeira, que é sempre o `Composition`), e **a cardinalidade dos campos varia**
 recursos FHIR:
 
 ```
-Bundle.entry.resource.ofType(Patient).identifier
-  .where(system = '<URI-do-CNS>').value
+Bundle.entry.resource.ofType(Observation)
+  .where(status = 'final').subject.identifier.value
 ```
 
-Essa expressão pega o CNS do paciente **sem depender de posição** e devolve
-vazio em vez de explodir se o campo não existir.
+Essa expressão pega o identificador do paciente nos resultados finais **sem
+depender de posição** e devolve vazio em vez de explodir se o campo não existir.
+Nos documentos da RNDS o paciente não está no Bundle como `Patient`: aparece só
+como identificador em `subject`.
 
 ## Os operadores que resolvem 90% dos casos
 
 | Expressão | O que faz |
 |---|---|
-| `.ofType(Patient)` | Filtra por tipo de recurso |
+| `.ofType(Observation)` | Filtra por tipo de recurso |
 | `.where(campo = 'valor')` | Filtra por condição |
 | `.first()` / `.last()` | Pega um item da coleção |
 | `.exists()` | Testa presença sem quebrar |

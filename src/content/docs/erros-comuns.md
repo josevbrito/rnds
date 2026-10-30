@@ -17,11 +17,21 @@ token ou no corpo da requisição.
 Se a autenticação parece correta e a chamada falha mesmo assim, confira o nome
 do header primeiro. → [Autenticação](/integracao/autenticacao/)
 
+## Colocar o paciente dentro do documento
+
+Nos perfis da RNDS o paciente não entra como recurso `Patient`: vai por
+identificador, em `subject.identifier`, e o perfil proíbe apontar para um
+recurso. O mesmo costuma valer para o estabelecimento. Quem vem de FHIR
+genérico monta o documento com `Patient` dentro e só descobre na validação. Ver
+em [Anatomia do documento](/integracao/anatomia-do-documento/).
+
 ## Errar a URI do `system` nos identificadores
 
-CPF, CNS e CNES têm URIs canônicas específicas, publicadas nos NamingSystems do
-Guia de Implementação. **Copie de lá**, não escreva de memória e não invente uma
-URI que "pareça certa". Ver em [Identificadores](/integracao/identificadores/).
+Nos documentos, o `system` do paciente e do estabelecimento é a URL de um
+perfil, como `http://www.saude.gov.br/fhir/r4/StructureDefinition/BRIndividuo-1.0`,
+e não de um NamingSystem. Parece errado, e por isso é comum "corrigir" para a
+URI que parece certa. **Copie dos exemplos oficiais**, não escreva de memória.
+Ver em [Identificadores](/integracao/identificadores/).
 
 ## Montar o Bundle sem `Composition` na primeira posição
 
@@ -31,10 +41,9 @@ mensagem nem sempre é óbvia, costuma falar de perfil, não de ordem. Ver em
 
 ## Referenciar recursos por ID em vez de `fullUrl`
 
-Dentro de um documento, as referências apontam para o `fullUrl` das entradas do
-próprio Bundle, tipicamente `urn:uuid:...`. Referenciar o ID do seu banco
-produz um documento que não é autocontido e que o outro lado não consegue
-resolver.
+Quando um recurso do documento aponta para outro recurso do próprio Bundle, a
+referência usa o `fullUrl` da entrada, tipicamente `urn:uuid:...`. Referenciar o
+ID do seu banco produz um documento que o outro lado não consegue resolver.
 
 ## Assumir que homologação é aberta
 
@@ -48,10 +57,11 @@ O barramento rejeita documentos por motivos que não aparecem nos exemplos:
 código fora do ValueSet, dígito verificador inválido, campo obrigatório do
 perfil ausente. Vale montar casos de teste **negativos** desde cedo.
 
-## Confundir os dois níveis de perfil
+## Validar contra o pacote errado
 
-Um erro de validação pode vir do **BR Core** e não da **RNDS**. Saber em qual
-camada o perfil violado está acelera muito o diagnóstico. Ver em
+Os perfis da RNDS não derivam do BR Core, então validar contra ele não diz nada
+sobre a conformidade com a RNDS. Valide contra o pacote do seu modelo, em
+`https://fhir.saude.gov.br/{modelo}/package.tgz`. Ver em
 [Perfis e BR Core](/integracao/perfis-e-br-core/).
 
 ## Implementar contra a portaria errada

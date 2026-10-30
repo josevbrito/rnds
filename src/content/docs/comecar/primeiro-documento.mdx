@@ -46,16 +46,43 @@ const ref = () => `urn:uuid:${randomUUID()}`;
 
 const id = {
   composition: ref(),
-  paciente: ref(),
-  organizacao: ref(),
-  observacao: ref(),
+  resultado: ref(),
 };
 ```
 
 Agora você pode montar os recursos em qualquer ordem, porque toda referência já
-tem destino conhecido.
+tem destino conhecido. Repare que não há UUID para o paciente nem para o
+laboratório: eles não entram no documento como recursos.
 
-## Passo 2 - o Composition vem primeiro, sempre
+## Passo 2 - paciente e laboratório entram por identificador
+
+Esta é a parte que mais contraria a intuição de quem já conhece FHIR. O paciente
+**não entra no documento** como um recurso `Patient`: o perfil exige a
+referência pelo identificador, com um `system` fixo, e proíbe apontar para um
+recurso. O laboratório segue o mesmo padrão, pelo CNES.
+
+```js
+const SD = 'http://www.saude.gov.br/fhir/r4/StructureDefinition';
+
+const paciente = {
+  identifier: { system: `${SD}/BRIndividuo-1.0`, value: '<CPF ou CNS do paciente>' },
+};
+
+const laboratorio = {
+  identifier: { system: `${SD}/BREstabelecimentoSaude-1.0`, value: '<CNES do laboratório>' },
+};
+```
+
+O `system` é a URL de um perfil, não de um NamingSystem. Parece errado, mas é o
+que os perfis da RNDS fixam. Veja em [identificadores](/integracao/identificadores/).
+
+<Aside type="danger" title="Nunca use dado real">
+Dado de saúde é dado pessoal sensível sob a LGPD, com regime mais restritivo que
+o de dado pessoal comum. Não use dado real de paciente em desenvolvimento e não
+coloque documento clínico real em repositório, nem privado.
+</Aside>
+
+## Passo 3 - o Composition vem primeiro, sempre
 
 Para Bundles do tipo `document`, a especificação FHIR é normativa: **a primeira
 entrada é obrigatoriamente um `Composition`**. Ele é o índice do documento - não
@@ -64,6 +91,7 @@ contém os dados clínicos, aponta para quem contém.
 ```js
 const composition = {
   resourceType: 'Composition',
+  meta: { profile: [`${SD}/BRResultadoExameLaboratorial-3.2.1`] },
   status: 'final',
   type: {
     coding: [{
@@ -71,84 +99,94 @@ const composition = {
       code: 'REL',
     }],
   },
+  subject: paciente,
   date: new Date().toISOString(),
+  author: [laboratorio],
   title: 'Resultado de Exame Laboratorial',
-  subject:   { reference: id.paciente },
-  author:    [{ reference: id.organizacao }],
-  custodian: { reference: id.organizacao },
   section: [{
-    title: 'Resultados',
-    entry: [{ reference: id.observacao }],
+    entry: [{ reference: id.resultado }],
   }],
 };
 ```
 
-<Aside type="caution">
-O `system` do tipo de documento acima é o que aparece nos exemplos oficiais. Os
-outros valores de `system` deste tutorial são marcadores: as URIs reais estão
-nos CodeSystems e NamingSystems do Guia de Implementação, **copie de lá**.
-Escrever URI de memória é uma das causas mais frequentes de rejeição. Veja em
-[identificadores](/integracao/identificadores/).
-</Aside>
+O `meta.profile` declara o perfil que o recurso segue. É por ele que o validador
+sabe contra o que conferir, e todos os recursos dos exemplos oficiais o trazem.
 
-## Passo 3 - os recursos referenciados
+## Passo 4 - o resultado do exame
 
 ```js
-const paciente = {
-  resourceType: 'Patient',
-  identifier: [{ system: '<URI-do-CNS>', value: '700000000000000' }],
-  name: [{ text: 'Paciente de Teste' }],
-  gender: 'female',
-  birthDate: '1985-03-12',
-};
-
-const organizacao = {
-  resourceType: 'Organization',
-  identifier: [{ system: '<URI-do-CNES>', value: '0000000' }],
-  name: 'Laboratório de Teste',
+const resultado = {
+  resourceType: 'Observation',
+  meta: { profile: [`${SD}/BRDiagnosticoLaboratorioClinico-3.2.1`] },
+  status: 'final',
+  subject: paciente,
+  performer: [laboratorio],
+  issued: new Date().toISOString(),
+  // category, code, effective, value, method, specimen e referenceRange
+  // também são obrigatórios neste perfil.
 };
 ```
 
-<Aside type="danger" title="Nunca use dado real">
-Dado de saúde é dado pessoal sensível sob a LGPD, com regime mais restritivo que
-o de dado pessoal comum. Não use dado real de paciente em desenvolvimento e não
-coloque documento clínico real em repositório, nem privado.
+<Aside type="caution">
+O documento deste tutorial está incompleto de propósito. No resultado, o perfil
+do REL exige ainda categoria, nome do exame, data da coleta, valor, método,
+amostra e faixa de referência, cada um com códigos de terminologias específicas.
+E a seção do `Composition` precisa apontar também para um `Condition`, a
+condição de saúde do paciente. O caminho mais curto é copiar a estrutura do
+[exemplo oficial](https://fhir.saude.gov.br/rel/pt-BR/exemplos.html) e trocar os
+valores.
 </Aside>
 
-## Passo 4 - empacote o Bundle
+## Passo 5 - empacote o Bundle
 
 ```js
 const bundle = {
   resourceType: 'Bundle',
+  identifier: {
+    system: 'http://www.saude.gov.br/fhir/r4/NamingSystem/BRRNDS-<número do solicitante>',
+    value: '<identificador único do documento no seu sistema>',
+  },
   type: 'document',
   timestamp: new Date().toISOString(),
   entry: [
-    { fullUrl: id.composition,  resource: composition },
-    { fullUrl: id.paciente,     resource: paciente },
-    { fullUrl: id.organizacao,  resource: organizacao },
-    { fullUrl: id.observacao,   resource: observacao },
+    { fullUrl: id.composition, resource: composition },
+    { fullUrl: id.resultado,   resource: resultado },
   ],
 };
 ```
 
-Repare que cada entrada casa `fullUrl` com o UUID gerado no passo 1, e que as
-referências dentro dos recursos apontam para esses mesmos valores, **nunca para
-um ID de banco de dados**. O documento é autocontido: tudo que ele referencia
-está dentro dele.
+Repare que cada entrada casa `fullUrl` com o UUID gerado no passo 1, e que a
+referência do `Composition` para o resultado aponta para esse mesmo valor,
+**nunca para um ID de banco de dados**.
 
-## Passo 5 - valide
+O `Bundle.identifier` é o identificador local do documento. Guarde-o junto com o
+ID que a RNDS devolve no envio: sem os dois não há como consultar, substituir
+nem excluir o documento depois. Veja em [serviços](/integracao/servicos/).
+
+## Passo 6 - valide
 
 ```bash
 java -jar validator_cli.jar documento.json \
   -version 4.0.1 \
-  -ig br.gov.saude.br-core.fhir
+  -ig https://fhir.saude.gov.br/rel/package.tgz
 ```
 
-Se acusar erro, a primeira pergunta útil é **em qual camada o perfil violado
-está**: no BR Core ou na RNDS. Saber isso acelera muito o diagnóstico, veja em
+Valide contra o pacote do modelo, publicado em
+`https://fhir.saude.gov.br/{modelo}/package.tgz`, e não contra o BR Core: os
+perfis da RNDS não derivam dele. Veja em
 [perfis e BR Core](/integracao/perfis-e-br-core/).
 
-## Passo 6 - leia de volta
+Rode primeiro contra o exemplo oficial, para confirmar que o ambiente está
+certo, e depois contra o seu documento. Na conferência deste guia, em 30/10/2026
+com o validador 7.0.3, o exemplo oficial do REL passou sem erros com esse
+comando.
+
+Neste tutorial o validador vai acusar o que falta no resultado e na seção, e
+isso é esperado: cada erro traz a URL do perfil violado, e a lista vira o seu
+roteiro. Se você trocar o identificador do paciente por um `Patient` dentro do
+documento, ele acusa também `Composition.subject.reference: max allowed = 0`.
+
+## Passo 7 - leia de volta
 
 Ler é a metade que costuma ser subestimada. Navegar índice a índice
 (`bundle.entry[3].resource...`) funciona no primeiro documento e quebra no
@@ -163,19 +201,19 @@ const porUrl = new Map(
 );
 
 const comp = bundle.entry[0].resource;
-const paciente = porUrl.get(comp.subject.reference);
+const paciente = comp.subject.identifier.value; // não está no documento
+const resultados = comp.section[0].entry.map((r) => porUrl.get(r.reference));
 ```
 
 </TabItem>
 <TabItem label="FHIRPath">
 
 ```
-Bundle.entry.resource.ofType(Patient).identifier
-  .where(system = '<URI-do-CNS>').value
+Bundle.entry.resource.ofType(Composition).subject.identifier.value
 ```
 
-Devolve vazio em vez de explodir se o campo não existir. Veja em
-[FHIRPath](/ferramentas/fhirpath/).
+Devolve o CPF ou CNS do paciente, ou vazio em vez de explodir se o campo não
+existir. Veja em [FHIRPath](/ferramentas/fhirpath/).
 
 </TabItem>
 </Tabs>

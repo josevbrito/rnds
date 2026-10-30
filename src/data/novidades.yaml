@@ -16,6 +16,18 @@
 # que dispara o aviso para quem volta ao site. Use horário antes das 21h, que a
 # data é exibida em UTC.
 
+- id: correcao-br-core-paciente-por-identificador
+  data: 2026-10-30T18:00:00-03:00
+  titulo: 'Correção: perfis não derivam do BR Core, e o paciente vai por identificador'
+  texto: >-
+    Duas correções a partir dos pacotes e exemplos oficiais do novo Guia de
+    Implementação. Os perfis da RNDS derivam direto do FHIR base, não do BR
+    Core, então a validação deve usar o pacote do modelo. E o paciente não entra
+    no documento como Patient: vai por identificador, com o system fixado pelo
+    perfil. O tutorial, a anatomia do documento e as páginas de identificadores
+    e validação foram refeitos.
+  link: /integracao/perfis-e-br-core/
+
 - id: servicos-ambientes-guia-implementacao
   data: 2026-10-30T15:00:00-03:00
   titulo: Serviços e ambientes conferidos no novo Guia de Implementação
