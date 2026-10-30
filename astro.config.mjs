@@ -92,6 +92,8 @@ export default defineConfig({
           attrs: { name: 'twitter:image', content: `${SITE}/og.png` },
         },
       ],
+      // Fechados por padrão: Modelos, Integração e Ferramentas. O Starlight abre
+      // sozinho o grupo da página atual e lembra o que o leitor abriu.
       sidebar: [
         { label: 'Início', link: '/' },
         { label: 'Novidades', slug: 'novidades' },
@@ -106,16 +108,13 @@ export default defineConfig({
         },
         {
           label: 'Modelos de informação',
+          collapsed: true,
           items: [{ autogenerate: { directory: 'modelos' } }],
         },
-        {
-          label: 'Legislação',
-          items: [
-            { label: 'Linha do tempo', slug: 'legislacao' },
-          ],
-        },
+        { label: 'Legislação', slug: 'legislacao' },
         {
           label: 'Integração',
+          collapsed: true,
           items: [
             { label: 'Anatomia do documento', slug: 'integracao/anatomia-do-documento' },
             { label: 'Perfis e BR Core', slug: 'integracao/perfis-e-br-core' },
@@ -128,6 +127,7 @@ export default defineConfig({
         },
         {
           label: 'Ferramentas',
+          collapsed: true,
           items: [
             { label: 'Validação', slug: 'ferramentas/validacao' },
             { label: 'FHIRPath', slug: 'ferramentas/fhirpath' },
