@@ -34,6 +34,7 @@ export const orgaoSchema = z.enum([
   'SECTICS/MS', // Secretaria de Ciência, Tecnologia, Inovação e Complexo da Saúde
   'SEIDIGI/MS', // Secretaria de Informação e Saúde Digital do Ministério da Saúde
   'SAES/SEIDIGI', // portaria conjunta
+  'SAES/SVSA/SEIDIGI', // portaria conjunta
   'SVS/MS', // Secretaria de Vigilância em Saúde do Ministério da Saúde
   'outro',
 ]);

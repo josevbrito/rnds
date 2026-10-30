@@ -3,9 +3,11 @@
 # Fonte primária: página de legislação da RNDS no gov.br.
 #   https://www.gov.br/saude/pt-br/composicao/seidigi/rnds/legislacao
 #
-# ATENÇÃO: essa página oficial está INCOMPLETA. Em 09/10/2026 ela listava só
+# ATENÇÃO: essa página oficial está INCOMPLETA. Em 30/10/2026 ela listava só
 # 13 normas e não trazia, entre outras, a Portaria GM/MS nº 6.100/2024 (REPM e
-# REDFM), a GM/MS nº 8.347/2025 (novo modelo do RAC) nem nenhuma norma de 2026.
+# REDFM), a GM/MS nº 8.347/2025 (novo modelo do RAC), a GM/MS nº 8.276/2025
+# (novo modelo do REL), a Conjunta nº 25/2023 (modelo atual do RIA) nem nenhuma
+# norma de 2026.
 # As entradas marcadas com 'ausente_da_lista_oficial: true' foram compiladas de
 # outras fontes públicas (CONASS, BVS Saúde Legis, DOU).
 #
@@ -102,6 +104,31 @@
       url: https://www.conass.org.br/conass-informa-n-183-2025-publicada-a-portaria-gm-n-8-323-que-institui-o-modelo-de-informacao-para-teleinterconsulta-no-ambito-da-rede-nacional-de-dados-em-saude-rnds/
   verificado_em: 2026-10-09
 
+- id: gm-ms-8276-2025
+  numero: GM/MS nº 8.276
+  orgao: GM/MS
+  data: 2025-09-29
+  ementa: >-
+    Institui o Modelo de Informação de Resultado de Exame Laboratorial (REL) no
+    âmbito da Rede Nacional de Dados em Saúde (RNDS).
+  status: vigente
+  modelos: [rel]
+  revoga: [saes-ms-883-2022]
+  ausente_da_lista_oficial: true
+  notas: >-
+    Institui o modelo atual do REL. O art. 4º traz a revogação expressa: "Fica
+    revogada a Portaria SAES/MS nº 883, de 29 de novembro de 2022." É a norma
+    que o Guia de Implementação oficial associa ao REL. Não constava da página
+    de legislação da RNDS no gov.br em 30/10/2026.
+  fontes:
+    - tipo: conass
+      titulo: Conass Informa n. 175/2025
+      url: https://www.conass.org.br/conass-informa-n-175-2025-publicada-a-portaria-gm-n-8-276-que-institui-o-modelo-de-informacao-de-resultado-de-exame-laboratorial-rel-no-ambito-da-rede-nacional-de-dados-em-saude-r/
+    - tipo: ig
+      titulo: Guia de Implementação da RNDS - modelos e portarias
+      url: https://fhir.saude.gov.br/pt-BR/index.html
+  verificado_em: 2026-10-30
+
 - id: gm-ms-8026-2025
   numero: GM/MS nº 8.026
   orgao: GM/MS
@@ -189,6 +216,34 @@
       url: https://www.in.gov.br/web/dou/-/portaria-gm/ms-n-5.663-de-31-de-outubro-de-2024-593693777
   verificado_em: 2026-10-09
 
+- id: saes-svsa-seidigi-25-2023
+  numero: Portaria Conjunta SAES/SVSA/SEIDIGI nº 25
+  orgao: SAES/SVSA/SEIDIGI
+  data: 2023-11-27
+  ementa: >-
+    Institui o Modelo de Informação do Registro de Imunobiológico Administrado.
+  status: vigente
+  modelos: [ria]
+  ausente_da_lista_oficial: true
+  notas: >-
+    Define o modelo do RIA em dois quadros, um para rotina e outro para
+    campanha. Comunicado do Programa Nacional de Imunizações de 23/02/2026
+    esclarece que, por esta portaria e pela GM/MS nº 5.663/2024, o RIA vigente
+    é o RIA-R 2.0, que deve receber também as doses de campanha. É a norma que
+    o Guia de Implementação oficial associa ao RIA. Não constava da página de
+    legislação da RNDS no gov.br em 30/10/2026.
+  fontes:
+    - tipo: bvs
+      titulo: BVS Saúde Legis - texto integral
+      url: https://bvsms.saude.gov.br/bvs/saudelegis/Saes/2023/poc0025_30_11_2023.html
+    - tipo: outro
+      titulo: Comunicado DPNI/SVSA/MS de 23/02/2026 (SEI nº 0053610638), cópia publicada pela SBIm
+      url: https://sbim.org.br/images/SEI_MS-0053610638-Comunicado.pdf_2026-02-26.pdf
+    - tipo: ig
+      titulo: Guia de Implementação da RNDS - modelos e portarias
+      url: https://fhir.saude.gov.br/pt-BR/index.html
+  verificado_em: 2026-10-30
+
 - id: saes-seidigi-3-2023
   numero: Portaria Conjunta SAES/SEIDIGI nº 3
   orgao: SAES/SEIDIGI
@@ -203,6 +258,30 @@
       titulo: Legislação da RNDS - gov.br
       url: https://www.gov.br/saude/pt-br/composicao/seidigi/rnds/legislacao/portaria-conjunta-saes-seidigi-no-3-de-18-de-abril-de-2023
   verificado_em: 2026-10-09
+
+- id: saes-ms-883-2022
+  numero: SAES/MS nº 883
+  orgao: SAES/MS
+  data: 2022-11-29
+  ementa: >-
+    Altera o Modelo de Informação de Resultado de Exame Laboratorial Covid-19,
+    que passa a vigorar com o nome Modelo de Informação de Resultado de Exame
+    Laboratorial (REL).
+  status: revogada
+  modelos: [rel]
+  altera: [portaria-1068-2020]
+  revogada_por: [gm-ms-8276-2025]
+  ausente_da_lista_oficial: true
+  notas: >-
+    Generalizou o modelo de exame de COVID-19 da Portaria SAES/MS nº 1.068/2020,
+    que passou a se chamar REL. Revogada expressamente pelo art. 4º da Portaria
+    GM/MS nº 8.276/2025. Não constava da página de legislação da RNDS no gov.br
+    em 30/10/2026.
+  fontes:
+    - tipo: bvs
+      titulo: BVS Saúde Legis - texto integral
+      url: https://bvsms.saude.gov.br/bvs/saudelegis/Saes/2022/prt0883_07_12_2022.html
+  verificado_em: 2026-10-30
 
 - id: portaria-701-2022
   numero: Portaria nº 701
@@ -334,22 +413,28 @@
   verificado_em: 2026-10-09
 
 - id: portaria-1068-2020
-  numero: Portaria nº 1.068
-  orgao: outro
+  numero: SAES/MS nº 1.068
+  orgao: SAES/MS
   data: 2020-11-17
   ementa: >-
     Institui o Modelo de Informação de Resultado de Exame Laboratorial para
     COVID-19 no âmbito da Rede Nacional de Dados em Saúde (RNDS).
-  status: vigente
+  status: indeterminado
   modelos: [rel]
   notas: >-
-    Origem do REL, o primeiro modelo implantado na RNDS e até hoje o mais maduro
-    em exemplos e material de apoio.
+    Origem do REL, o primeiro modelo implantado na RNDS. O modelo foi alterado e
+    renomeado pela Portaria SAES/MS nº 883/2022, que a identifica como norma da
+    SAES/MS, e um novo REL foi instituído pela GM/MS nº 8.276/2025. A revogação
+    expressa desta norma não foi encontrada nas fontes consultadas. Trate a
+    8.276/2025 como a referência vigente.
   fontes:
     - tipo: gov-br
       titulo: Legislação da RNDS - gov.br
       url: https://www.gov.br/saude/pt-br/composicao/seidigi/rnds/legislacao/portaria-no-1-068-de-17-de-novembo-de-2020
-  verificado_em: 2026-10-09
+    - tipo: bvs
+      titulo: Portaria SAES/MS nº 883/2022 - texto integral
+      url: https://bvsms.saude.gov.br/bvs/saudelegis/Saes/2022/prt0883_07_12_2022.html
+  verificado_em: 2026-10-30
 
 - id: portaria-1792-2020
   numero: Portaria nº 1.792
