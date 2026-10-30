@@ -1,5 +1,5 @@
 ---
-import { dataISO, dataLonga, nomePortaria } from '../lib/formato';
+import { dataISO, dataLonga, nomeNorma } from '../lib/formato';
 import { novidadesOrdenadas } from '../lib/novidades';
 
 /**
@@ -27,7 +27,7 @@ const novidades = await novidadesOrdenadas();
             ))}
             {n.portarias.map((p) => (
               <li>
-                <a href={`/legislacao/#${p.id}`}>{nomePortaria(p.data.numero)}</a>
+                <a href={`/legislacao/#${p.id}`}>{nomeNorma(p.data.numero)}</a>
               </li>
             ))}
             {n.link && (

@@ -166,6 +166,34 @@
       url: https://www.gov.br/saude/pt-br/composicao/seidigi/rnds/legislacao/portaria-gm-ms-no-8-025-de-27-de-agosto-de-2025
   verificado_em: 2026-10-09
 
+- id: decreto-12560-2025
+  numero: Decreto nº 12.560
+  orgao: PR
+  data: 2025-07-23
+  ementa: >-
+    Dispõe sobre a Rede Nacional de Dados em Saúde e sobre as Plataformas SUS
+    Digital e regulamenta o art. 47 e o art. 47-A, caput, § 1º e § 2º, da Lei
+    nº 8.080, de 19 de setembro de 1990.
+  status: vigente
+  modelos: []
+  ausente_da_lista_oficial: true
+  notas: >-
+    Decreto presidencial que disciplina a RNDS, definida no art. 3º como a
+    plataforma de interoperabilidade do ecossistema de dados do SUS. O art. 11,
+    § 4º, determina que os modelos informacionais e computacionais sejam
+    pactuados na Comissão Intergestores Tripartite e publicados em portaria do
+    Ministério da Saúde, e o art. 19 atribui ao Ministério a edição das normas
+    complementares. É citado na abertura do Guia de Implementação de outubro de
+    2026. Não constava da página de legislação da RNDS no gov.br em 30/10/2026.
+  fontes:
+    - tipo: outro
+      titulo: Planalto - texto integral do Decreto nº 12.560/2025
+      url: https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2025/decreto/d12560.htm
+    - tipo: ig
+      titulo: Guia de Implementação da RNDS - contextualização
+      url: https://fhir.saude.gov.br/pt-BR/index.html
+  verificado_em: 2026-10-30
+
 - id: gm-ms-6100-2024
   numero: GM/MS nº 6.100
   orgao: GM/MS

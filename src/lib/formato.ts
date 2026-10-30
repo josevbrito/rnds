@@ -26,11 +26,11 @@ export const dataISO = (d: Date) => d.toISOString().slice(0, 10);
 export const ano = (d: Date) => d.getUTCFullYear();
 
 /**
- * "Portaria GM/MS nº 8.347". O `numero` das portarias conjuntas já começa com
- * "Portaria Conjunta", e aí não leva o prefixo de novo.
+ * "Portaria GM/MS nº 8.347". O `numero` de portarias conjuntas, decretos e leis
+ * já começa pelo tipo da norma, e aí não leva o prefixo "Portaria".
  */
-export const nomePortaria = (numero: string) =>
-  numero.startsWith('Portaria') ? numero : `Portaria ${numero}`;
+export const nomeNorma = (numero: string) =>
+  /^(Portaria|Decreto|Lei)\b/.test(numero) ? numero : `Portaria ${numero}`;
 
 /** Rótulo correspondente a um status. */
 export const rotuloStatus: Record<string, string> = {

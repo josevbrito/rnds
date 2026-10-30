@@ -1,6 +1,6 @@
 ---
 import { getCollection, getEntry } from 'astro:content';
-import { dataCurta, dataISO, dataLonga, ano, nomePortaria, rotuloStatus, rotuloFonte } from '../lib/formato';
+import { dataCurta, dataISO, dataLonga, ano, nomeNorma, rotuloStatus, rotuloFonte } from '../lib/formato';
 
 /**
  * Linha do tempo da legislação da RNDS.
@@ -97,7 +97,7 @@ const totalAusentes = linhas.filter((l) => l.ausente_da_lista_oficial).length;
         >
           <div class="cabecalho">
             <h3>
-              {nomePortaria(l.numero)}
+              {nomeNorma(l.numero)}
               <span class="etiqueta" data-status={l.status}>
                 {rotuloStatus[l.status]}
               </span>

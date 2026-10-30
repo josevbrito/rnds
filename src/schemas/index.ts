@@ -36,12 +36,13 @@ export const orgaoSchema = z.enum([
   'SAES/SEIDIGI', // portaria conjunta
   'SAES/SVSA/SEIDIGI', // portaria conjunta
   'SVS/MS', // Secretaria de Vigilância em Saúde do Ministério da Saúde
+  'PR', // Presidência da República (decretos)
   'outro',
 ]);
 
 /** Descrição de uma portaria. */
 export const portariaSchema = z.object({
-  /** Ex.: "GM/MS nº 8.347" */
+  /** Ex.: "GM/MS nº 8.347", "Portaria Conjunta SAES/SEIDIGI nº 3", "Decreto nº 12.560" */
   numero: z.string(),
   orgao: orgaoSchema,
   data: z.coerce.date(),
@@ -152,6 +153,7 @@ export const ferramentaSchema = z.object({
     'modelagem',
     'exploracao',
     'documentacao',
+    'terminologia',
   ]),
   oficial: z.boolean().default(false),
   descricao: z.string(),
