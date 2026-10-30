@@ -1,8 +1,8 @@
 # Ferramentas e bibliotecas do ecossistema
 #
 # 'oficial: true' significa mantido pelo Ministério da Saúde, DATASUS ou HL7.
-# Todo o resto é comunidade, útil, mas confira na rnds-fhir.saude.gov.br
-# antes de depender de detalhes.
+# Todo o resto é comunidade, útil, mas confira no Guia de Implementação oficial
+# (fhir.saude.gov.br) antes de depender de detalhes.
 
 - id: validator-cli
   nome: Validador oficial do HL7 (validator_cli.jar)
@@ -84,8 +84,8 @@
     Portal para navegar e experimentar os perfis: consulta por FQL, inspeção via
     FHIRPath e validação direto no navegador. A própria página avisa que NÃO é o
     repositório oficial da RNDS e que parte dos artefatos ainda está em
-    homologação ('draft'). Para decisões de implementação, vale o
-    rnds-fhir.saude.gov.br.
+    homologação ('draft'). Para decisões de implementação, vale o Guia de
+    Implementação oficial, em fhir.saude.gov.br.
   url: https://simplifier.net/redenacionaldedadosemsaude
   fontes:
     - tipo: simplifier
@@ -93,22 +93,40 @@
       url: https://simplifier.net/RedeNacionaldeDadosemSaude/~introduction
   verificado_em: 2026-08-26
 
+- id: ig-rnds
+  nome: Guia de Implementação da RNDS
+  categoria: documentacao
+  oficial: true
+  descricao: >-
+    O Guia de Implementação FHIR oficial, publicado pelo Ministério da Saúde em
+    outubro de 2026. Tem um guia geral, com credenciamento, integração,
+    CapabilityStatement e catálogo de erros, e um guia por modelo de
+    informação. O guia anterior, em rnds-fhir.saude.gov.br, segue no ar com o
+    build de 2022.
+  url: https://fhir.saude.gov.br/
+  repo: https://github.com/igorevan/rnds-ig
+  fontes:
+    - tipo: ig
+      titulo: Guia de Implementação da RNDS
+      url: https://fhir.saude.gov.br/pt-BR/index.html
+  verificado_em: 2026-10-30
+
 - id: br-core
   nome: BR Core
   categoria: documentacao
   oficial: true
   descricao: >-
     Núcleo FHIR brasileiro, pacote `br.gov.saude.br-core.fhir`, em STU1
-    (v1.1.0, 2023). Define os perfis brasileiros de uso geral, BRCorePatient,
-    BRCorePractitioner, BRCoreOrganization. Os perfis da RNDS derivam daqui:
-    quando um campo parece arbitrário na RNDS, a explicação costuma estar uma
-    camada abaixo, no BR Core.
+    (v1.7.1, de outubro de 2026). Define os perfis brasileiros de uso geral,
+    BRCorePatient, BRCorePractitioner, BRCoreOrganization. Os perfis da RNDS
+    derivam daqui: quando um campo parece arbitrário na RNDS, a explicação
+    costuma estar uma camada abaixo, no BR Core.
   url: https://hl7.org.br/fhir/core/
   fontes:
     - tipo: hl7
       titulo: BR Core - HL7 Brasil
       url: https://hl7.org.br/fhir/core/
-  verificado_em: 2026-08-26
+  verificado_em: 2026-10-30
 
 - id: synthea
   nome: Synthea

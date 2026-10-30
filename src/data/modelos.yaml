@@ -2,6 +2,9 @@
 #
 # São catorze os modelos catalogados aqui, sendo doze vigentes e dois mantidos como histórico.
 #
+# 'ig_oficial' aponta para o guia do modelo em https://fhir.saude.gov.br/. Fica
+# vazio enquanto o modelo não tiver guia próprio publicado lá.
+#
 # 'codigo_tipo_documento' refere-se ao CodeSystem BRTipoDocumento:
 #   https://rnds-fhir.saude.gov.br/CodeSystem-BRTipoDocumento.html
 # Só é preenchido onde o código foi conferido. Ausência do campo significa
@@ -13,18 +16,25 @@
   resumo: >-
     Laudo de exame laboratorial. Foi o primeiro modelo implantado na RNDS e
     segue sendo o mais maduro em exemplos e material de apoio, se você pode
-    escolher por onde começar, comece por ele.
+    escolher por onde começar, comece por ele. O modelo vigente é o da Portaria
+    GM/MS nº 8.276/2025.
   status: producao
   codigo_tipo_documento: REL
-  portaria_vigente: portaria-1068-2020
-  portarias: [portaria-1068-2020, portaria-1792-2020, gm-ms-1046-2021, gm-ms-3328-2022]
-  ig_oficial: https://rnds-fhir.saude.gov.br/
+  portaria_vigente: gm-ms-8276-2025
+  portarias: [gm-ms-8276-2025, saes-ms-883-2022, gm-ms-3328-2022, gm-ms-1046-2021, portaria-1068-2020, portaria-1792-2020]
+  ig_oficial: https://fhir.saude.gov.br/rel/
   ordem: 1
   fontes:
     - tipo: ig
-      titulo: Guia de Implementação FHIR da RNDS - exemplos de REL (v2 e v3.2.1)
+      titulo: Guia de Implementação do REL
+      url: https://fhir.saude.gov.br/rel/
+    - tipo: conass
+      titulo: Conass Informa n. 175/2025 - Portaria GM/MS nº 8.276/2025
+      url: https://www.conass.org.br/conass-informa-n-175-2025-publicada-a-portaria-gm-n-8-276-que-institui-o-modelo-de-informacao-de-resultado-de-exame-laboratorial-rel-no-ambito-da-rede-nacional-de-dados-em-saude-r/
+    - tipo: ig
+      titulo: Guia de Implementação anterior - exemplos de REL (v2 e v3.2.1)
       url: https://rnds-fhir.saude.gov.br/exemplos.html
-  verificado_em: 2026-08-26
+  verificado_em: 2026-10-30
 
 - id: rac
   sigla: RAC
@@ -36,36 +46,31 @@
   codigo_tipo_documento: RAC
   portaria_vigente: gm-ms-8347-2025
   portarias: [gm-ms-8347-2025, gm-ms-234-2022]
-  ig_oficial: https://rnds-fhir.saude.gov.br/
-  ig_comunitario:
-    - nome: RAC Implementation Guide
-      autor: Igor Evangelista (igorevan)
-      url: https://igorevan.github.io/rac-ig/
-      repo: https://github.com/igorevan/rac-ig
+  ig_oficial: https://fhir.saude.gov.br/rac/
   ordem: 2
   fontes:
     - tipo: gov-br
       titulo: Estrutura do Projeto RNDS - SEIDIGI
       url: https://www.gov.br/saude/pt-br/composicao/seidigi/rnds/estrutura-do-projeto
-  verificado_em: 2026-08-26
+    - tipo: ig
+      titulo: Guia de Implementação do RAC
+      url: https://fhir.saude.gov.br/rac/
+  verificado_em: 2026-10-30
 
 - id: ria
   sigla: RIA
   nome: Registro de Imunobiológico Administrado
   resumo: >-
-    Dose de vacina aplicada. Na operação da RNDS o modelo se desdobra em dois
-    fluxos processados separadamente: RIA-R para vacinação de rotina e RIA-C
-    para campanha.
+    Dose de vacina aplicada, de rotina ou de campanha. O perfil vigente é o
+    RIA-R 2.0, que desde fevereiro de 2026 deve receber todas as doses,
+    inclusive as de campanha. O Programa Nacional de Imunizações anunciou a
+    desativação do RIA Carga, do RIA-R 1.0 e do RIA-C 2.0, com cronograma a ser
+    divulgado com antecedência.
   status: producao
   codigo_tipo_documento: RIA
-  portaria_vigente: gm-ms-69-2021
-  portarias: [gm-ms-5663-2024, gm-ms-69-2021]
-  ig_oficial: https://rnds-fhir.saude.gov.br/
-  ig_comunitario:
-    - nome: RIA Implementation Guide
-      autor: Igor Evangelista (igorevan)
-      url: https://igorevan.github.io/ria-ig/
-      repo: https://github.com/igorevan/ria-ig
+  portaria_vigente: saes-svsa-seidigi-25-2023
+  portarias: [saes-svsa-seidigi-25-2023, gm-ms-5663-2024, gm-ms-69-2021]
+  ig_oficial: https://fhir.saude.gov.br/ria/
   ordem: 3
   fontes:
     - tipo: gov-br
@@ -74,7 +79,13 @@
     - tipo: dou
       titulo: Portaria GM/MS nº 5.663/2024 - centraliza na RNDS os registros de vacinação
       url: https://www.in.gov.br/web/dou/-/portaria-gm/ms-n-5.663-de-31-de-outubro-de-2024-593693777
-  verificado_em: 2026-10-09
+    - tipo: outro
+      titulo: Comunicado DPNI/SVSA/MS de 23/02/2026 sobre o RIA-R 2.0 (cópia publicada pela SBIm)
+      url: https://sbim.org.br/images/SEI_MS-0053610638-Comunicado.pdf_2026-02-26.pdf
+    - tipo: ig
+      titulo: Guia de Implementação do RIA
+      url: https://fhir.saude.gov.br/ria/
+  verificado_em: 2026-10-30
 
 - id: rira
   sigla: RIRA
@@ -86,12 +97,8 @@
   status: producao
   portaria_vigente: saes-seidigi-3-2023
   portarias: [saes-seidigi-3-2023]
-  ig_oficial: https://rnds-fhir.saude.gov.br/
+  ig_oficial: https://fhir.saude.gov.br/rira/
   ig_comunitario:
-    - nome: RIRA Implementation Guide
-      autor: Igor Evangelista (igorevan)
-      url: https://igorevan.github.io/rira-ig/
-      repo: https://github.com/igorevan/rira-ig
     - nome: Perfil Regulação Assistencial (Simplifier)
       autor: Projeto RNDS no Simplifier
       url: https://simplifier.net/redenacionaldedadosemsaude/brregulacaoassistencial
@@ -103,7 +110,10 @@
     - tipo: gov-br
       titulo: Estrutura do Projeto RNDS - SEIDIGI
       url: https://www.gov.br/saude/pt-br/composicao/seidigi/rnds/estrutura-do-projeto
-  verificado_em: 2026-08-26
+    - tipo: ig
+      titulo: Guia de Implementação do RIRA
+      url: https://fhir.saude.gov.br/rira/
+  verificado_em: 2026-10-30
 
 - id: sa
   sigla: SA
@@ -116,13 +126,16 @@
   codigo_tipo_documento: SA
   portaria_vigente: gm-ms-8026-2025
   portarias: [gm-ms-8026-2025, portaria-701-2022]
-  ig_oficial: https://rnds-fhir.saude.gov.br/
+  ig_oficial: https://fhir.saude.gov.br/sa/
   ordem: 5
   fontes:
     - tipo: conass
       titulo: Conass Informa n. 151/2025
       url: https://www.conass.org.br/conass-informa-n-151-2025-publicada-a-portaria-gm-n-8-026-que-institui-o-modelo-de-informacao-do-sumario-de-alta-sa-no-ambito-da-rede-nacional-de-dados-em-saude-rnds/
-  verificado_em: 2026-08-26
+    - tipo: ig
+      titulo: Guia de Implementação do SA
+      url: https://fhir.saude.gov.br/sa/
+  verificado_em: 2026-10-30
 
 - id: sao
   sigla: SAO
@@ -133,13 +146,15 @@
   status: producao
   portaria_vigente: gm-ms-8025-2025
   portarias: [gm-ms-8025-2025]
-  ig_oficial: https://rnds-fhir.saude.gov.br/
   ordem: 6
   fontes:
     - tipo: gov-br
       titulo: Legislação da RNDS - gov.br
       url: https://www.gov.br/saude/pt-br/composicao/seidigi/rnds/legislacao/portaria-gm-ms-no-8-025-de-27-de-agosto-de-2025
-  verificado_em: 2026-08-26
+    - tipo: ig
+      titulo: Guia de Implementação da RNDS - modelos e portarias
+      url: https://fhir.saude.gov.br/pt-BR/index.html
+  verificado_em: 2026-10-30
 
 - id: cmd
   sigla: CMD
@@ -153,7 +168,6 @@
   codigo_tipo_documento: CMD
   portaria_vigente: gm-ms-11952-2026
   portarias: [gm-ms-11952-2026]
-  ig_oficial: https://rnds-fhir.saude.gov.br/
   ordem: 7
   fontes:
     - tipo: conass
@@ -165,7 +179,10 @@
     - tipo: ig
       titulo: CodeSystem BRTipoDocumento
       url: https://rnds-fhir.saude.gov.br/CodeSystem-BRTipoDocumento.html
-  verificado_em: 2026-10-09
+    - tipo: ig
+      titulo: Guia de Implementação da RNDS - modelos e portarias
+      url: https://fhir.saude.gov.br/pt-BR/index.html
+  verificado_em: 2026-10-30
 
 - id: repm
   sigla: REPM
@@ -177,13 +194,15 @@
   portaria_vigente: gm-ms-6100-2024
   portarias: [gm-ms-6100-2024]
   sucede: rpm
-  ig_oficial: https://rnds-fhir.saude.gov.br/
   ordem: 8
   fontes:
     - tipo: bvs
       titulo: Portaria GM/MS nº 6.100/2024 - texto integral
       url: https://bvsms.saude.gov.br/bvs/saudelegis/gm/2024/prt6100_18_12_2024.html
-  verificado_em: 2026-08-26
+    - tipo: ig
+      titulo: Guia de Implementação da RNDS - modelos e portarias
+      url: https://fhir.saude.gov.br/pt-BR/index.html
+  verificado_em: 2026-10-30
 
 - id: redfm
   sigla: REDFM
@@ -198,28 +217,22 @@
   portaria_vigente: gm-ms-6100-2024
   portarias: [gm-ms-6100-2024]
   sucede: rdm
-  ig_oficial: https://rnds-fhir.saude.gov.br/
-  ig_comunitario:
-    - nome: REDFM Implementation Guide
-      autor: Igor Evangelista (igorevan)
-      url: https://igorevan.github.io/redfm-ig/
-      repo: https://github.com/igorevan/redfm-ig
-    - nome: Perfil REDFM (Simplifier)
-      autor: Projeto RNDS no Simplifier
-      url: https://simplifier.net/redenacionaldedadosemsaude/rndsregistroeletronicodispensacaofornecimentomedicamento
+  ig_oficial: https://fhir.saude.gov.br/redfm/
   ordem: 9
   fontes:
     - tipo: bvs
       titulo: Portaria GM/MS nº 6.100/2024 - texto integral
       url: https://bvsms.saude.gov.br/bvs/saudelegis/gm/2024/prt6100_18_12_2024.html
-  verificado_em: 2026-08-26
+    - tipo: ig
+      titulo: Guia de Implementação do REDFM
+      url: https://fhir.saude.gov.br/redfm/
+  verificado_em: 2026-10-30
 
 - id: rati
   sigla: RATI
   nome: Registro de Atendimento via Teleinterconsulta
   resumo: >-
-    Atendimento realizado por teleinterconsulta, instituído em 2025. A
-    especificação técnica ainda não foi conferida no Guia de Implementação.
+    Atendimento realizado por teleinterconsulta, instituído em 2025.
   status: planejado
   portaria_vigente: gm-ms-8323-2025
   portarias: [gm-ms-8323-2025]

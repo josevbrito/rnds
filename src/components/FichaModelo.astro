@@ -150,11 +150,23 @@ const sucede = d.sucede ? await getEntry(d.sucede) : null;
     <h2>Onde está a especificação</h2>
     <ul class="links">
       {
-        d.ig_oficial && (
+        d.ig_oficial ? (
           <li>
-            <a href={d.ig_oficial}>Guia de Implementação FHIR da RNDS</a>
+            <a href={d.ig_oficial}>Guia de Implementação do {d.sigla}</a>
             <span class="etiqueta" data-status="vigente">oficial</span>
             <p class="secundario">É o que vale para decisão de implementação.</p>
+          </li>
+        ) : d.status === 'historico' ? (
+          <li>
+            <p class="secundario">Modelo histórico, sem guia de implementação vigente.</p>
+          </li>
+        ) : (
+          <li>
+            <p class="secundario">
+              Este modelo ainda não tem guia próprio no{' '}
+              <a href="https://fhir.saude.gov.br/">Guia de Implementação da RNDS</a>, que
+              traz as orientações gerais de integração.
+            </p>
           </li>
         )
       }
@@ -179,9 +191,8 @@ const sucede = d.sucede ? await getEntry(d.sucede) : null;
     {
       d.ig_comunitario.length > 0 && (
         <p class="ressalva">
-          Guias não oficiais costumam ser mais navegáveis, mas podem estar
-          defasados. Confira contra o <code>rnds-fhir.saude.gov.br</code> antes
-          de depender de detalhes.
+          Material não oficial pode estar defasado. Confira contra o Guia de
+          Implementação oficial antes de depender de detalhes.
         </p>
       )
     }
