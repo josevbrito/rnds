@@ -11,13 +11,26 @@
 # O site ordena pela data, da mais recente para a mais antiga; no mesmo dia,
 # pelo id em ordem alfabética. Escreva aqui na mesma ordem, para facilitar.
 #
-# Segunda novidade no mesmo dia? Ponha hora na data da mais nova, por exemplo
-# 2026-10-30T15:00:00-03:00, para ela ficar em primeiro. É a primeira da lista
-# que dispara o aviso para quem volta ao site. Use horário antes das 21h, que a
-# data é exibida em UTC.
+# Segunda novidade no mesmo dia? Ponha na data a hora em que ela foi publicada,
+# por exemplo 2026-10-30T02:39:00-03:00, para a mais nova ficar em primeiro. É
+# a primeira da lista que dispara o aviso para quem volta ao site. Não use hora
+# futura: o RSS publica a data como está. Depois das 21h, a data exibida já é a
+# do dia seguinte, porque o site mostra datas em UTC.
+
+- id: decreto-12560-erros-acesso
+  data: 2026-10-30T03:11:00-03:00
+  titulo: Decreto nº 12.560/2025, catálogo de erros e credenciamento
+  texto: >-
+    O Decreto nº 12.560/2025, que disciplina a RNDS e determina que os modelos
+    sejam pactuados na CIT e publicados em portaria, entra na linha do tempo; ele
+    também falta na lista oficial do gov.br. A página de erros comuns passa a
+    ensinar a ler o código que a RNDS devolve e a procurá-lo no catálogo oficial,
+    e a página de acesso traz as evidências exigidas para pedir produção.
+  portarias: [decreto-12560-2025]
+  link: /erros-comuns/
 
 - id: correcao-br-core-paciente-por-identificador
-  data: 2026-10-30T18:00:00-03:00
+  data: 2026-10-30T03:05:00-03:00
   titulo: 'Correção: perfis não derivam do BR Core, e o paciente vai por identificador'
   texto: >-
     Duas correções a partir dos pacotes e exemplos oficiais do novo Guia de
@@ -29,7 +42,7 @@
   link: /integracao/perfis-e-br-core/
 
 - id: servicos-ambientes-guia-implementacao
-  data: 2026-10-30T15:00:00-03:00
+  data: 2026-10-30T02:39:00-03:00
   titulo: Serviços e ambientes conferidos no novo Guia de Implementação
   texto: >-
     Entram cinco serviços documentados pelo guia: exclusão de documento,

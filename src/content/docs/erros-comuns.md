@@ -8,6 +8,22 @@ description: >-
 Uma lista do que mais consome tempo de quem está começando. Vale ler antes de
 gastar o tempo, não depois.
 
+## Como ler o erro que a RNDS devolve
+
+Um documento rejeitado costuma voltar com status `422 Unprocessable Entity` e
+um `OperationOutcome`. O campo `diagnostics` começa com um código entre
+parênteses:
+
+```json
+"diagnostics": "(EHR-ERR825) Para realizar a exclusão, o status do documento deve ser \"final\"."
+```
+
+A parte depois do hífen, `ERR825`, é o código no
+[catálogo oficial de mensagens e erros](https://fhir.saude.gov.br/pt-BR/CodeSystem-RNDSErros.html)
+do Guia de Implementação, que explica cada um. São 251 códigos, quase todos
+erros (`ERR`) e mensagens (`MSG`). Os códigos citados nesta página foram
+conferidos no catálogo em 30/10/2026.
+
 ## Usar o header `Authorization` em vez de `X-Authorization-Server`
 
 O barramento espera o segundo. O erro resultante costuma ser genérico e **não
@@ -33,6 +49,10 @@ e não de um NamingSystem. Parece errado, e por isso é comum "corrigir" para a
 URI que parece certa. **Copie dos exemplos oficiais**, não escreva de memória.
 Ver em [Identificadores](/integracao/identificadores/).
 
+Se o número do paciente estiver errado, a RNDS responde com `MSG001` (CNS não
+encontrado) ou `ERR983` (paciente não encontrado). Vale validar o dígito
+verificador antes de enviar.
+
 ## Montar o Bundle sem `Composition` na primeira posição
 
 Para Bundles do tipo `document` isso é normativo. O validador acusa, mas a
@@ -44,6 +64,30 @@ mensagem nem sempre é óbvia, costuma falar de perfil, não de ordem. Ver em
 Quando um recurso do documento aponta para outro recurso do próprio Bundle, a
 referência usa o `fullUrl` da entrada, tipicamente `urn:uuid:...`. Referenciar o
 ID do seu banco produz um documento que o outro lado não consegue resolver.
+
+## Enviar para o endereço de outra UF
+
+Em produção, a credencial fica associada a uma UF, e o endereço de envio também
+é por UF. Mandar para o endereço de outro estado devolve `ERR880` ("Você não
+possui autorização para enviar documentos para esta UF"). Ver em
+[Ambientes](/integracao/ambientes/).
+
+## Reenviar o mesmo documento
+
+Um envio que deu timeout pode ter sido gravado mesmo assim. Reenviar às cegas
+devolve `ERR823`, informação que já existe no repositório, com o ID que a RNDS
+já tinha atribuído. Antes de reenviar, consulte pelo identificador local, no
+`GET /api/identifier`. Ver em [Serviços](/integracao/servicos/).
+
+## Errar a substituição
+
+Cada documento só pode ser substituído uma vez, e o substituto precisa repetir o
+identificador local do original. Os erros mais comuns:
+
+- `MSG009`: o documento já foi substituído;
+- `MSG007`: o `identifier` do substituto é diferente do original;
+- `ERR875`: o documento indicado em `relatesTo` não foi encontrado. Confira o
+  ID RNDS, o tipo do documento e a UF onde ele foi enviado.
 
 ## Assumir que homologação é aberta
 
