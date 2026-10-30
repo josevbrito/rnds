@@ -118,14 +118,18 @@
   descricao: >-
     Núcleo FHIR brasileiro, pacote `br.gov.saude.br-core.fhir`, em STU1
     (v1.7.1, de outubro de 2026). Define os perfis brasileiros de uso geral,
-    BRCorePatient, BRCorePractitioner, BRCoreOrganization. Os perfis da RNDS
-    derivam daqui: quando um campo parece arbitrário na RNDS, a explicação
-    costuma estar uma camada abaixo, no BR Core.
+    BRCorePatient, BRCorePractitioner, BRCoreOrganization. Apesar do nome, não
+    é a base dos perfis da RNDS: nenhum pacote do Guia de Implementação de
+    outubro de 2026 depende dele. Para validar documentos da RNDS, use o pacote
+    do modelo.
   url: https://hl7.org.br/fhir/core/
   fontes:
     - tipo: hl7
       titulo: BR Core - HL7 Brasil
       url: https://hl7.org.br/fhir/core/
+    - tipo: ig
+      titulo: Pacote do REL no Guia de Implementação (package.json lista as dependências)
+      url: https://fhir.saude.gov.br/rel/package.tgz
   verificado_em: 2026-10-30
 
 - id: synthea

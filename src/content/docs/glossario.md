@@ -108,8 +108,9 @@ o que é obrigatório, quais códigos valem, quais extensões existem.
 **IG** - Implementation Guide. O pacote publicado com perfis, ValueSets,
 exemplos e documentação.
 
-**BR Core** - o núcleo FHIR brasileiro, do qual os perfis da RNDS derivam.
-Ver mais em [Perfis e BR Core](/integracao/perfis-e-br-core/).
+**BR Core** - o núcleo FHIR brasileiro de uso geral. Apesar do nome, não é a
+base dos perfis da RNDS, que derivam direto do FHIR base. Ver mais em
+[Perfis e BR Core](/integracao/perfis-e-br-core/).
 
 **CodeSystem** - o conjunto de códigos definidos para um domínio.
 Ex.: `BRTipoDocumento`.

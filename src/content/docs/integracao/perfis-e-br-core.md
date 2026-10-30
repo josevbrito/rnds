@@ -1,55 +1,65 @@
 ---
 title: Perfis e BR Core
 description: >-
-  As duas camadas de perfil FHIR no Brasil (BR Core e RNDS) e por que saber em
-  qual delas um erro de validação nasceu acelera o diagnóstico.
+  Onde estão os perfis FHIR da RNDS, como validar contra eles, e por que o BR
+  Core, apesar do nome, não é a base deles.
 sidebar:
   order: 2
 ---
 
 FHIR é deliberadamente genérico: o recurso `Patient` da especificação base serve
-para o mundo inteiro e por isso quase não tem campos obrigatórios. Cada país
+para o mundo inteiro e por isso quase não tem campos obrigatórios. Cada contexto
 aperta esse recurso com **perfis** (`StructureDefinition`), que dizem o que é
 obrigatório, quais códigos são aceitos e quais extensões existem localmente.
 
-No Brasil isso acontece em **duas camadas**.
+No Brasil há dois conjuntos de perfis com nomes parecidos, e confundir os dois
+custa tempo.
 
-## Camada 1 - BR Core
+## Os perfis da RNDS
 
-O núcleo nacional, publicado em [hl7.org.br/fhir/core](https://hl7.org.br/fhir/core/),
-pacote `br.gov.saude.br-core.fhir`.
+Estão no Guia de Implementação oficial, em
+[fhir.saude.gov.br](https://fhir.saude.gov.br/), com um guia por modelo de
+informação. Cada guia reúne os perfis, as extensões, as terminologias e os
+exemplos do seu modelo, e publica um pacote para o validador em
+`https://fhir.saude.gov.br/{modelo}/package.tgz`.
 
-Define os perfis brasileiros de uso geral: `BRCorePatient`,
-`BRCorePractitioner`, `BRCoreOrganization` e afins. Foi desenvolvido pela
-Secretaria de Informação e Saúde Digital com apoio do HL7 International e da
-OPAS, e está em **STU1 (versão 1.7.1, de outubro de 2026)**.
+É contra esses perfis que o documento precisa estar conforme. Nos exemplos
+oficiais, cada recurso declara em `meta.profile` o perfil que segue: o
+`Composition` de um REL, por exemplo, aponta para
+`http://www.saude.gov.br/fhir/r4/StructureDefinition/BRResultadoExameLaboratorial-3.2.1`.
 
-## Camada 2 - RNDS
+O guia anterior, em [rnds-fhir.saude.gov.br](https://rnds-fhir.saude.gov.br/),
+segue no ar com o build de 2022.
 
-A camada específica da rede, publicada no Guia de Implementação oficial, em
-[fhir.saude.gov.br](https://fhir.saude.gov.br/), com um guia geral e um guia
-por modelo de informação. O guia anterior, em
-[rnds-fhir.saude.gov.br](https://rnds-fhir.saude.gov.br/), segue no ar com o
-build de 2022.
+## O BR Core não é a base deles
 
-Deriva do BR Core e acrescenta o que a RNDS precisa: perfis de amostra
-biológica, condição de saúde, diagnóstico laboratorial, estabelecimento e
-profissional. Traz também mais de 25 ValueSets (categorias de exame, etnias,
-municípios, ocupações, nomes de exames em LOINC e GAL) e as extensões
-brasileiras: nacionalidade, raça/cor, naturalização, atendimento SUS.
+O [BR Core](https://hl7.org.br/fhir/core/) é o núcleo FHIR brasileiro de uso
+geral, pacote `br.gov.saude.br-core.fhir`, em **STU1 (versão 1.7.1, de outubro
+de 2026)**. Define perfis como `BRCorePatient`, `BRCorePractitioner` e
+`BRCoreOrganization`, e foi desenvolvido pela Secretaria de Informação e Saúde
+Digital com apoio do HL7 International e da OPAS.
 
-## Por que a hierarquia importa
+**Mas os perfis da RNDS não derivam dele.** Nos pacotes do Guia de Implementação
+de outubro de 2026, nenhum dos sete (o geral e os seis modelos publicados)
+declara dependência do BR Core, e os perfis do REL e do RAC herdam direto dos
+recursos base do FHIR R4.
 
-Entender essa estrutura poupa tempo de duas formas.
+:::caution[Correção]
+Versões anteriores deste guia descreviam a RNDS como uma camada acima do BR
+Core. Não é o que os pacotes oficiais mostram. Se você encontrar essa descrição
+em outro material, desconfie da data dele.
+:::
 
-**Primeira:** quando um campo parece arbitrário no perfil da RNDS, a explicação
-normalmente está no BR Core, uma camada abaixo. Ir direto à camada certa evita
-procurar no lugar errado.
+## O que isso muda na prática
 
-**Segunda, e mais prática:** um erro de validação pode vir do BR Core e não da
-RNDS. Saber em qual camada o perfil violado está acelera muito o diagnóstico, isso 
-é a diferença entre "por que esse campo é obrigatório?" e "ah, isso é regra
-nacional geral, não da rede".
+- **Valide contra o pacote do seu modelo**, não contra o BR Core. Validar só
+  contra o BR Core não diz nada sobre a conformidade com a RNDS. Ver em
+  [validação](/ferramentas/validacao/).
+- **Quando um campo parece arbitrário**, a explicação está no perfil do modelo,
+  na página *Artefatos* do guia correspondente. O erro do validador traz a URL
+  do perfil violado, que leva direto a ela.
+- **O BR Core continua sendo a referência** para perfis brasileiros de uso
+  geral, fora dos modelos da RNDS.
 
 ## Sobre o Simplifier
 

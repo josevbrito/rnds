@@ -52,5 +52,5 @@ consulta do padrão, e resolve boa parte do incômodo de navegar o grafo na mão
 - [Ecossistema FHIR no guia da RNDS](https://rnds-guia.saude.gov.br/docs/rnds/tecnologias/)
 
 O FHIR base é deliberadamente genérico e serve o mundo inteiro. O que aperta
-esse padrão para o Brasil são os perfis, assunto de
+esse padrão para a RNDS são os perfis de cada modelo, assunto de
 [perfis e BR Core](/integracao/perfis-e-br-core/).
