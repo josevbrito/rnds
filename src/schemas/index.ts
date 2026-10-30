@@ -91,6 +91,22 @@ export const modeloSchema = z.object({
   ...rastreavel,
 });
 
+/**
+ * Mudança relevante no guia. Alimenta a página /novidades, o RSS e o aviso
+ * para quem volta ao site.
+ *
+ * Não carrega `fontes` própria: aponta para portarias e modelos, que carregam.
+ */
+export const novidadeSchema = z.object({
+  data: z.coerce.date(),
+  titulo: z.string(),
+  texto: z.string(),
+  portarias: z.array(reference('portarias')).default([]),
+  modelos: z.array(reference('modelos')).default([]),
+  /** Página interna para saber mais, ex.: "/ferramentas/ecossistema/". */
+  link: z.string().startsWith('/').optional(),
+});
+
 /** Descrição de um serviço disponível no sistema. */
 export const servicoSchema = z.object({
   nome: z.string(),

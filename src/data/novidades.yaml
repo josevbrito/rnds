@@ -1,0 +1,46 @@
+# Novidades do guia
+#
+# Cada entrada aparece na página /novidades, no RSS (/novidades.xml) e no aviso
+# para quem volta ao site. Por isso só entra aqui mudança que importa para quem
+# integra: portaria nova, modelo que mudou, fonte oficial que mudou de lugar.
+# Correção de texto, link ou digitação NÃO entra, fica no histórico do git.
+#
+# A entrada não tem 'fontes' própria: aponta para os registros de portarias e
+# modelos, que têm.
+#
+# O site ordena pela data, da mais recente para a mais antiga; no mesmo dia,
+# pelo id em ordem alfabética. Escreva aqui na mesma ordem, para facilitar.
+
+- id: guia-implementacao-fhir-saude
+  data: 2026-10-30
+  titulo: Novo Guia de Implementação oficial em fhir.saude.gov.br
+  texto: >-
+    O Ministério da Saúde publicou um novo Guia de Implementação FHIR, com um
+    guia geral e um guia por modelo. As fichas de RAC, REL, RIA, RIRA, SA e
+    REDFM agora apontam para eles. O guia anterior, em rnds-fhir.saude.gov.br,
+    continua no ar com o build de 2022.
+  modelos: [rac, rel, ria, rira, sa, redfm]
+  link: /ferramentas/ecossistema/
+
+- id: modelos-atuais-rel-ria
+  data: 2026-10-30
+  titulo: Portarias atuais do REL e do RIA
+  texto: >-
+    O REL passa a ter como referência a Portaria GM/MS nº 8.276/2025, e o RIA a
+    Portaria Conjunta SAES/SVSA/SEIDIGI nº 25/2023, duas normas que faltam na
+    lista oficial do gov.br. No RIA, o perfil vigente é o RIA-R 2.0, que deve
+    receber também as doses de campanha.
+  portarias: [gm-ms-8276-2025, saes-svsa-seidigi-25-2023]
+  modelos: [rel, ria]
+
+- id: cmd-rati-ratc-relc
+  data: 2026-10-09
+  titulo: CMD ganha portaria e entram RATI, RATC e RELC
+  texto: >-
+    A Portaria GM/MS nº 11.952/2026 institui o modelo do CMD. Entram no
+    catálogo três modelos: RATI, de teleinterconsulta, RATC, de
+    teleconsultoria, e RELC, de resultado de exame com laudo clínico. Entra
+    também a GM/MS nº 5.663/2024, que centraliza na RNDS os registros de
+    vacinação.
+  portarias: [gm-ms-11952-2026, gm-ms-10341-2026, gm-ms-8323-2025, gm-ms-5663-2024]
+  modelos: [cmd, rati, ratc, relc]

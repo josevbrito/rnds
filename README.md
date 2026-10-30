@@ -37,7 +37,10 @@ Todo o conteúdo estruturado é publicado como JSON, com CORS liberado:
 | `/api/servicos.json` | Serviços web |
 | `/api/ambientes.json` | Homologação e produção |
 | `/api/ferramentas.json` | Ecossistema |
+| `/api/novidades.json` | Mudanças relevantes no guia |
 | `/api/tudo.json` | Tudo num arquivo só |
+
+As novidades também saem em RSS, em `/novidades.xml`.
 
 ```bash
 # Quais normas faltam na lista oficial do gov.br?

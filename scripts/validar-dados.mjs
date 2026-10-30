@@ -12,10 +12,12 @@
  *   3. todo registro tem ao menos uma fonte com URL válida
  *   4. todo registro tem `verificado_em`, e a data não está no futuro
  *   5. modelo com status "historico" aponta para o sucessor
+ *   6. novidade tem data válida, não futura, e aponta para algo verificável:
+ *      portaria, modelo ou página do site que exista
  *
  * Uso: node scripts/validar-dados.mjs
  */
-import { readFile } from 'node:fs/promises';
+import { access, readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import yaml from 'js-yaml';
@@ -37,9 +39,16 @@ const REFERENCIAS = {
     sucedido_por: 'modelos',
     sucede: 'modelos',
   },
+  novidades: {
+    'portarias[]': 'portarias',
+    'modelos[]': 'modelos',
+  },
 };
 
-const COLECOES = ['portarias', 'modelos', 'servicos', 'ambientes', 'ferramentas'];
+const COLECOES = ['portarias', 'modelos', 'servicos', 'ambientes', 'ferramentas', 'novidades'];
+
+/** Coleções de fatos: cada registro carrega a própria fonte. */
+const RASTREAVEIS = ['portarias', 'modelos', 'servicos', 'ambientes', 'ferramentas'];
 
 const erros = [];
 const avisos = [];
@@ -95,8 +104,8 @@ for (const [colecao, campos] of Object.entries(REFERENCIAS)) {
 const hoje = new Date();
 hoje.setUTCHours(23, 59, 59, 999);
 
-for (const [colecao, registros] of Object.entries(tudo)) {
-  for (const r of registros ?? []) {
+for (const colecao of RASTREAVEIS) {
+  for (const r of tudo[colecao] ?? []) {
     if (!Array.isArray(r?.fontes) || r.fontes.length === 0) {
       falha(`${colecao}.yaml -> "${r?.id}": sem "fontes". Toda afirmação precisa de fonte pública.`);
     } else {
@@ -137,6 +146,43 @@ for (const m of tudo.modelos ?? []) {
       `modelos.yaml -> "${m.id}": marcado como histórico mas sem "sucedido_por". ` +
         `Quem lê a página fica sem saber o que usar no lugar.`
     );
+  }
+}
+
+// 6. novidades: a fonte está nos registros para onde elas apontam
+const paginaExiste = async (link) => {
+  const caminho = link.split('#')[0].replace(/^\/|\/$/g, '');
+  const base = join(raiz, 'src/content/docs', caminho);
+  const candidatos = caminho
+    ? [`${base}.md`, `${base}.mdx`, join(base, 'index.md'), join(base, 'index.mdx')]
+    : [join(base, 'index.mdx'), join(base, 'index.md')];
+  for (const c of candidatos) {
+    try {
+      await access(c);
+      return true;
+    } catch {}
+  }
+  return false;
+};
+
+for (const n of tudo.novidades ?? []) {
+  const d = new Date(n.data);
+  if (!n.data || Number.isNaN(d.getTime())) {
+    falha(`novidades.yaml -> "${n.id}": "data" ausente ou inválida.`);
+  } else if (d > hoje) {
+    falha(`novidades.yaml -> "${n.id}": "data" está no futuro.`);
+  }
+
+  const aponta = (n.portarias?.length ?? 0) + (n.modelos?.length ?? 0) > 0 || Boolean(n.link);
+  if (!aponta) {
+    falha(
+      `novidades.yaml -> "${n.id}": não aponta para nenhuma portaria, modelo ou página. ` +
+        `Sem isso, quem lê não tem onde conferir.`
+    );
+  }
+
+  if (n.link && !(await paginaExiste(n.link))) {
+    falha(`novidades.yaml -> "${n.id}": "link" aponta para "${n.link}", que não existe no site.`);
   }
 }
 

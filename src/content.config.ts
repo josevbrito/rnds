@@ -7,6 +7,7 @@ import {
   ambienteSchema,
   ferramentaSchema,
   modeloSchema,
+  novidadeSchema,
   portariaSchema,
   servicoSchema,
 } from './schemas';
@@ -39,5 +40,9 @@ export const collections = {
   ferramentas: defineCollection({
     loader: file('src/data/ferramentas.yaml'),
     schema: ferramentaSchema,
+  }),
+  novidades: defineCollection({
+    loader: file('src/data/novidades.yaml'),
+    schema: novidadeSchema,
   }),
 };

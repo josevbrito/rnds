@@ -1,0 +1,105 @@
+---
+import { dataISO, dataLonga, nomePortaria } from '../lib/formato';
+import { novidadesOrdenadas } from '../lib/novidades';
+
+/**
+ * Lista da página /novidades. Cada entrada tem âncora pelo id, que é para onde
+ * o aviso e o RSS apontam.
+ */
+const novidades = await novidadesOrdenadas();
+---
+
+<ol class="novidades">
+  {
+    novidades.map((n) => (
+      <li id={n.id} class="novidade">
+        <time datetime={dataISO(n.data)}>{dataLonga(n.data)}</time>
+        <h2>
+          <a href={`#${n.id}`}>{n.titulo}</a>
+        </h2>
+        <p>{n.texto}</p>
+        {(n.modelos.length > 0 || n.portarias.length > 0 || n.link) && (
+          <ul class="relacionados">
+            {n.modelos.map((m) => (
+              <li>
+                <a href={`/modelos/${m.id}/`}>{m.data.sigla}</a>
+              </li>
+            ))}
+            {n.portarias.map((p) => (
+              <li>
+                <a href={`/legislacao/#${p.id}`}>{nomePortaria(p.data.numero)}</a>
+              </li>
+            ))}
+            {n.link && (
+              <li>
+                <a href={n.link}>Saiba mais</a>
+              </li>
+            )}
+          </ul>
+        )}
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .novidades {
+    list-style: none;
+    padding: 0;
+    margin-block-start: 2rem;
+  }
+
+  /* Margens explícitas: dentro da prosa do Starlight, todo irmão ganha
+     margin-top, o que espaçaria demais data, título e texto. */
+  .novidade {
+    border-inline-start: 2px solid var(--sl-color-gray-5);
+    padding: 0.25rem 0 0.25rem 1.25rem;
+    margin: 0;
+  }
+
+  .novidade + .novidade {
+    margin-block-start: 2.5rem;
+  }
+
+  .novidade:first-child {
+    border-inline-start-color: var(--sl-color-accent);
+  }
+
+  .novidade time {
+    display: block;
+    font-size: var(--sl-text-sm);
+    color: var(--sl-color-gray-3);
+  }
+
+  .novidade h2 {
+    margin: 0.25rem 0 0.5rem;
+    font-size: var(--sl-text-h4);
+  }
+
+  .novidade p {
+    margin: 0;
+  }
+
+  .novidade h2 a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .novidade h2 a:hover {
+    text-decoration: underline;
+  }
+
+  .relacionados {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    list-style: none;
+    padding: 0;
+    margin: 0.75rem 0 0;
+    font-size: var(--sl-text-sm);
+  }
+
+  .relacionados li {
+    margin: 0;
+  }
+</style>

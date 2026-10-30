@@ -55,6 +55,7 @@ src/data/modelos.yaml       modelos de informação
 src/data/servicos.yaml      serviços web e endpoints
 src/data/ambientes.yaml     homologação e produção
 src/data/ferramentas.yaml   ecossistema
+src/data/novidades.yaml     mudanças relevantes (página, RSS e aviso)
 ```
 
 As tabelas do site e os endpoints `/api/*.json` são renderizados a partir
@@ -65,6 +66,16 @@ Texto explicativo vive em `src/content/docs/`.
 
 As páginas em `src/content/docs/modelos/` são **geradas**. Não edite à mão:
 edite `modelos.yaml` e rode `npm run gerar:modelos`.
+
+### Quando registrar uma novidade
+
+Toda entrada em `novidades.yaml` vira item no RSS e aviso para quem volta ao
+site. Registre só o que muda a vida de quem integra: portaria nova, modelo que
+mudou, fonte oficial que mudou de lugar. Correção de texto, link ou digitação
+não entra.
+
+A novidade não tem `fontes` própria: ela aponta para as portarias, os modelos
+ou a página onde a fonte já está.
 
 ### Rodando localmente
 
@@ -90,6 +101,7 @@ O validador falha se:
 - faltar `fontes` ou `verificado_em` em algum registro
 - alguma URL de fonte for inválida
 - `verificado_em` estiver no futuro
+- uma novidade não apontar para nenhuma portaria, modelo ou página existente
 
 E o `build` roda o validador antes de qualquer coisa, então dataset quebrado
 não chega a virar site.

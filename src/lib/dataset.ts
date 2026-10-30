@@ -24,7 +24,9 @@ const limpar = (valor: unknown): unknown => {
   return valor;
 };
 
-async function serializar(nome: 'portarias' | 'modelos' | 'servicos' | 'ambientes' | 'ferramentas') {
+type Colecao = 'portarias' | 'modelos' | 'servicos' | 'ambientes' | 'ferramentas' | 'novidades';
+
+async function serializar(nome: Colecao) {
   const entradas = await getCollection(nome as any);
   return entradas.map((e: any) => ({ id: e.id, ...(limpar(e.data) as object) }));
 }
@@ -41,9 +43,7 @@ export const LICENCA = {
 };
 
 /** Envelope padrão de todas as respostas. */
-export async function dataset(
-  nome: 'portarias' | 'modelos' | 'servicos' | 'ambientes' | 'ferramentas'
-) {
+export async function dataset(nome: Colecao) {
   const dados = await serializar(nome);
   return {
     licenca: LICENCA,
@@ -54,12 +54,13 @@ export async function dataset(
 }
 
 export async function datasetCompleto() {
-  const [portarias, modelos, servicos, ambientes, ferramentas] = await Promise.all([
+  const [portarias, modelos, servicos, ambientes, ferramentas, novidades] = await Promise.all([
     serializar('portarias'),
     serializar('modelos'),
     serializar('servicos'),
     serializar('ambientes'),
     serializar('ferramentas'),
+    serializar('novidades'),
   ]);
 
   return {
@@ -71,12 +72,14 @@ export async function datasetCompleto() {
       servicos: servicos.length,
       ambientes: ambientes.length,
       ferramentas: ferramentas.length,
+      novidades: novidades.length,
     },
     portarias,
     modelos,
     servicos,
     ambientes,
     ferramentas,
+    novidades,
   };
 }
 

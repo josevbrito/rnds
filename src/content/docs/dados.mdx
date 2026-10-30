@@ -2,7 +2,8 @@
 title: Dados abertos (JSON)
 description: >-
   Todo o conteúdo estruturado deste guia (portarias, modelos, serviços,
-  ambientes e ferramentas) disponível como JSON aberto, com CORS liberado.
+  ambientes, ferramentas e novidades) disponível como JSON aberto, com CORS
+  liberado.
 ---
 
 import { Tabs, TabItem } from '@astrojs/starlight/components';
@@ -22,7 +23,11 @@ Todos os endpoints são **estáticos**, servidos com `Access-Control-Allow-Origi
 | [`/api/servicos.json`](/api/servicos.json) | Serviços web e endpoints |
 | [`/api/ambientes.json`](/api/ambientes.json) | Homologação e produção |
 | [`/api/ferramentas.json`](/api/ferramentas.json) | Ecossistema de ferramentas |
+| [`/api/novidades.json`](/api/novidades.json) | Mudanças relevantes no guia |
 | [`/api/tudo.json`](/api/tudo.json) | Tudo acima, num arquivo só |
+
+As [novidades](/novidades/) também saem em RSS, em
+[`/novidades.xml`](/novidades.xml).
 
 ## Formato
 
@@ -42,8 +47,8 @@ array de registros:
 }
 ```
 
-Dois campos aparecem em **todo** registro, e são o que torna o dataset
-confiável:
+Dois campos aparecem em **todo** registro de portarias, modelos, serviços,
+ambientes e ferramentas, e são o que torna o dataset confiável:
 
 - **`fontes`** - array com pelo menos uma URL pública de onde o dado saiu
 - **`verificado_em`** - data (ISO `YYYY-MM-DD`) em que essa fonte foi conferida
@@ -51,6 +56,9 @@ confiável:
 
 Se `verificado_em` está velho, trate o registro com desconfiança. É de propósito
 que essa informação seja explícita.
+
+As novidades não têm esses campos: cada uma aponta, em `portarias` e `modelos`,
+para os registros que carregam a fonte.
 
 ## Exemplos de uso
 

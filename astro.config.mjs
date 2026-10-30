@@ -52,6 +52,15 @@ export default defineConfig({
           tag: 'meta',
           attrs: { name: 'theme-color', content: '#b45309' },
         },
+        {
+          tag: 'link',
+          attrs: {
+            rel: 'alternate',
+            type: 'application/rss+xml',
+            title: 'Novidades do Guia RNDS',
+            href: `${SITE}/novidades.xml`,
+          },
+        },
         // O Starlight emite og:title, og:description e twitter:card sozinho,
         // Gerada por `npm run gerar:og`.
         {
@@ -85,6 +94,7 @@ export default defineConfig({
       ],
       sidebar: [
         { label: 'Início', link: '/' },
+        { label: 'Novidades', slug: 'novidades' },
         {
           label: 'Começar',
           items: [
