@@ -1,0 +1,165 @@
+---
+import { APOIO } from '../lib/apoio';
+
+/**
+ * Pedido de apoio, sempre depois do pedido de issue: a contribuição mais
+ * valiosa continua sendo avisar que saiu portaria nova.
+ *
+ * `rodape` é uma linha discreta em toda página; `completo` é a seção da página
+ * Sobre, com a chave PIX e o botão de copiar.
+ */
+interface Props {
+  variante?: 'rodape' | 'completo';
+}
+
+const { variante = 'rodape' } = Astro.props;
+---
+
+{
+  variante === 'rodape' ? (
+    <p class="apoie-rodape">
+      Mantido por uma pessoa, sem anúncios. Viu portaria nova?{' '}
+      <a href={APOIO.issues}>Abra uma issue</a>. Quer apoiar?{' '}
+      <a href={APOIO.pagina}>PIX ou GitHub Sponsors</a>.
+    </p>
+  ) : (
+    <div class="apoie not-content">
+      <div class="canal">
+        <p class="nome">PIX</p>
+        <p class="secundario">Chave aleatória</p>
+        <div class="chave">
+          <code data-chave>{APOIO.pix}</code>
+          <button type="button" data-copiar={APOIO.pix} hidden>
+            Copiar
+          </button>
+        </div>
+        <p class="status" aria-live="polite" data-status />
+      </div>
+
+      <div class="canal">
+        <p class="nome">GitHub Sponsors</p>
+        <p class="secundario">Mensal ou valor único, em dólar</p>
+        <a class="sponsors" href={APOIO.sponsors}>
+          github.com/sponsors/josevbrito
+        </a>
+      </div>
+    </div>
+  )
+}
+
+<script>
+  // Sem a API de área de transferência o botão nem aparece: a chave continua
+  // visível e selecionável.
+  for (const botao of document.querySelectorAll<HTMLButtonElement>('[data-copiar]')) {
+    if (!navigator.clipboard) continue;
+    botao.hidden = false;
+
+    const canal = botao.closest('.canal')!;
+    const status = canal.querySelector<HTMLElement>('[data-status]')!;
+    let relogio: ReturnType<typeof setTimeout>;
+
+    botao.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(botao.dataset.copiar!);
+        botao.textContent = 'Copiada';
+        status.textContent = 'Chave PIX copiada.';
+      } catch {
+        const selecao = getSelection();
+        selecao?.selectAllChildren(canal.querySelector('[data-chave]')!);
+        status.textContent = 'Não deu para copiar. A chave está selecionada: use Ctrl+C.';
+      }
+      clearTimeout(relogio);
+      relogio = setTimeout(() => {
+        botao.textContent = 'Copiar';
+        status.textContent = '';
+      }, 2500);
+    });
+  }
+</script>
+
+<style>
+  .apoie-rodape {
+    margin-block: 1.5rem 0;
+    font-size: var(--sl-text-xs);
+    color: var(--sl-color-gray-3);
+  }
+
+  /* Fora da prosa do Starlight os links perdem a cor do site. */
+  .apoie-rodape a,
+  .apoie a {
+    color: var(--sl-color-text-accent);
+  }
+
+  /* Empilhado: lado a lado, a chave PIX quebraria em duas linhas. */
+  .apoie {
+    display: grid;
+    gap: 1rem;
+    margin-block: 1.5rem;
+  }
+
+  .canal {
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.375rem;
+  }
+
+  .canal p {
+    margin: 0;
+  }
+
+  .nome {
+    font-weight: 600;
+    color: var(--sl-color-white);
+  }
+
+  .secundario {
+    font-size: var(--sl-text-sm);
+    color: var(--sl-color-gray-3);
+  }
+
+  .chave {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin-block-start: 0.75rem;
+  }
+
+  .chave code {
+    font-size: var(--sl-text-sm);
+    overflow-wrap: anywhere;
+    user-select: all;
+  }
+
+  .chave button {
+    padding: 0.25rem 0.75rem;
+    border: 1px solid var(--sl-color-gray-4);
+    border-radius: 0.25rem;
+    background: transparent;
+    color: var(--sl-color-white);
+    font: inherit;
+    font-size: var(--sl-text-sm);
+    cursor: pointer;
+  }
+
+  .chave button:hover {
+    background: var(--sl-color-gray-6);
+  }
+
+  .chave button[hidden] {
+    display: none;
+  }
+
+  .canal .status {
+    min-height: 1.25rem;
+    margin-block-start: 0.25rem;
+    font-size: var(--sl-text-xs);
+    color: var(--sl-color-gray-3);
+  }
+
+  .sponsors {
+    display: inline-block;
+    margin-block-start: 0.75rem;
+    font-size: var(--sl-text-sm);
+  }
+</style>

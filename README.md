@@ -102,6 +102,21 @@ template para isso e leva 30 segundos.
 
 Leia o [CONTRIBUTING.md](CONTRIBUTING.md) antes de abrir PR.
 
+## Apoie
+
+O guia é mantido por uma pessoa e não exibe anúncios. Se ele poupou tempo do seu
+time, dá para apoiar:
+
+- **PIX** (chave aleatória): `9a64be6d-41ab-4c96-b5be-05a0066e9d85`
+- **GitHub Sponsors**: [github.com/sponsors/josevbrito](https://github.com/sponsors/josevbrito)
+
+Esta é a chave oficial do projeto, a mesma da página
+[Sobre](https://rnds.josevbrito.com/sobre/#apoie-o-projeto). Se encontrar outra
+chave em nome deste guia, desconfie.
+
+Apoio não compra conteúdo: quem apoia, pessoa ou empresa, não influencia o que é
+publicado, e o guia não aceita link patrocinado no texto.
+
 ## Publicidade
 
 Este site **não exibe anúncios**. O componente `AdSlot` existe e é inerte:

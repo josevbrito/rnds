@@ -38,7 +38,7 @@ export default defineConfig({
       head: [
         {
           tag: 'meta',
-          attrs: { name: 'author', content: 'José Victor Brito' },
+          attrs: { name: 'author', content: 'José Brito' },
         },
         {
           tag: 'link',
@@ -143,6 +143,7 @@ export default defineConfig({
             { label: 'Todas as fontes', slug: 'referencias' },
             { label: 'Dados abertos (JSON)', slug: 'dados' },
             { label: 'Sobre este guia', slug: 'sobre' },
+            { label: 'Apoie o projeto', link: '/sobre/#apoie-o-projeto' },
           ],
         },
       ],

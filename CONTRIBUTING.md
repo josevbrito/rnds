@@ -42,6 +42,9 @@ templates para:
 
 Você não precisa saber Astro, nem abrir PR. Uma issue bem preenchida já resolve.
 
+Se preferir apoiar financeiramente, as opções estão na seção
+[Apoie do README](README.md#apoie).
+
 ## Se quiser abrir PR
 
 ### Onde o conteúdo mora
