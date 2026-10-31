@@ -17,6 +17,18 @@
 # futura: o RSS publica a data como está. Depois das 21h, a data exibida já é a
 # do dia seguinte, porque o site mostra datas em UTC.
 
+- id: guia-envio-ria
+  data: 2026-10-31T19:41:00-03:00
+  titulo: Guia de envio do RIA
+  texto: >-
+    A página do RIA, a mais visitada do site, ganhou um guia de envio: quem
+    precisa integrar, o que mudou com o RIA-R 2.0, o que a Portaria GM/MS nº
+    5.663/2024 exige do sistema, a estrutura do documento (uma dose por
+    documento), os campos do Immunization e as regras de vacinação do catálogo
+    oficial de erros.
+  modelos: [ria]
+  portarias: [gm-ms-5663-2024]
+
 - id: decreto-12560-erros-acesso
   data: 2026-10-30T03:11:00-03:00
   titulo: Decreto nº 12.560/2025, catálogo de erros e credenciamento

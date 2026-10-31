@@ -1,14 +1,177 @@
 ---
 title: RIA - Registro de Imunobiológico Administrado
-description: "Dose de vacina aplicada, de rotina ou de campanha. O perfil vigente é o RIA-R 2.0, que desde fevereiro de 2026 deve receber todas as doses, inclusive as…"
+description: "Como enviar o RIA à RNDS: RIA-R 2.0, o que a Portaria 5.663/2024 exige do sistema, a estrutura do documento e os erros de vacinação mais comuns."
 sidebar:
     label: RIA
     order: 3
 ---
 
 import FichaModelo from '../../../components/FichaModelo.astro';
+import { Aside } from '@astrojs/starlight/components';
 
 {/* Página gerada por scripts/gerar-paginas-modelos.mjs, não edite à mão.
-    Para mudar o conteúdo, edite src/data/modelos.yaml. */}
+    Para mudar o conteúdo, edite src/data/modelos.yaml (ficha) e src/guias-modelo/ria.mdx (guia). */}
 
 <FichaModelo id="ria" />
+
+## Como enviar o RIA
+
+A ficha acima resume a base normativa. Daqui em diante, o que importa para quem
+integra um sistema de vacinação: o que mudou, o que o sistema precisa fazer,
+como o documento é montado e onde ele costuma ser rejeitado. Conferido em
+31/10/2026.
+
+## Quem precisa integrar
+
+Todo sistema que registra vacinação. Desde a Portaria GM/MS nº 5.663/2024, as
+doses aplicadas vão **exclusivamente** para a RNDS, no modelo RIA vigente
+([texto integral na BVS](https://bvsms.saude.gov.br/bvs/saudelegis/gm/2024/prt5663_04_11_2024.html)).
+Na atenção primária, o registro é feito no PEC, na CDS ou num sistema próprio ou
+de terceiros integrado à RNDS.
+
+A regra alcança o setor privado. A
+[Nota Técnica nº 115/2024](https://www.cosemssp.org.br/wp-content/uploads/2025/02/RNDS-Nota-Tecnica-115.pdf)
+cita os sistemas próprios ou de terceiros das secretarias de saúde e do setor
+privado. E a
+[Nota Técnica nº 77/2026](https://www.gov.br/saude/pt-br/centrais-de-conteudo/publicacoes/notas-tecnicas/2026/nota-tecnica-no-77-2026-cgici-dpni-svsa-ms.pdf)
+orienta maternidades públicas e privadas a registrar as doses do recém-nascido
+(vacinas hepatite B e BCG e o anticorpo nirsevimabe) no SI-PNI ou num sistema
+integrado à RNDS.
+
+## O que mudou em 2026: só o RIA-R 2.0
+
+Em fevereiro de 2026, o Programa Nacional de Imunizações comunicou que o RIA
+vigente é o **RIA-R 2.0**, e que ele deve receber **todas** as doses, inclusive
+as de campanha
+([comunicado de 23/02/2026](https://sbim.org.br/images/SEI_MS-0053610638-Comunicado.pdf_2026-02-26.pdf)).
+Quem envia para outros perfis pode ter os indicadores prejudicados.
+
+O mesmo comunicado anuncia a desativação do **RIA Carga**, do **RIA-R 1.0** e do
+**RIA-C 2.0**, com cronograma a ser divulgado com antecedência. Até 31/10/2026
+não encontramos o cronograma publicado. Quando ele sair, aparece em
+[Novidades](/novidades/), que também tem [RSS](/novidades.xml).
+
+O pacote do [Guia de Implementação do RIA](https://fhir.saude.gov.br/ria/), de
+outubro de 2026, já reflete isso: os únicos perfis de documento que ele traz são
+os do RIA-R 2.0.
+
+O caminho antigo, pelo layout e-SUS LEDI (Apache Thrift ou XML), foi desativado
+para vacinas pela própria Portaria 5.663/2024. Segundo o
+[COSEMS/SP](https://www.cosemssp.org.br/noticias/sistemas-de-vacinacao-deverao-estar-integrados-a-rnds-ate-setembro/),
+a aceitação do Thrift terminou em setembro de 2025.
+
+## O que o seu sistema precisa fazer
+
+A Nota Técnica nº 115/2024 traduz a portaria em requisitos. Na prática:
+
+- **Validar o CPF ou CNS do vacinado** antes de enviar.
+- **Validar o CNS do vacinador** no CNES do estabelecimento antes de enviar.
+- **Enviar em até 24 horas** das salas com conectividade, e em até 15 dias das
+  salas sem.
+- **Guardar o retorno de cada envio**: o identificador do registro e o status de
+  sucesso ou erro.
+- **Adequar-se em até 15 dias** a cada nova orientação técnica de vacinação.
+- **Acompanhar os imunobiológicos novos**: depois da liberação pela Anvisa, o
+  Programa Nacional de Imunizações tem 15 dias para publicar as regras de
+  registro, e o seu sistema precisa absorver o código novo.
+
+## A estrutura do documento
+
+Cada documento leva **uma única dose**: o perfil aceita uma só entrada na seção
+do `Composition`. Três vacinas aplicadas no mesmo atendimento são três
+documentos.
+
+```
+Bundle (type: "document")
+├── identifier  → identificador local (BRRNDS-{número do solicitante})
+└── Composition    perfil BRRegistroImunobiologicoAdministradoRotina-2.0
+    ├── type       → RIA, no CodeSystem BRTipoDocumento
+    ├── subject    → paciente, pelo identificador (CPF ou CNS)
+    ├── author     → estabelecimento, pelo CNES
+    └── section    → uma única entrada: o Immunization
+└── Immunization   perfil BRImunobiologicoAdministrado-3.0
+└── Condition      perfil BRCID10Avaliado-1.0, quando há motivo de indicação
+```
+
+Paciente e estabelecimento vão por identificador, como em todos os modelos da
+RNDS. Veja em [anatomia do documento](/integracao/anatomia-do-documento/).
+
+## Os campos do Immunization
+
+| Campo | O que é | Obrigatório |
+|---|---|---|
+| `vaccineCode` | o imunobiológico aplicado | sim |
+| `occurrenceDateTime` | a data da aplicação | sim, e não pode ser futura |
+| `manufacturer.identifier` | o fabricante | sim, exceto na transcrição de caderneta |
+| `lotNumber` | o lote | sim, exceto na transcrição de caderneta |
+| `site` | o local de aplicação | sim |
+| `route` | a via de administração | sim |
+| `performer` | quem aplicou, em `actor`, e a ocupação em CBO, em `function` | `actor` sim, `function` não |
+| `protocolApplied.doseNumberString` | a dose | sim |
+| extensão de estratégia, em `protocolApplied` | rotina, especial, bloqueio, campanha... | sim |
+| extensão de grupo de atendimento | o grupo pelo qual a pessoa se vacinou, como uma comorbidade | sim |
+| extensão de condição maternal | gestante, puérpera ou não se aplica | sim |
+| extensão de contato com hanseníase | se a pessoa é contato de hanseníase | só para BCG |
+| `reportOrigin` | `01` transcrição de caderneta, `02` vacina no exterior | não |
+
+A obrigatoriedade combina o perfil e as regras de negócio da próxima seção. No
+exemplo oficial, `performer.actor` aponta para `Practitioner/{CNS}` do
+profissional.
+
+<Aside type="caution" title="Não copie os fullUrl do exemplo oficial">
+O [exemplo oficial do RIA-R](https://fhir.saude.gov.br/ria/pt-BR/exemplos.html)
+usa `urn:uuid:transient-0` como `fullUrl`, que não é um UUID válido, e o
+validador acusa erro. Com UUIDs de verdade no lugar, o mesmo exemplo passa sem
+erros (conferido em 31/10/2026 com o validador 7.0.3).
+</Aside>
+
+## Regras que a RNDS aplica além do perfil
+
+O [catálogo oficial de mensagens e erros](https://fhir.saude.gov.br/pt-BR/CodeSystem-RNDSErros.html)
+tem códigos próprios da vacinação. A resposta traz o código com prefixo, como
+`EHR-ERR1010`. Veja [como ler o erro](/erros-comuns/).
+
+| Código | Quando acontece |
+|---|---|
+| `ERR1010` | Data de aplicação no futuro. |
+| `ERR1012` | Fabricante ausente. Só pode faltar na transcrição de caderneta (registro de origem `01`). |
+| `ERR1013` | Lote ausente, com a mesma exceção. |
+| `ERR1011` | BCG (imunobiológico `15`) sem a extensão de contato com hanseníase. |
+| `ERR1014` | Estratégia especial (`2`) sem o motivo de indicação, em `reasonReference`. |
+| `ERR816` | Estratégia de pesquisa sem os dados da pesquisa clínica registrada na Anvisa. |
+| `ERR817` | Mais doses que o permitido para o imunobiológico, por paciente e por UF. |
+| `ERR819` | Código de imunobiológico inválido. |
+| `ERR815` | Código inativo, como um grupo de atendimento desativado. |
+| `ERR824` | Item repetido na mesma requisição. |
+
+## Terminologias
+
+Os códigos de cada campo estão no guia do RIA:
+
+- [Imunobiológico](https://fhir.saude.gov.br/ria/pt-BR/CodeSystem-BRImunobiologico.html)
+- [Fabricante do Imunobiológico](https://fhir.saude.gov.br/ria/pt-BR/CodeSystem-BRFabricantePNI.html)
+- [Dose de Vacina](https://fhir.saude.gov.br/ria/pt-BR/CodeSystem-BRDose.html)
+- [Local de Aplicação](https://fhir.saude.gov.br/ria/pt-BR/CodeSystem-BRLocalAplicacao.html)
+- [Via de Administração](https://fhir.saude.gov.br/ria/pt-BR/CodeSystem-BRViaAdministracao.html)
+- [Estratégia de Vacinação](https://fhir.saude.gov.br/ria/pt-BR/CodeSystem-BREstrategiaVacinacao.html)
+- [Grupo de Atendimento](https://fhir.saude.gov.br/ria/pt-BR/CodeSystem-BRGrupoAtendimento.html)
+- [Condição Maternal](https://fhir.saude.gov.br/ria/pt-BR/CodeSystem-BRCondicaoMaternal.html)
+- [Registro de Origem](https://fhir.saude.gov.br/ria/pt-BR/CodeSystem-BRRegistroOrigem.html)
+
+A lista de imunobiológicos muda sempre que entra uma vacina nova. Em vez de
+fixar os códigos no seu sistema, vale ler os CodeSystems do pacote do guia, em
+`https://fhir.saude.gov.br/ria/package.tgz`.
+
+## Valide antes de enviar
+
+```bash
+java -jar validator_cli.jar documento.json \
+  -version 4.0.1 \
+  -ig https://fhir.saude.gov.br/ria/package.tgz
+```
+
+Conferido em 31/10/2026 com o validador 7.0.3: o exemplo oficial, com UUIDs
+válidos, passa sem erros. Sobram dois alertas de códigos brasileiros fora dos
+conjuntos de valores do FHIR base, que não impedem a validação. O validador
+confere o perfil, mas não as regras de negócio da seção anterior: essas só
+aparecem no envio. Veja em [validação](/ferramentas/validacao/).
