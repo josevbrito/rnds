@@ -93,6 +93,11 @@ const ids = novidades.map((n) => n.id);
         aviso.hidden = true;
       });
 
+      // O rodapé fica dentro da coluna de conteúdo, que o Starlight isola
+      // (isolation: isolate). Lá dentro o z-index não vence o painel lateral
+      // direito, que cobre o canto no desktop e engole os cliques. No body, o
+      // aviso fica acima do painel e abaixo do menu do celular.
+      document.body.append(aviso);
       aviso.hidden = false;
     }
   }
