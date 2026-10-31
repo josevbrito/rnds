@@ -80,8 +80,9 @@ YAML na busca. Hoje só o RIA tem guia.
 
 Toda entrada em `novidades.yaml` vira item no RSS e aviso para quem volta ao
 site. Registre só o que muda a vida de quem integra: portaria nova, modelo que
-mudou, fonte oficial que mudou de lugar. Correção de texto, link ou digitação
-não entra.
+mudou, fonte oficial que mudou de lugar, correção de algo que o site ensinava
+errado, ou guia novo de um modelo. Ajuste em guia que já existe, correção de
+texto, link ou digitação não entra.
 
 A novidade não tem `fontes` própria: ela aponta para as portarias, os modelos
 ou a página onde a fonte já está.

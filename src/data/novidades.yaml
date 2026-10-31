@@ -2,8 +2,10 @@
 #
 # Cada entrada aparece na página /novidades, no RSS (/novidades.xml) e no aviso
 # para quem volta ao site. Por isso só entra aqui mudança que importa para quem
-# integra: portaria nova, modelo que mudou, fonte oficial que mudou de lugar.
-# Correção de texto, link ou digitação NÃO entra, fica no histórico do git.
+# integra: portaria nova, modelo que mudou, fonte oficial que mudou de lugar,
+# correção de algo que o site ensinava errado, ou guia novo de um modelo.
+# Ajuste em guia que já existe, correção de texto, link ou digitação NÃO entra,
+# fica no histórico do git.
 #
 # A entrada não tem 'fontes' própria: aponta para os registros de portarias e
 # modelos, que têm.
@@ -21,11 +23,11 @@
   data: 2026-10-31T19:41:00-03:00
   titulo: Guia de envio do RIA
   texto: >-
-    A página do RIA, a mais visitada do site, ganhou um guia de envio: quem
-    precisa integrar, o que mudou com o RIA-R 2.0, o que a Portaria GM/MS nº
-    5.663/2024 exige do sistema, a estrutura do documento (uma dose por
-    documento), os campos do Immunization e as regras de vacinação do catálogo
-    oficial de erros.
+    Cada documento do RIA-R 2.0 leva uma única dose, e o sistema de vacinação
+    precisa validar CPF ou CNS e o vacinador no CNES, enviar em até 24 horas e
+    guardar o retorno de cada envio. Isso e mais os campos do Immunization e as
+    regras de vacinação do catálogo oficial de erros estão no novo guia de envio
+    da página do RIA.
   modelos: [ria]
   portarias: [gm-ms-5663-2024]
 
