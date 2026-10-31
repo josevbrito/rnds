@@ -60,11 +60,13 @@ src/
 ├── schemas/        ← Zod, valida os YAML no build
 ├── content/docs/   ← as páginas
 ├── components/     ← renderizam as tabelas a partir do YAML
+├── guias-modelo/   ← texto extra por modelo, incorporado à página gerada
 ├── lib/            ← formatação e serialização do dataset
 └── pages/api/      ← endpoints JSON
 scripts/
 ├── validar-dados.mjs        ← integridade; roda antes do build
-└── gerar-paginas-modelos.mjs ← gera src/content/docs/modelos/
+└── gerar-paginas-modelos.mjs ← gera src/content/docs/modelos/, com os guias
+                                 de src/guias-modelo/
 ```
 
 Nenhuma tabela é escrita à mão. Isso dá consistência entre páginas, contribuição
@@ -88,7 +90,7 @@ npm run dev      # http://localhost:4321
 | `npm run dev` | Servidor de desenvolvimento |
 | `npm run build` | Valida o dataset e constrói o site |
 | `npm run validar` | Só a checagem de integridade |
-| `npm run gerar:modelos` | Regenera as páginas de modelo a partir do YAML |
+| `npm run gerar:modelos` | Regenera as páginas de modelo a partir do YAML (roda também no build) |
 | `npm run preview` | Serve o build local |
 
 Stack: [Astro](https://astro.build) + [Starlight](https://starlight.astro.build),

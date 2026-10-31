@@ -15,7 +15,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "npm run validar && astro build",
+    "build": "npm run validar && npm run gerar:modelos && astro build",
     "preview": "astro preview",
     "check": "astro check",
     "validar": "node scripts/validar-dados.mjs",

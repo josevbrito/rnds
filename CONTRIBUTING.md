@@ -68,7 +68,13 @@ um lugar, ele pertence ao YAML.
 Texto explicativo vive em `src/content/docs/`.
 
 As páginas em `src/content/docs/modelos/` são **geradas**. Não edite à mão:
-edite `modelos.yaml` e rode `npm run gerar:modelos`.
+edite `modelos.yaml` e rode `npm run gerar:modelos` (o `npm run build` também
+roda o gerador).
+
+Um modelo pode ter um guia próprio, com texto explicativo além da ficha: crie
+`src/guias-modelo/{id}.mdx`. O gerador incorpora o guia à página do modelo,
+depois da ficha. Um `description` no frontmatter do guia substitui o resumo do
+YAML na busca. Hoje só o RIA tem guia.
 
 ### Quando registrar uma novidade
 
